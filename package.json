@@ -4,8 +4,9 @@
   "description": "Document management system, complete with roles and privileges. Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published.",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test mocha tests/server/**/*.js --require tests/helpers --reporter spec --compilers js:babel-register --slow 5000",
-    "start": "babel-node server.js"
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha tests/server/**/*.js --require tests/helpers --reporter spec --compilers js:babel-register --slow 5000",
+    "start": "babel-node server.js",
+    "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
   "repository": {
     "type": "git",
@@ -35,12 +36,14 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "coveralls": "^2.12.0",
     "eslint": "^3.18.0",
     "eslint-config-airbnb": "^14.1.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "mocha": "^3.2.0",
+    "nyc": "^10.1.2",
     "supertest": "^3.0.0"
   }
 }
