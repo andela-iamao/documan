@@ -3,19 +3,19 @@ import bodyParser from 'body-parser';
 import config from './server/config';
 import db from './server/db';
 
+require('dotenv').config();
+
 let app = express();
 
 const database = db();
 
 app = config(app);
 
-app.set('port', 5000);
-
 app.use(bodyParser.json());
 
 database.sequelize.sync().done(() => {
-  app.listen(app.get('port'), () => {
-    console.log(`server started on port ${app.get('port')}`);
+  app.listen(process.env.PORT, () => {
+    console.log(`server started on port ${process.env.PORT}`);
   });
 });
 
