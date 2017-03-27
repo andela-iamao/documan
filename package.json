@@ -4,7 +4,7 @@
   "description": "Document management system, complete with roles and privileges. Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published.",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "NODE_ENV=test mocha tests/server/**/*.js --require tests/helpers --reporter spec --compilers js:babel-register --slow 5000",
     "start": "babel-node server.js"
   },
   "repository": {

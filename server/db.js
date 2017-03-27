@@ -30,9 +30,11 @@ module.exports = () => {
     sequelize
       .authenticate()
       .then(() => {
+        /* eslint-disable */
         console.log('Connection has been established successfully.');
       })
       .catch((err) => {
+        /* eslint-disable */
         console.log('Unable to connect to the database:', err);
       });
 
