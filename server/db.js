@@ -10,7 +10,6 @@ module.exports = () => {
   if (!db) {
     let sequelize = null;
     if (process.env.NODE_ENV === 'development') {
-      console.log('development environment');
       sequelize = new Sequelize('documan_test', 'postgres', '', {
         host: 'localhost',
         dialect: 'postgres',
