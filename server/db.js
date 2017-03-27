@@ -2,20 +2,32 @@ import Sequelize from 'sequelize';
 import fs from 'fs';
 import path from 'path';
 
+require('dotenv').config();
+
 let db = null;
 
 module.exports = () => {
   if (!db) {
-    const sequelize = new Sequelize('documan_test', 'postgres', '', {
-      host: 'localhost',
-      dialect: 'postgres',
-      pool: {
-        max: 5,
-        min: 0,
-        idle: 10000
-      }
-    });
-
+    let sequelize = null;
+    if (process.env.NODE_ENV === 'development') {
+      console.log('development environment');
+      sequelize = new Sequelize('documan_test', 'postgres', '', {
+        host: 'localhost',
+        dialect: 'postgres',
+        pool: {
+          max: 5,
+          min: 0,
+          idle: 10000
+        }
+      });
+    } else {
+      sequelize = new Sequelize(process.env.DATABASE_URL, {
+        dialect: 'postgres',
+        dialectOptions: {
+          ssl: true
+        }
+      });
+    }
     sequelize
       .authenticate()
       .then(() => {
