@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test mocha tests/server/**/*.js --require tests/helpers --reporter spec --compilers js:babel-register --slow 5000",
-    "start": "npm run migrate && babel-node server.js",
+    "start": "babel-node server.js",
     "migrate": "sequelize db:migrate",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
