@@ -3,4 +3,4 @@ node_modules/
 coverage/
 .nyc_output/
 *.DS_Store
-server/npm-debug/log
+server/npm-debug.log
