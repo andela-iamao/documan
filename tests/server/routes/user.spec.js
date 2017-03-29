@@ -1,16 +1,18 @@
 describe('Routes: user', () => {
   const User = db.Users;
   beforeEach((done) => {
-    User.destroy({ where: {} })
-      .then(() => {
-        User.create({
-          lastname: "Riddle",
-          username: "tomrid",
-          email: "lordvold@gmail.com",
-          password: "fuck the potters",
-          firstname: "Thomas"
-        }).then(() => done());
-      });
+    db.sequelize.sync().done(() => {
+      User.destroy({ where: {} })
+        .then(() => {
+          User.create({
+            lastname: "Riddle",
+            username: "tomrid",
+            email: "lordvold@gmail.com",
+            password: "fuck the potters",
+            firstname: "Thomas"
+          }).then(() => done());
+        });
+    });
   });
 
   describe("GET /api/v1/users", () => {
