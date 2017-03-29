@@ -11,8 +11,7 @@ const db = {};
 
 let sequelize = null;
 if (process.env.DATABASE_URL) {
-  console.log('running dequelize on production');
-  sequelize = new Sequelize('postgres://pxisbnzbniigwu:c0044e5c83851252180bc5c32de917282fda05809c1b478356b0ca31ff9d93db@ec2-107-22-223-6.compute-1.amazonaws.com:5432/d3gk5ajj3np9u5', {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions: {
       ssl: true
     }
