@@ -10,7 +10,7 @@ const config = require(`${__dirname}/../config/config.json`)[env];
 const db = {};
 
 let sequelize = null;
-if (process.env.DATABASE_URL) {
+if (process.env.NODE_ENV !== 'development' || process.env.NODE_ENV !== 'test') {
   sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions: {
       ssl: true
