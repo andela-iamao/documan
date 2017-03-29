@@ -1,10 +1,11 @@
 import express from 'express';
+import path from 'path';
 
 const router = express.Router();
 
 module.exports = () => {
   router.get('/', (req, res) => {
-    res.json({ status: 200, message: 'Welcome to document management system' });
+    res.sendFile(path.join(__dirname, '../public/docs', 'index.html'));
   });
   return router;
 };
