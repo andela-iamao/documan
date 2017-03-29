@@ -1,10 +1,11 @@
 /* eslint-disable */
 import express from 'express';
 import config from './server/config';
-import db from './server/models/index';
-/* eslint-enable */
 
 require('dotenv').config();
+
+import db from './server/models/index';
+/* eslint-enable */
 
 let app = express();
 
