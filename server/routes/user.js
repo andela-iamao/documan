@@ -48,10 +48,8 @@ module.exports = () => {
    *         description: users successfully fetched
    */
   router.get('/api/v1/users', (req, res) => {
-    console.log('api');
     db.Users.findAll({})
       .then((result) => {
-        console.log('calling');
         res.json(result);
       })
       .catch(error => res.status(412).json({ msg: error.message }));

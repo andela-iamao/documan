@@ -10,7 +10,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'Demonstrating how to describe a RESTful API with Swagger',
   },
-  host: 'localhost:5000',
+  host: process.env.HOST_URL,
   basePath: '/',
 };
 
