@@ -1,11 +1,8 @@
 /* eslint-disable */
 import express from 'express';
-/* eslint-disable */
-import bodyParser from 'body-parser';
-/* eslint-disable */
 import config from './server/config';
-/* eslint-disable */
 import db from './server/models/index';
+/* eslint-enable */
 
 require('dotenv').config();
 
@@ -13,7 +10,8 @@ let app = express();
 
 app = config(app);
 
-app.use(bodyParser.json());
+// app.use(express.static('server/public'));
+
 if (process.env.NODE_ENV !== 'test') {
   db.sequelize.sync().done(() => {
     app.listen(process.env.PORT, () => {

@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test mocha tests/server/**/*.js --require tests/helpers --reporter spec --compilers js:babel-register --slow 5000",
-    "start": "babel-node server.js",
+    "start": "npm run migrate && babel-node server.js",
     "migrate": "sequelize db:migrate",
     "coverage": "nyc report --reporter=text-lcov | coveralls"
   },
@@ -35,7 +35,8 @@
     "pg": "^6.1.5",
     "pg-hstore": "^2.3.2",
     "sequelize": "^3.30.2",
-    "sequelize-cli": "^2.7.0"
+    "sequelize-cli": "^2.7.0",
+    "swagger-jsdoc": "^1.9.2"
   },
   "devDependencies": {
     "chai": "^3.5.0",
