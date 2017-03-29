@@ -1,15 +1,15 @@
-require('dotenv').config();
 /* eslint-disable */
 import express from 'express';
+import bodyParser from 'body-parser';
 import config from './server/config';
 import db from './server/models/index';
 /* eslint-enable */
 
+require('dotenv').config();
+
 let app = express();
 
 app = config(app);
-
-// app.use(express.static('server/public'));
 
 if (process.env.NODE_ENV !== 'test') {
   db.sequelize.sync().done(() => {

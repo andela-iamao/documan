@@ -3,13 +3,14 @@ import express from 'express';
 
 const router = express.Router();
 
+  // swagger definition
 const swaggerDefinition = {
   info: {
     title: 'iamdocuman API',
     version: '1.0.0',
     description: 'Demonstrating how to describe a RESTful API with Swagger',
   },
-  host: process.env.HOST_URL,
+  host: 'localhost:5000',
   basePath: '/',
 };
 
@@ -32,5 +33,6 @@ module.exports = () => {
     res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, OPTIONS');
     res.send(swaggerSpec);
   });
+
   return router;
 };
