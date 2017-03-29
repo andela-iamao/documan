@@ -1,9 +1,7 @@
+require('dotenv').config();
 /* eslint-disable */
 import express from 'express';
 import config from './server/config';
-
-require('dotenv').config();
-
 import db from './server/models/index';
 /* eslint-enable */
 
