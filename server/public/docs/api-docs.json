@@ -1,0 +1,31 @@
+{
+    "info": {
+        "title": "iamdocuman API",
+        "version": "1.0.0",
+        "description": "Demonstrating how to describe a RESTful API with Swagger"
+    },
+    "swagger": "2.0",
+    "paths": {
+        "/api/v1/users": {
+            "get": {
+                "description": "Returns users",
+                "tags": [
+                    "Users"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "users"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {},
+    "responses": {},
+    "parameters": {},
+    "securityDefinitions": {},
+    "tags": []
+}
