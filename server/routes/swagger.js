@@ -3,6 +3,8 @@ import express from 'express';
 
 const router = express.Router();
 
+const host = `http://${process.env.IP}:${process.env.PORT}`;
+
   // swagger definition
 const swaggerDefinition = {
   info: {
@@ -10,8 +12,7 @@ const swaggerDefinition = {
     version: '1.0.0',
     description: 'Demonstrating how to describe a RESTful API with Swagger',
   },
-  host: process.env.HOST_URL,
-  basePath: '/',
+  host
 };
 
 // options for the swagger docs
