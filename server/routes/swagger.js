@@ -3,16 +3,13 @@ import express from 'express';
 
 const router = express.Router();
 
-const host = `http://${process.env.IP}:${process.env.PORT}`;
-
   // swagger definition
 const swaggerDefinition = {
   info: {
     title: 'iamdocuman API',
     version: '1.0.0',
     description: 'Demonstrating how to describe a RESTful API with Swagger',
-  },
-  host
+  }
 };
 
 // options for the swagger docs
