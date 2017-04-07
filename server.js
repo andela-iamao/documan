@@ -12,7 +12,7 @@ let app = express();
 app = config(app);
 
 if (process.env.NODE_ENV !== 'test') {
-  db.sequelize.sync({ force: true }).done(() => {
+  db.sequelize.sync().done(() => {
     app.listen(process.env.PORT, () => {
       /* eslint-disable */
       console.log(`server started on port ${process.env.PORT}`);

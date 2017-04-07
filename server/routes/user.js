@@ -1,9 +1,9 @@
 import express from 'express';
-import { create } from '../controllers/user';
+import { create, findOne, findAll, update, deleteUser } from '../controllers/user';
 
 const router = express.Router();
 
-module.exports = () => {
+export default () => {
   /**
  * @swagger
  * definitions:
@@ -43,31 +43,131 @@ module.exports = () => {
  *           format: int64
  */
 
+  router.route('/api/v1/users')
+    /**
+     * @swagger
+     * /api/v1/users:
+     *    get:
+     *      description: Returns all users
+     *      tags:
+     *        - Get users
+     *      produces:
+     *        - application/json
+     *      responses:
+     *        200:
+     *          description: users
+     *          schema:
+     *            type: array
+     *            items:
+     *              $ref: '#/definitions/User'
+     */
+   /** @swagger
+     *  /api/v1/users/?limit=4&offset=2:
+     *   get:
+     *     description: Returns {limit} users from the the {offset}
+     *     tags:
+     *       - Get users
+     *     produces:
+     *        - application/json
+     *     responses:
+     *        200:
+     *          description: users
+     *          schema:
+     *            type: array
+     *            items:
+     *              $ref: '#/definitions/User'
+     */
+    .get(findAll)
+    /**
+     * @swagger
+     * /api/v1/users:
+     *   post:
+     *     description: Creates a user
+     *     tags:
+     *      - Create User
+     *     produces:
+     *      - application/json
+     *     parameters:
+     *       - name: body
+     *         description: User object
+     *         in:  body
+     *         required: true
+     *         type: string
+     *         schema:
+     *           $ref: '#/definitions/NewUser'
+     *     responses:
+     *       200:
+     *         description: users
+     *         schema:
+     *          type: object,
+     *          items:
+     *            $ref: '#/definitions/User'
+     */
+    .post(create);
+
+  router.route('/api/v1/users/:id')
+
   /**
    * @swagger
-   * /api/v1/users:
-   *   post:
-   *     description: Returns users
-   *     tags:
-   *      - Users
-   *     produces:
-   *      - application/json
-   *     parameters:
-   *       - name: body
-   *         description: User object
-   *         in:  body
-   *         required: true
-   *         type: string
-   *         schema:
-   *           $ref: '#/definitions/NewUser'
-   *     responses:
-   *       200:
-   *         description: users
-   *         schema:
-   *          type: object,
-   *          items:
-   *            $ref: '#/definitions/User'
+   * /api/v1/users/1:
+   *    get:
+   *      description: Returns the user with the id of 1
+   *      tags:
+   *        - Get user
+   *      produces:
+   *        - application/json
+   *      responses:
+   *        200:
+   *          description: users
+   *          schema:
+   *            type: array
+   *            items:
+   *              $ref: '#/definitions/User'
    */
-  router.post('/api/v1/users', create);
+    .get(findOne)
+    /**
+     * @swagger
+     * /api/v1/users/1:
+     *   put:
+     *     description: Creates a user
+     *     tags:
+     *      - Update User
+     *     produces:
+     *      - application/json
+     *     parameters:
+     *       - name: body
+     *         description: User object
+     *         in:  body
+     *         required: true
+     *         type: string
+     *         schema:
+     *           $ref: '#/definitions/NewUser'
+     *     responses:
+     *       200:
+     *         description: users
+     *         schema:
+     *          type: object,
+     *          items:
+     *            $ref: '#/definitions/User'
+     */
+    .put(update)
+    /**
+     * @swagger
+     * /api/v1/users/1:
+     *    delete:
+     *      description: Deletes the user with the id of 1
+     *      tags:
+     *        - Delete user
+     *      produces:
+     *        - application/json
+     *      responses:
+     *        200:
+     *          description: users
+     *          schema:
+     *            type: array
+     *            items:
+     *              $ref: '#/definitions/User'
+     */
+    .delete(deleteUser);
   return router;
 };
