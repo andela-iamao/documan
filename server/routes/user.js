@@ -1,5 +1,6 @@
 import express from 'express';
-import { create, findOne, findAll, update, deleteUser } from '../controllers/user';
+import { create, findOne, findAll, updateUser, deleteUser, login } from '../controllers/user';
+import auth from '../config/auth';
 
 const router = express.Router();
 
@@ -77,7 +78,7 @@ export default () => {
      *            items:
      *              $ref: '#/definitions/User'
      */
-    .get(findAll)
+    .get(auth, findAll)
     /**
      * @swagger
      * /api/v1/users:
@@ -124,7 +125,7 @@ export default () => {
    *            items:
    *              $ref: '#/definitions/User'
    */
-    .get(findOne)
+    .get(auth, findOne)
     /**
      * @swagger
      * /api/v1/users/1:
@@ -150,7 +151,7 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/User'
      */
-    .put(update)
+    .put(auth, updateUser)
     /**
      * @swagger
      * /api/v1/users/1:
@@ -168,6 +169,8 @@ export default () => {
      *            items:
      *              $ref: '#/definitions/User'
      */
-    .delete(deleteUser);
+    .delete(auth, deleteUser);
+
+  router.post('/api/v1/users/login', login);
   return router;
 };

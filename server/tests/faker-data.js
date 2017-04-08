@@ -1,4 +1,5 @@
 import faker from 'faker';
+import bcrypt from 'bcrypt';
 
 const fakeData = {
   valid_user: {
@@ -174,6 +175,32 @@ const fakeData = {
     email: faker.internet.email(),
     password: faker.internet.password()
   },
+  bulkCreateUser: [{
+    lastname: 'Riddle',
+    username: 'tommyrid',
+    email: 'lordvold@gmail.com',
+    password: bcrypt.hashSync('I hate the potters', bcrypt.genSaltSync()),
+    firstname: 'Thomas'
+  }, {
+    lastname: 'Potters',
+    username: 'HARRYp',
+    email: 'harryp@gmail.com',
+    password: bcrypt.hashSync('I love lord vold', bcrypt.genSaltSync()),
+    firstname: 'Harry'
+  }, {
+    lastname: 'Fain',
+    username: 'dark_friend',
+    email: 'pfain@gmail.com',
+    password: bcrypt.hashSync('darkoneRULES!', bcrypt.genSaltSync()),
+    firstname: 'Padan'
+  }, {
+    lastname: 'Amao',
+    username: 'inuamao',
+    email: 'inumidun@sky.com',
+    password: bcrypt.hashSync('password!', bcrypt.genSaltSync()),
+    roleId: 1,
+    firstname: 'Inumidun'
+  }],
   adminRole: {
     title: 'Admin'
   },

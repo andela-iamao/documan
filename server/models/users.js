@@ -100,14 +100,18 @@ module.exports = (sequelize, DataTypes) => {
         user.password = bcrypt.hashSync(user.password, salt);
       },
       beforeUpdate(user) {
-        const salt = bcrypt.genSaltSync();
-        user.password = bcrypt.hashSync(user.password, salt);
-        user.updatedAt = Date.now();
+        if (user.password) {
+          const salt = bcrypt.genSaltSync();
+          user.password = bcrypt.hashSync(user.password, salt);
+          user.updatedAt = Date.now();
+        }
       },
       beforeBulkUpdate(users) {
-        const salt = bcrypt.genSaltSync();
-        const password = users.attributes.password;
-        users.attributes.password = bcrypt.hashSync(password, salt);
+        if (users.sttributes && users.attributes.password) {
+          const salt = bcrypt.genSaltSync();
+          const password = users.attributes.password;
+          users.attributes.password = bcrypt.hashSync(password, salt);
+        }
       }
     },
     classMethods: {
