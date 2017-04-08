@@ -2,41 +2,34 @@
 /* global db:true */
 /* global expect:true */
 /* global request:true */
+/* global jwt:true */
+/* global faker:true */
+
 describe('Routes: user', () => {
   const User = db.Users;
   const Role = db.Roles;
+  let token;
   let fakeUID;
+  let secondUserToken;
   beforeEach((done) => {
-    Role.create({ title: 'regular', id: 2 })
+    Role.bulkCreate([{
+      title: 'regular', id: 2
+    }, {
+      title: 'admin', id: 1
+    }])
       .then(() => {
         User.destroy({ where: {} })
           .then(() => {
-            User.bulkCreate([{
-              lastname: 'Riddle',
-              username: 'tommyrid',
-              email: 'lordvold@gmail.com',
-              password: 'I hate the potters',
-              firstname: 'Thomas'
-            }, {
-              lastname: 'Potters',
-              username: 'HARRYp',
-              email: 'harryp@gmail.com',
-              password: 'I love lord vold',
-              firstname: 'Harry'
-            }, {
-              lastname: 'Fain',
-              username: 'dark_friend',
-              email: 'pfain@gmail.com',
-              password: 'darkoneRULES!',
-              firstname: 'Padan'
-            }, {
-              lastname: 'Skywalker',
-              username: 'elkay',
-              email: 'luke@sky.com',
-              password: 'dont know a skywalker!',
-              firstname: 'Luke'
-            }], { returning: true }).then((res) => {
+            User.bulkCreate(faker.bulkCreateUser, { returning: true }).then((res) => {
               fakeUID = res[0];
+              token = jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + (60),
+                data: { id: res[0].id }
+              }, process.env.JWT_SECRET);
+              secondUserToken = jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + (60),
+                data: { id: res[2].id }
+              }, process.env.JWT_SECRET);
               done();
             });
           });
@@ -431,10 +424,22 @@ describe('Routes: user', () => {
     describe('Status 200', () => {
       it('Should return a user', (done) => {
         request.get(`/api/v1/users/${fakeUID.id}`)
+          .set('Authorization', token)
           .expect(200)
           .end((err, res) => {
             expect(res.body).to.be.a('object');
             expect(res.body.firstname).to.eql('Thomas');
+            done(err);
+          });
+      });
+    });
+    describe('Status 401', () => {
+      it('should reject an unauthorized user', (done) => {
+        request.get(`/api/v1/users/${fakeUID.id}`)
+          .set('Authorization', `JW ${token}`)
+          .expect(401)
+          .end((err, res) => {
+            expect(res.body.message).to.eql('Sorry you don\'t have permission to perform this operation');
             done(err);
           });
       });
@@ -444,6 +449,7 @@ describe('Routes: user', () => {
     describe('Status 200', () => {
       it('should get and return all users', (done) => {
         request.get('/api/v1/users')
+          .set('Authorization', token)
           .expect(200)
           .end((err, res) => {
             expect(res.body.length).to.eql(4);
@@ -453,6 +459,7 @@ describe('Routes: user', () => {
       });
       it('should return 3 users starting from the second', (done) => {
         request.get('/api/v1/users/?limit=3&offset=1')
+          .set('Authorization', token)
           .expect(200)
           .end((err, res) => {
             expect(res.body.length).to.eql(3);
@@ -462,6 +469,7 @@ describe('Routes: user', () => {
       });
       it('should return all users starting from the second', (done) => {
         request.get('/api/v1/users/?offset=1')
+          .set('Authorization', token)
           .expect(200)
           .end((err, res) => {
             expect(res.body.length).to.eql(3);
@@ -471,6 +479,7 @@ describe('Routes: user', () => {
       });
       it('should return 2 users', (done) => {
         request.get('/api/v1/users/?limit=2')
+          .set('Authorization', token)
           .expect(200)
           .end((err, res) => {
             expect(res.body.length).to.eql(2);
@@ -480,6 +489,7 @@ describe('Routes: user', () => {
       });
       it('should return all users if limit exceeds max users', (done) => {
         request.get('/api/v1/users/?limit=10')
+          .set('Authorization', token)
           .expect(200)
           .end((err, res) => {
             expect(res.body.length).to.eql(4);
@@ -487,6 +497,150 @@ describe('Routes: user', () => {
             done(err);
           });
       });
+    });
+    describe('Status 401', () => {
+      it('should reject an unauthorized user', (done) => {
+        request.get(`/api/v1/users/${fakeUID}`)
+          .set('Authorization', `${token}s2`)
+          .expect(401)
+          .end((err, res) => {
+            expect(res.body.message).to.eql('Sorry you don\'t have permission to perform this operation');
+            done(err);
+          });
+      });
+    });
+  });
+
+  describe('POST /api/v1/users/login', () => {
+    describe('Status 200', () => {
+      it('should log a valid user in', (done) => {
+        request.post('/api/v1/users/login')
+        .send({
+          email: 'inumidun@sky.com',
+          password: 'password!'
+        })
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.token).to.be.ok;
+          done(err);
+        });
+      });
+    });
+    describe('Status 401', () => {
+      it('should reject a request without an email', (done) => {
+        request.post('/api/v1/users/login')
+          .send({
+            password: 'password!'
+          })
+          .expect(401)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Unauthorized Access');
+            expect(res.body.message).to.eql('email/password do not match');
+            done(err);
+          });
+      });
+      it('should reject a request without a password', (done) => {
+        request.post('/api/v1/users/login')
+          .send({
+            email: 'inumidun@sky.com'
+          })
+          .expect(401)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Unauthorized Access');
+            expect(res.body.message).to.eql('email/password do not match');
+            done(err);
+          });
+      });
+      it('should reject a request with an invalid password', (done) => {
+        request.post('/api/v1/users/login')
+          .send({
+            email: 'inumidun@sky.com',
+            password: 'passrd!'
+          })
+          .expect(401)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Unauthorized Access');
+            expect(res.body.message).to.eql('email/password do not match');
+            done(err);
+          });
+      });
+      it('should reject a request with an invalid email', (done) => {
+        request.post('/api/v1/users/login')
+          .send({
+            email: 'inumidun@skee.com',
+            password: 'password!'
+          })
+          .expect(401)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Unauthorized Access');
+            expect(res.body.message).to.eql('email/password do not match');
+            done(err);
+          });
+      });
+    });
+  });
+
+  describe('PUT /api/v1/users/:id', () => {
+    it('should update a user with given id', (done) => {
+      request.put(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', token)
+        .send({
+          password: 'a new password'
+        })
+        .expect(204)
+        .end((err, res) => {
+          expect(res.text).to.eql('');
+          expect(Object.keys(res.body).length).to.eql(0);
+          done(err);
+        });
+    });
+    it('should reject request if token is not valid', (done) => {
+      request.put(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', `s${token}`)
+        .send({
+          password: 'a new password'
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.message).to.eql('Sorry you don\'t have permission to perform this operation');
+          done(err);
+        });
+    });
+    it('should reject request if sender\'s id does not match param', (done) => {
+      request.put(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', secondUserToken)
+        .send({
+          password: 'a new password'
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.message).to.eql('Cannot update properties of another user');
+          done(err);
+        });
+    });
+    it('should reject request if email already exists', (done) => {
+      request.put(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', token)
+        .send({
+          email: faker.bulkCreateUser[2].email
+        })
+        .expect(409)
+        .end((err, res) => {
+          expect(res.body.message).to.eql('This email is already in use');
+          done(err);
+        });
+    });
+    it('should reject request if username exists', (done) => {
+      request.put(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', token)
+        .send({
+          username: faker.bulkCreateUser[2].username
+        })
+        .expect(409)
+        .end((err, res) => {
+          expect(res.body.message).to.eql('This username is already in use');
+          done(err);
+        });
     });
   });
 });
