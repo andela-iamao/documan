@@ -1,8 +1,8 @@
+/* eslint-disable */
 import fs from 'fs';
 import path from 'path';
 import Sequelize from 'sequelize';
-
-// require('dotenv').config();
+/* eslint-enable */
 
 const basename = path.basename(module.filename);
 const env = process.env.NODE_ENV || 'development';

@@ -11,12 +11,17 @@ module.exports = (sequelize, DataTypes) => {
       },
       validate: {
         is: {
-          args: ['^[a-z0-9_]+$', 'i'],
-          msg: 'username cannot contain symbols or spaces except _'
+          args: ['^[a-z0-9_.]+$', 'i'],
+          msg: 'username must contains only letters, numbers, "." and "_"'
         },
         len: {
-          args: [4, 8],
-          msg: 'username cannot be less than 4 or greater than 8 characters'
+          args: [4, 16],
+          msg: 'username cannot be less than 4 or greater than 16 characters'
+        },
+        hasLetters(value) {
+          if (!/[a-z]/i.test(value)) {
+            throw new Error('username must contain letters');
+          }
         }
       }
     },
@@ -45,7 +50,7 @@ module.exports = (sequelize, DataTypes) => {
       validate: {
         is: {
           args: ['^[a-z\'-]+$', 'i'],
-          msg: 'lastname can only contain letters and/or \' and -'
+          msg: 'lastname can only contain letters and/or - and \''
         },
         len: {
           args: [2, 16],
@@ -72,6 +77,11 @@ module.exports = (sequelize, DataTypes) => {
         },
       }
     },
+    roleId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      defaultValue: 2
+    },
     password: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -85,15 +95,37 @@ module.exports = (sequelize, DataTypes) => {
     }
   }, {
     hooks: {
-      beforeCreate: (user) => {
+      beforeCreate(user) {
         const salt = bcrypt.genSaltSync();
         user.password = bcrypt.hashSync(user.password, salt);
+      },
+      beforeUpdate(user) {
+        const salt = bcrypt.genSaltSync();
+        user.password = bcrypt.hashSync(user.password, salt);
+        user.updatedAt = Date.now();
+      },
+      beforeBulkUpdate(users) {
+        const salt = bcrypt.genSaltSync();
+        const password = users.attributes.password;
+        users.attributes.password = bcrypt.hashSync(password, salt);
       }
     },
     classMethods: {
-      associate: (models) => {
-        Users.hasMany(models.Document);
-      },
+      associate(models) {
+        Users.belongsTo(models.Roles, {
+          foreignKey: 'roleId',
+          onDelete: 'CASCADE'
+        });
+        Users.hasMany(models.Document, {
+          foreignKey: {
+            name: 'ownerId',
+            allowNull: false,
+          },
+          onDelete: 'CASCADE'
+        });
+      }
+    },
+    instanceMethods: {
       isPassword: (encodedPassword, password) =>
         bcrypt.compareSync(password, encodedPassword)
     }

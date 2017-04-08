@@ -1,9 +1,9 @@
 import express from 'express';
-import home from '../controllers/home';
+import { create } from '../controllers/document';
 
 const router = express.Router();
 
 export default () => {
-  router.get('/', home);
+  router.post('/api/v1/documents', create);
   return router;
 };

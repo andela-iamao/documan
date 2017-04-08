@@ -8,13 +8,28 @@ module.exports = (sequelize, DataType) => {
       }
     },
     content: {
-      type: DataType.STRING,
+      type: DataType.TEXT,
+      allowNull: false
+    },
+    accessId: {
+      type: DataType.INTEGER,
+      allowNull: false,
+      defaultValue: 1
+    },
+    ownerId: {
+      type: DataType.INTEGER,
       allowNull: false
     }
   }, {
     classMethods: {
       associate: (models) => {
-        Document.belongsTo(models.Users);
+        Document.belongsTo(models.Users, {
+          foreignKey: 'ownerId',
+          onDelete: 'CASCADE'
+        });
+        Document.belongsTo(models.Access, {
+          foreignKey: 'accessId'
+        });
       }
     }
   });

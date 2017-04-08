@@ -7,10 +7,30 @@
     "swagger": "2.0",
     "paths": {
         "/api/v1/users": {
-            "post": {
-                "description": "Returns users",
+            "get": {
+                "description": "Returns all users",
                 "tags": [
-                    "Users"
+                    "Get users"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Creates a user",
+                "tags": [
+                    "Create User"
                 ],
                 "produces": [
                     "application/json"
@@ -32,6 +52,102 @@
                         "description": "users",
                         "schema": {
                             "type": "object,",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/?limit=4&offset=2": {
+            "get": {
+                "description": "Returns {limit} users from the the {offset}",
+                "tags": [
+                    "Get users"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/users/1": {
+            "get": {
+                "description": "Returns the user with the id of 1",
+                "tags": [
+                    "Get user"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "users",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Creates a user",
+                "tags": [
+                    "Update User"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "name": "body",
+                        "description": "User object",
+                        "in": "body",
+                        "required": true,
+                        "type": "string",
+                        "schema": {
+                            "$ref": "#/definitions/NewUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "users",
+                        "schema": {
+                            "type": "object,",
+                            "items": {
+                                "$ref": "#/definitions/User"
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Deletes the user with the id of 1",
+                "tags": [
+                    "Delete user"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "users",
+                        "schema": {
+                            "type": "array",
                             "items": {
                                 "$ref": "#/definitions/User"
                             }
