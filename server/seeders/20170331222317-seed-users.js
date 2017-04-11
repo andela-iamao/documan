@@ -16,6 +16,7 @@ module.exports = {
       firstname: 'Fyodor',
       lastname: 'Dostoyevsky',
       email: 'efdee@g.com',
+      roleId: 1,
       username: 'fyodor',
       password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
       createdAt: '2017-03-31 13:51:40.653+01',

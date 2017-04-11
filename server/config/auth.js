@@ -10,7 +10,7 @@ export default (req, res, next) => {
           message: 'Sorry you don\'t have permission to perform this operation'
         });
       } else {
-        req.decoded = decoded;
+        req.decoded = decoded.data;
         next();
       }
     });

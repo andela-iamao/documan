@@ -41,6 +41,13 @@ module.exports = (sequelize, DataTypes) => {
           if (!/[a-z]/i.test(value)) {
             throw new Error('firstname must contain letters');
           }
+        },
+        hasOneSymbol(value) {
+          if (value.replace(/[^-]/g, '').length > 1) {
+            throw new Error('firstname cannot have more than one -');
+          } else if (value.replace(/[^']/g, '').length > 1) {
+            throw new Error('firstname cannot have more than one \'');
+          }
         }
       }
     },
@@ -59,6 +66,13 @@ module.exports = (sequelize, DataTypes) => {
         hasLetters(value) {
           if (!/[a-z]/i.test(value)) {
             throw new Error('lastname must contain letters');
+          }
+        },
+        hasOneSymbol(value) {
+          if (value.replace(/[^-]/g, '').length > 1) {
+            throw new Error('lastname cannot have more than one -');
+          } else if (value.replace(/[^']/g, '').length > 1) {
+            throw new Error('lastname cannot have more than one \'');
           }
         }
       }

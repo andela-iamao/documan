@@ -11,8 +11,17 @@ describe('Routes: user', () => {
   let token;
   let fakeUID;
   let secondUserToken;
+  let adminToken;
+  let admin;
+  let secondRegUser;
+  let fourthRegUser;
+  let fifthRegUserToken;
+  let customRoles = [];
+  let customRolesToken = [];
   beforeEach((done) => {
     Role.bulkCreate([{
+      title: 'custom', id: 3
+    }, {
       title: 'regular', id: 2
     }, {
       title: 'admin', id: 1
@@ -20,17 +29,44 @@ describe('Routes: user', () => {
       .then(() => {
         User.destroy({ where: {} })
           .then(() => {
-            User.bulkCreate(faker.bulkCreateUser, { returning: true }).then((res) => {
+            User.bulkCreate(faker.bulkCreateUser, { returning: true })
+            .then((res) => {
               fakeUID = res[0];
+              admin = res[1];
+              secondRegUser = res[2];
+              fourthRegUser = res[4];
+              customRoles.push(res[4], res[5]);
+              customRolesToken.pushn(jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + (60 * 10),
+                data: { id: res[4].id }
+              }, process.env.JWT_SECRET), jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + (60 * 10),
+                data: { id: res[5].id }
+              }, process.env.JWT_SECRET));
               token = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60),
+                exp: Math.floor(Date.now() / 1000) + (60 * 10),
                 data: { id: res[0].id }
               }, process.env.JWT_SECRET);
               secondUserToken = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60),
+                exp: Math.floor(Date.now() / 1000) + (60 * 10),
                 data: { id: res[2].id }
               }, process.env.JWT_SECRET);
-              done();
+              fifthRegUserToken = jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + (60 * 10),
+                data: { id: res[5].id }
+              }, process.env.JWT_SECRET);
+              adminToken = jwt.sign({
+                exp: Math.floor(Date.now() / 1000) + (60 * 10),
+                data: { id: res[3].id }
+              }, process.env.JWT_SECRET);
+              const docs = faker.createDocument(fakeUID.id)
+                .concat(faker.createDocument(secondRegUser.id))
+                .concat(faker.createDocument(admin.id));
+              db.Access.bulkCreate(faker.allAccess)
+                .then(() => {
+                  db.Document
+                    .bulkCreate(docs).then(() => done());
+                });
             });
           });
       });
@@ -39,544 +75,535 @@ describe('Routes: user', () => {
     Role.destroy({ where: {} })
       .then(() => {
         User.destroy({ where: {} })
-          .then(() => done());
+          .then(() => {
+            db.Access.destroy({ where: {} })
+              .then(() => {
+                db.Document.destroy({ where: {} });
+                done();
+              });
+          });
       });
   });
   describe('POST /api/v1/users', () => {
-    describe('Status 200', () => {
-      it('creates a new user', (done) => {
-        request.post('/api/v1/users')
-          .send({
-            firstname: 'Rhett',
-            lastname: 'Butler',
-            username: 'scalawag',
-            email: 'rhett@g.com',
-            password: 'password7'
-          })
-          .expect(200)
-          .end((err, res) => {
-            expect(res.body.firstname).to.eql('Rhett');
-            expect(res.body.lastname).to.eql('Butler');
-            expect(res.body.username).to.eql('scalawag');
-            expect(res.body.email).to.eql('rhett@g.com');
-            expect(res.body.email).to.not.eql('password7');
-            done(err);
-          });
-      });
+    it('creates a new user', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.create_valid_user)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.user.firstname)
+            .to.eql(faker.create_valid_user.firstname);
+          expect(res.body.user.lastname)
+            .to.eql(faker.create_valid_user.lastname);
+          expect(res.body.user.username)
+            .to.eql(faker.create_valid_user.username);
+          expect(res.body.user.email)
+            .to.eql(faker.create_valid_user.email);
+          expect(res.body.user.password)
+            .to.not.eql(faker.create_valid_user.password);
+          expect(res.body).to.have.property('token');
+          done(err);
+        });
     });
-    describe('Status 400', () => {
-      it('rejects requests without an email field', (done) => {
+    it('rejects requests without an email field', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.no_email_user)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('notNull Violation');
+          expect(res.body.message).to.eql('email cannot be null');
+          done(err);
+        });
+    });
+    it('rejects requests without an incorrect email field', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.invalid_email_user)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Validation error');
+          expect(res.body.message).to.eql('Email is not valid');
+          done(err);
+        });
+    });
+    it('rejects requests without a firstname field', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.no_firstname_user)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('notNull Violation');
+          expect(res.body.message).to.eql('firstname cannot be null');
+          done(err);
+        });
+    });
+    it('rejects request if firstname field contains anything but letters',
+      (done) => {
         request.post('/api/v1/users')
-          .send({
-            firstname: 'Rhett',
-            lastname: 'Butler',
-            username: 'scalawag',
-            password: 'password7'
-          })
+          .send(faker.symbol_firstname_user)
           .expect(400)
           .end((err, res) => {
-            expect(res.body.error_code).to.eql('notNull Violation');
-            expect(res.body.message).to.eql('email cannot be null');
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to.eql('firstname can only contain letters and/or - and \'');
             done(err);
           });
       });
-      it('rejects requests without an incorrect email field', (done) => {
+    it('rejects request if firstname field does not contain letters',
+      (done) => {
+        request.post('/api/v1/users')
+          .send(faker.noletter_firstname_user)
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message).to.eql('firstname must contain letters');
+            done(err);
+          });
+      });
+    it('rejects requests if firstname contains more than one "\'"', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.firstname_more_quote)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Validation error');
+          expect(res.body.message).to.eql('firstname cannot have more than one \'');
+          done(err);
+        });
+    });
+    it('rejects requests if firstname contains more than one "-"', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.firstname_more_hyphen)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Validation error');
+          expect(res.body.message).to.eql('firstname cannot have more than one -');
+          done(err);
+        });
+    });
+    it('rejects request if firstname field is greater than 16 characters',
+      (done) => {
+        request.post('/api/v1/users')
+          .send(faker.long_firstname_user)
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to
+              .eql(
+                'firstname cannot be less than 2 or greater than 16 characters'
+              );
+            done(err);
+          });
+      });
+    it('rejects request if firstname field is less than 2 characters',
+      (done) => {
+        request.post('/api/v1/users')
+          .send(faker.short_firstname_user)
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code)
+              .to.eql('Validation error');
+            expect(res.body.message)
+              .to
+              .eql(
+                'firstname cannot be less than 2 or greater than 16 characters'
+              );
+            done(err);
+          });
+      });
+    it('rejects requests without a lastname field', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.no_lastname_user)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('notNull Violation');
+          expect(res.body.message).to.eql('lastname cannot be null');
+          done(err);
+        });
+    });
+    it('rejects request if lastname field contains anything but letters and/or \' and -',
+      (done) => {
+        request.post('/api/v1/users')
+          .send(faker.symbol_lastname_user)
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to.eql('lastname can only contain letters and/or - and \'');
+            done(err);
+          });
+      });
+    it('rejects request if lastname field does not contain letters',
+      (done) => {
         request.post('/api/v1/users')
           .send({
-            firstname: 'Rhett',
-            lastname: 'Butler',
+            firstname: 'O\'hara',
+            lastname: '-\'',
             username: 'scalawag',
-            email: 'rhett',
+            email: 'rhett@g.com',
             password: 'password7'
           })
           .expect(400)
           .end((err, res) => {
             expect(res.body.error_code).to.eql('Validation error');
-            expect(res.body.message).to.eql('Email is not valid');
+            expect(res.body.message).to.eql('lastname must contain letters');
             done(err);
           });
       });
-      it('rejects requests without a firstname field', (done) => {
-        request.post('/api/v1/users')
-          .send({
-            lastname: 'Butler',
-            username: 'scalawag',
-            email: 'rhett@g.com',
-            password: 'password7'
-          })
-          .expect(400)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('notNull Violation');
-            expect(res.body.message).to.eql('firstname cannot be null');
-            done(err);
-          });
-      });
-      it('rejects request if firstname field contains anything but letters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'Rhe1t',
-              lastname: 'Butler',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to.eql('firstname can only contain letters and/or - and \'');
-              done(err);
-            });
-        });
-      it('rejects request if firstname field does not contain letters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: '-----\'',
-              lastname: 'Butler',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message).to.eql('firstname must contain letters');
-              done(err);
-            });
-        });
-      it('rejects request if firstname field is greater than 16 characters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'ScarlettMissisipi',
-              lastname: 'Butler',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to
-                .eql(
-                  'firstname cannot be less than 2 or greater than 16 characters'
-                );
-              done(err);
-            });
-        });
-      it('rejects request if firstname field is less than 2 characters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'R',
-              lastname: 'Butler',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code)
-                .to.eql('Validation error');
-              expect(res.body.message)
-                .to
-                .eql(
-                  'firstname cannot be less than 2 or greater than 16 characters'
-                );
-              done(err);
-            });
-        });
-      it('rejects requests without a lastname field', (done) => {
-        request.post('/api/v1/users')
-          .send({
-            firstname: 'Rhett',
-            username: 'scalawag',
-            email: 'rhett@g.com',
-            password: 'password7'
-          })
-          .expect(400)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('notNull Violation');
-            expect(res.body.message).to.eql('lastname cannot be null');
-            done(err);
-          });
-      });
-      it('rejects request if lastname field contains anything but letters and/or \' and -',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'O\'hara',
-              lastname: '$Butler',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to.eql('lastname can only contain letters and/or - and \'');
-              done(err);
-            });
-        });
-      it('rejects request if lastname field does not contain letters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'O\'hara',
-              lastname: '----\'',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message).to.eql('lastname must contain letters');
-              done(err);
-            });
-        });
-      it('rejects request if lastname field is greater than 16 characters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'Rhett',
-              lastname: 'O\'HaraButtlerScarlett',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to
-                .eql('lastname cannot be less than 2 or greater than 16 characters');
-              done(err);
-            });
-        });
-      it('rejects request if lastname field is less than 2 characters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'Rhett',
-              lastname: 'B',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code)
-                .to.eql('Validation error');
-              expect(res.body.message)
-                .to
-                .eql('lastname cannot be less than 2 or greater than 16 characters');
-              done(err);
-            });
-        });
-      it('rejects requests without a username field', (done) => {
-        request.post('/api/v1/users')
-          .send({
-            firstname: 'Rhett',
-            lastname: 'Butler',
-            email: 'rhett@g.com',
-            password: 'password7'
-          })
-          .expect(400)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('notNull Violation');
-            expect(res.body.message).to.eql('username cannot be null');
-            done(err);
-          });
-      });
-      it('rejects requests if username field is less than 4 characters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'Rhett',
-              lastname: 'Butler',
-              username: 'sc',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to
-                .eql('username cannot be less than 4 or greater than 16 characters');
-              done(err);
-            });
-        });
-      it('rejects requests if username field is greater than 16 characters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'Rhett',
-              lastname: 'Pool',
-              username: 'scalawage890olp0u',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to
-                .eql('username cannot be less than 4 or greater than 16 characters');
-              done(err);
-            });
-        });
-      it('rejects request if username field contains symbols except _ and .',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'Rhett',
-              lastname: 'Butler',
-              username: 'da n^ke',
-              email: 'rhett@g.com',
-              password: 'password7'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to
-                .eql('username must contains only letters, numbers, "." and "_"');
-              done(err);
-            });
-        });
-      it('rejects requests without a password field', (done) => {
-        request.post('/api/v1/users')
-          .send({
-            firstname: 'Rhett',
-            lastname: 'Butler',
-            username: 'scalawag',
-            email: 'rhett@g.com'
-          })
-          .expect(400)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('notNull Violation');
-            expect(res.body.message)
-              .to.eql('password cannot be null');
-            done(err);
-          });
-      });
-      it('rejects requests if password field is less than 8 characters',
-        (done) => {
-          request.post('/api/v1/users')
-            .send({
-              firstname: 'Rhett',
-              lastname: 'Butler',
-              username: 'scalawag',
-              email: 'rhett@g.com',
-              password: 'pass'
-            })
-            .expect(400)
-            .end((err, res) => {
-              expect(res.body.error_code).to.eql('Validation error');
-              expect(res.body.message)
-                .to.eql('password cannot be less than 8 characters');
-              done(err);
-            });
+    it('rejects requests if lastname contains more than one "\'"', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.lastname_more_quote)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Validation error');
+          expect(res.body.message).to.eql('lastname cannot have more than one \'');
+          done(err);
         });
     });
-    describe('Status 409', () => {
-      it('rejects request if email already exists', (done) => {
+    it('rejects requests if lastname contains more than one "-"', (done) => {
+      request.post('/api/v1/users')
+        .send(faker.lastname_more_hyphen)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Validation error');
+          expect(res.body.message).to.eql('lastname cannot have more than one -');
+          done(err);
+        });
+    });
+    it('rejects request if lastname field is greater than 16 characters',
+      (done) => {
         request.post('/api/v1/users')
           .send({
-            lastname: 'John',
-            username: 'depp',
-            email: 'lordvold@gmail.com',
-            password: 'I hate the potters',
-            firstname: 'Thomas'
+            firstname: 'Rhett',
+            lastname: 'O\'HaraButtlerScarlett',
+            username: 'scalawag',
+            email: 'rhett@g.com',
+            password: 'password7'
           })
-          .expect(409)
+          .expect(400)
           .end((err, res) => {
-            expect(res.body.error_code).to.eql('Unique key violation');
-            expect(res.body.message).to.eql('This email is already in use');
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to
+              .eql('lastname cannot be less than 2 or greater than 16 characters');
             done(err);
           });
       });
-      it('rejects request if username already exists', (done) => {
+    it('rejects request if lastname field is less than 2 characters',
+      (done) => {
         request.post('/api/v1/users')
           .send({
-            lastname: 'John',
-            username: 'tommyrid',
-            email: 'lordold@gmail.com',
-            password: 'I hate the potters',
-            firstname: 'Thomas'
+            firstname: 'Rhett',
+            lastname: 'B',
+            username: 'scalawag',
+            email: 'rhett@g.com',
+            password: 'password7'
           })
-          .expect(409)
+          .expect(400)
           .end((err, res) => {
-            expect(res.body.error_code).to.eql('Unique key violation');
-            expect(res.body.message).to.eql('This username is already in use');
+            expect(res.body.error_code)
+              .to.eql('Validation error');
+            expect(res.body.message)
+              .to
+              .eql('lastname cannot be less than 2 or greater than 16 characters');
             done(err);
           });
       });
+    it('rejects requests without a username field', (done) => {
+      request.post('/api/v1/users')
+        .send({
+          firstname: 'Rhett',
+          lastname: 'Butler',
+          email: 'rhett@g.com',
+          password: 'password7'
+        })
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('notNull Violation');
+          expect(res.body.message).to.eql('username cannot be null');
+          done(err);
+        });
+    });
+    it('rejects requests if username field is less than 4 characters',
+      (done) => {
+        request.post('/api/v1/users')
+          .send({
+            firstname: 'Rhett',
+            lastname: 'Butler',
+            username: 'sc',
+            email: 'rhett@g.com',
+            password: 'password7'
+          })
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to
+              .eql('username cannot be less than 4 or greater than 16 characters');
+            done(err);
+          });
+      });
+    it('rejects requests if username field is greater than 16 characters',
+      (done) => {
+        request.post('/api/v1/users')
+          .send({
+            firstname: 'Rhett',
+            lastname: 'Pool',
+            username: 'scalawage890olp0u',
+            email: 'rhett@g.com',
+            password: 'password7'
+          })
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to
+              .eql('username cannot be less than 4 or greater than 16 characters');
+            done(err);
+          });
+      });
+    it('rejects request if username field contains symbols except _ and .',
+      (done) => {
+        request.post('/api/v1/users')
+          .send({
+            firstname: 'Rhett',
+            lastname: 'Butler',
+            username: 'da n^ke',
+            email: 'rhett@g.com',
+            password: 'password7'
+          })
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to
+              .eql('username must contains only letters, numbers, "." and "_"');
+            done(err);
+          });
+      });
+    it('rejects requests without a password field', (done) => {
+      request.post('/api/v1/users')
+        .send({
+          firstname: 'Rhett',
+          lastname: 'Butler',
+          username: 'scalawag',
+          email: 'rhett@g.com'
+        })
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('notNull Violation');
+          expect(res.body.message)
+            .to.eql('password cannot be null');
+          done(err);
+        });
+    });
+    it('rejects requests if password field is less than 8 characters',
+      (done) => {
+        request.post('/api/v1/users')
+          .send({
+            firstname: 'Rhett',
+            lastname: 'Butler',
+            username: 'scalawag',
+            email: 'rhett@g.com',
+            password: 'pass'
+          })
+          .expect(400)
+          .end((err, res) => {
+            expect(res.body.error_code).to.eql('Validation error');
+            expect(res.body.message)
+              .to.eql('password cannot be less than 8 characters');
+            done(err);
+          });
+      });
+    it('rejects request if email already exists', (done) => {
+      request.post('/api/v1/users')
+        .send({
+          lastname: 'John',
+          username: 'depp',
+          email: 'lordvold@gmail.com',
+          password: 'I hate the potters',
+          firstname: 'Thomas'
+        })
+        .expect(409)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unique key violation');
+          expect(res.body.message).to.eql('This email is already in use');
+          done(err);
+        });
+    });
+    it('rejects request if username already exists', (done) => {
+      request.post('/api/v1/users')
+        .send({
+          lastname: 'John',
+          username: 'tommyrid',
+          email: 'lordold@gmail.com',
+          password: 'I hate the potters',
+          firstname: 'Thomas'
+        })
+        .expect(409)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unique key violation');
+          expect(res.body.message).to.eql('This username is already in use');
+          done(err);
+        });
     });
   });
   describe('GET /api/v1/users/:id', () => {
-    describe('Status 200', () => {
-      it('Should return a user', (done) => {
-        request.get(`/api/v1/users/${fakeUID.id}`)
-          .set('Authorization', token)
-          .expect(200)
-          .end((err, res) => {
-            expect(res.body).to.be.a('object');
-            expect(res.body.firstname).to.eql('Thomas');
-            done(err);
-          });
-      });
+    it('should return a user\'s basic data if not admin', (done) => {
+      request.get(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', token)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.a('object');
+          expect(res.body.firstname).to.eql('Thomas');
+          expect(res.body.password).to.be.a('undefined');
+          done(err);
+        });
     });
-    describe('Status 401', () => {
-      it('should reject an unauthorized user', (done) => {
-        request.get(`/api/v1/users/${fakeUID.id}`)
-          .set('Authorization', `JW ${token}`)
-          .expect(401)
-          .end((err, res) => {
-            expect(res.body.message).to.eql('Sorry you don\'t have permission to perform this operation');
-            done(err);
-          });
-      });
+    it('should return all users data if admin', (done) => {
+      request.get(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', adminToken)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.be.a('object');
+          expect(res.body.firstname).to.eql(faker.bulkCreateUser[0].firstname);
+          expect(res.body.password).to.not.be.a('undefined');
+          done(err);
+        });
+    });
+    it('should reject an unauthorized user', (done) => {
+      request.get(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', `JW ${token}`)
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.message)
+          .to.eql('Sorry you don\'t have permission to perform this operation');
+          done(err);
+        });
     });
   });
   describe('GET /api/v1/users', () => {
-    describe('Status 200', () => {
-      it('should get and return all users', (done) => {
-        request.get('/api/v1/users')
-          .set('Authorization', token)
-          .expect(200)
-          .end((err, res) => {
-            expect(res.body.length).to.eql(4);
-            expect(Object.keys(res.body[0]).length).to.eql(9);
-            done(err);
-          });
-      });
-      it('should return 3 users starting from the second', (done) => {
-        request.get('/api/v1/users/?limit=3&offset=1')
-          .set('Authorization', token)
-          .expect(200)
-          .end((err, res) => {
-            expect(res.body.length).to.eql(3);
-            expect(res.body[0].firstname).to.not.eql('Thomas');
-            done(err);
-          });
-      });
-      it('should return all users starting from the second', (done) => {
-        request.get('/api/v1/users/?offset=1')
-          .set('Authorization', token)
-          .expect(200)
-          .end((err, res) => {
-            expect(res.body.length).to.eql(3);
-            expect(res.body[0].firstname).to.not.eql('Thomas');
-            done(err);
-          });
-      });
-      it('should return 2 users', (done) => {
-        request.get('/api/v1/users/?limit=2')
-          .set('Authorization', token)
-          .expect(200)
-          .end((err, res) => {
-            expect(res.body.length).to.eql(2);
-            expect(res.body[0].firstname).to.eql('Thomas');
-            done(err);
-          });
-      });
-      it('should return all users if limit exceeds max users', (done) => {
-        request.get('/api/v1/users/?limit=10')
-          .set('Authorization', token)
-          .expect(200)
-          .end((err, res) => {
-            expect(res.body.length).to.eql(4);
-            expect(res.body[0].firstname).to.eql('Thomas');
-            done(err);
-          });
-      });
+    it('should get and return all users', (done) => {
+      request.get('/api/v1/users')
+        .set('Authorization', token)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.length).to.eql(6);
+          expect(Object.keys(res.body[0]).length).to.eql(6);
+          done(err);
+        });
     });
-    describe('Status 401', () => {
-      it('should reject an unauthorized user', (done) => {
-        request.get(`/api/v1/users/${fakeUID}`)
-          .set('Authorization', `${token}s2`)
-          .expect(401)
-          .end((err, res) => {
-            expect(res.body.message).to.eql('Sorry you don\'t have permission to perform this operation');
-            done(err);
-          });
-      });
+    it('should return 3 users starting from the second', (done) => {
+      request.get('/api/v1/users/?limit=3&offset=1')
+        .set('Authorization', token)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.length).to.eql(3);
+          expect(res.body[0].firstname).to.not.eql('Thomas');
+          done(err);
+        });
+    });
+    it('should return all users starting from the second', (done) => {
+      request.get('/api/v1/users/?offset=1')
+        .set('Authorization', token)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.length).to.eql(5);
+          expect(res.body[0].firstname).to.not.eql('Thomas');
+          done(err);
+        });
+    });
+    it('should return 2 users', (done) => {
+      request.get('/api/v1/users/?limit=2')
+        .set('Authorization', token)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.length).to.eql(2);
+          expect(res.body[0].firstname).to.eql('Thomas');
+          done(err);
+        });
+    });
+    it('should return all users if limit exceeds max users', (done) => {
+      request.get('/api/v1/users/?limit=10')
+        .set('Authorization', token)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body.length).to.eql(6);
+          expect(res.body[0].firstname).to.eql('Thomas');
+          done(err);
+        });
+    });
+    it('should reject an unauthorized user', (done) => {
+      request.get(`/api/v1/users/${fakeUID}`)
+        .set('Authorization', `${token}s2`)
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.message)
+          .to.eql('Sorry you don\'t have permission to perform this operation');
+          done(err);
+        });
     });
   });
 
   describe('POST /api/v1/users/login', () => {
-    describe('Status 200', () => {
-      it('should log a valid user in', (done) => {
-        request.post('/api/v1/users/login')
-        .send({
-          email: 'inumidun@sky.com',
-          password: 'password!'
-        })
-        .expect(200)
-        .end((err, res) => {
-          expect(res.body.token).to.be.ok;
-          done(err);
-        });
+    it('should log a valid user in', (done) => {
+      request.post('/api/v1/users/login')
+      .send({
+        email: 'inumidun@sky.com',
+        password: 'password!'
+      })
+      .expect(200)
+      .end((err, res) => {
+        expect(res.body.token).to.be.ok;
+        done(err);
       });
     });
-    describe('Status 401', () => {
-      it('should reject a request without an email', (done) => {
-        request.post('/api/v1/users/login')
-          .send({
-            password: 'password!'
-          })
-          .expect(401)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('Unauthorized Access');
-            expect(res.body.message).to.eql('email/password do not match');
-            done(err);
-          });
-      });
-      it('should reject a request without a password', (done) => {
-        request.post('/api/v1/users/login')
-          .send({
-            email: 'inumidun@sky.com'
-          })
-          .expect(401)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('Unauthorized Access');
-            expect(res.body.message).to.eql('email/password do not match');
-            done(err);
-          });
-      });
-      it('should reject a request with an invalid password', (done) => {
-        request.post('/api/v1/users/login')
-          .send({
-            email: 'inumidun@sky.com',
-            password: 'passrd!'
-          })
-          .expect(401)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('Unauthorized Access');
-            expect(res.body.message).to.eql('email/password do not match');
-            done(err);
-          });
-      });
-      it('should reject a request with an invalid email', (done) => {
-        request.post('/api/v1/users/login')
-          .send({
-            email: 'inumidun@skee.com',
-            password: 'password!'
-          })
-          .expect(401)
-          .end((err, res) => {
-            expect(res.body.error_code).to.eql('Unauthorized Access');
-            expect(res.body.message).to.eql('email/password do not match');
-            done(err);
-          });
-      });
+    it('should reject a request without an email', (done) => {
+      request.post('/api/v1/users/login')
+        .send({
+          password: 'password!'
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized Access');
+          expect(res.body.message).to.eql('email/password do not match');
+          done(err);
+        });
+    });
+    it('should reject a request without a password', (done) => {
+      request.post('/api/v1/users/login')
+        .send({
+          email: 'inumidun@sky.com'
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized Access');
+          expect(res.body.message).to.eql('email/password do not match');
+          done(err);
+        });
+    });
+    it('should reject a request with an invalid password', (done) => {
+      request.post('/api/v1/users/login')
+        .send({
+          email: 'inumidun@sky.com',
+          password: 'passrd!'
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized Access');
+          expect(res.body.message).to.eql('email/password do not match');
+          done(err);
+        });
+    });
+    it('should reject a request with an invalid email', (done) => {
+      request.post('/api/v1/users/login')
+        .send({
+          email: 'inumidun@skee.com',
+          password: 'password!'
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized Access');
+          expect(res.body.message).to.eql('email/password do not match');
+          done(err);
+        });
     });
   });
 
@@ -594,6 +621,18 @@ describe('Routes: user', () => {
           done(err);
         });
     });
+    it('should allow admin promote regular roles to admin roles', (done) => {
+      request.put(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', adminToken)
+        .send({
+          roleId: 1
+        })
+        .expect(204)
+        .end((err, res) => {
+          expect(res.body).to.eql({});
+          done(err);
+        });
+    });
     it('should reject request if token is not valid', (done) => {
       request.put(`/api/v1/users/${fakeUID.id}`)
         .set('Authorization', `s${token}`)
@@ -602,7 +641,8 @@ describe('Routes: user', () => {
         })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.message).to.eql('Sorry you don\'t have permission to perform this operation');
+          expect(res.body.message)
+          .to.eql('Sorry you don\'t have permission to perform this operation');
           done(err);
         });
     });
@@ -614,7 +654,35 @@ describe('Routes: user', () => {
         })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.message).to.eql('Cannot update properties of another user');
+          expect(res.body.message)
+          .to.eql('Cannot update properties of another user');
+          done(err);
+        });
+    });
+    it('should reject request if admin tries to update user details', (done) => {
+      request.put(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', adminToken)
+        .send({
+          password: 'a new password'
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.message)
+          .to.eql('Cannot update properties of another user');
+          done(err);
+        });
+    });
+    it('should reject request if admin tries to update admin roleId', (done) => {
+      request.put(`/api/v1/users/${admin.id}`)
+        .set('Authorization', adminToken)
+        .send({
+          roleId: 2
+        })
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized');
+          expect(res.body.message)
+            .to.eql('Cannot update properties of another admin');
           done(err);
         });
     });
@@ -642,5 +710,116 @@ describe('Routes: user', () => {
           done(err);
         });
     });
+  });
+
+  describe('DELETE /api/v1/users/:id', () => {
+    it('should delete a user', (done) => {
+      request.delete(`/api/v1/users/${secondRegUser.id}`)
+        .set('Authorization', secondUserToken)
+        .expect(204)
+        .end((err, res) => {
+          expect(res.body).to.eql({});
+          done(err);
+        });
+    });
+    it('should allow admin delete a user', (done) => {
+      request.delete(`/api/v1/users/${fakeUID.id}`)
+        .set('Authorization', adminToken)
+        .expect(204)
+        .end((err, res) => {
+          expect(res.body).to.eql({});
+          done(err);
+        });
+    });
+    it('should reject request to delete user from a regular user', (done) => {
+      request.delete(`/api/v1/users/${fourthRegUser.id}`)
+        .set('Authorization', fifthRegUserToken)
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized');
+          expect(res.body.message).to.eql('you cannot delete another user');
+          done(err);
+        });
+    });
+    it('should reject request if user was not found', (done) => {
+      request.delete('/api/v1/users/99999')
+        .set('Authorization', fifthRegUserToken)
+        .expect(404)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Not found');
+          expect(res.body.message).to.eql('User not found');
+          done(err);
+        });
+    });
+    it('should reject requests from unauthorized users', (done) => {
+      request.delete(`/api/v1/users/${fourthRegUser.id}`)
+        .set('Authorization', `${fifthRegUserToken}1`)
+        .expect(401)
+        .end((err, res) => {
+          // expect(res.body.error_code).to.eql('Unauthorized');
+          expect(res.body.message)
+            .to.eql('Sorry you don\'t have permission to perform this operation');
+          done(err);
+        });
+    });
+    it('should reject request to delete admin user from admin user', (done) => {
+      request.delete(`/api/v1/users/${admin.id}`)
+        .set('Authorization', adminToken)
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized');
+          expect(res.body.message).to.eql('you cannot delete an admin');
+          done(err);
+        });
+    });
+  });
+
+  describe('GET /api/v1/users/:id/documents', () => {
+    it('should return only public documents of a user to another reqular users',
+    (done) => {
+      request.get(`/api/v1/users/${fakeUID.id}/documents`)
+        .set('Authorization', secondUserToken)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.have.lengthOf(5);
+          done(err);
+        });
+    });
+    it('should return all documents belonging to the requester',
+    (done) => {
+      request.get(`/api/v1/users/${fakeUID.id}/documents`)
+        .set('Authorization', token)
+        .expect(200)
+        .end((err, res) => {
+          expect(res.body).to.have.lengthOf(7);
+          done(err);
+        });
+    });
+    it('should return role documents if both users are on the same role',
+      (done) => {
+        request.get(`/api/v1/users/${customRoles[0].id}/documents`)
+          .set('Authorization', customRolesToken[1])
+          .expect(200)
+          .end((err, res) => {
+            expect(res.body).to.have.lengthOf(1);
+            done(err);
+          });
+      });
+    // it('should return both privte and public documents if admin requests',
+    //   (done) => {
+    //     request.get(`/api/v1/users/${secondRegUser.id}/documents`)
+    //       .set('Authorization', token)
+    //       .expect(200)
+    //       .end((err, res) => {
+    //         expect(res.body).to.have.lengthOf(7);
+    //         done(err);
+    //       });
+    //   });
+    // it('should reject requests from an unauthorized user', (done) => {
+    //
+    // });
+    // it('should reject request if user does not exist', (done) => {
+    //
+    // });
   });
 });
