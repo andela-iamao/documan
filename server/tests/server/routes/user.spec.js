@@ -105,6 +105,17 @@ describe('Routes: user', () => {
           done(err);
         });
     });
+    it('should reject request if roleId if is found in request', (done) => {
+      const req = faker.valid_user;
+      req.roleId = 1;
+      request.post('/api/v1/users')
+        .send(req)
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).to.eql('sorry, you can\'t signup as an admin');
+          done(err);
+        });
+    });
     it('rejects requests without an email field', (done) => {
       request.post('/api/v1/users')
         .send(faker.no_email_user)

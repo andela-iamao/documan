@@ -48,4 +48,21 @@ const targetIsAdmin = (req, res, next) => {
     }));
 };
 
-export { isAdmin, hasAccess, targetIsAdmin };
+/**
+ * @param {Array} fields - contains list of required fields
+ * @param {Object} values - contains object to be validated
+ *
+ * @returns {Boolean} - If all required fields are found
+ * @returns {String} - If validation fails return error message
+ */
+function requiredField(fields, values) {
+  let errorMessage = '';
+  fields.forEach((field) => {
+    if ((!values[field] || values[field] === '') && !errorMessage) {
+      errorMessage = `${field} cannot be null`;
+    }
+  });
+  return errorMessage || false;
+}
+
+export { requiredField, isAdmin, hasAccess, targetIsAdmin };

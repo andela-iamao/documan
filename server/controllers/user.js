@@ -3,6 +3,11 @@ import db from '../models/index';
 import helper from '../helpers/error-render';
 
 const create = (req, res) => {
+  if (req.body.roleId) {
+    return res.status(400).json({
+      message: 'sorry, you can\'t signup as an admin'
+    });
+  }
   db.Users.create(req.body)
     .then((result) => {
       res.status(200).json({
