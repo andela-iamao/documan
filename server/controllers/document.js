@@ -61,6 +61,11 @@ const updateDocument = (req, res) => {
   const id = req.decoded.id;
   Document.findById(req.params.id)
     .then((document) => {
+      if (!document) {
+        return res.status(404).json({
+          message: 'document not found'
+        });
+      }
       if (document.ownerId === id) {
         document.update(req.body)
           .then(() => {

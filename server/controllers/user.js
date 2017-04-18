@@ -28,13 +28,22 @@ const getAllUserDocuments = (req, res) => {
   let query;
   if (id === parseInt(req.params.id, 10) || (req.admin && !req.adminTarget)) {
     query = { where: { ownerId: req.params.id } };
+  } else if ((id !== parseInt(req.params.id, 10)) && (req.userRole === req.targetRole)) {
+    query = `SELECT * FROM "Documents" WHERE "ownerId"=${req.params.id} AND ("accessId"=1 OR "accessId"=3)`;
   } else {
     query = { where: { ownerId: req.params.id, accessId: 1 } };
   }
-  db.Document.findAll(query)
-  .then((results) => {
-    res.status(200).json(results);
-  });
+  if (typeof query === 'object') {
+    db.Document.findAll(query)
+    .then((results) => {
+      res.status(200).json(results);
+    });
+  } else {
+    db.sequelize.query(query)
+      .then((results) => {
+        res.status(200).json(results[0]);
+      });
+  }
 };
 
 const findOne = (req, res) => {

@@ -8,6 +8,7 @@ import {
   login,
   getAllUserDocuments
 } from '../controllers/user';
+import getRole from '../middlewares/checkRoles';
 import auth from '../config/auth';
 import { isAdmin, targetIsAdmin } from '../helpers/helper';
 
@@ -278,6 +279,12 @@ export default () => {
    *          schema:
    *            type: array
    */
-  router.get('/api/v1/users/:id/documents', auth, isAdmin, targetIsAdmin, getAllUserDocuments);
+  router.get(
+    '/api/v1/users/:id/documents',
+    auth,
+    isAdmin,
+    targetIsAdmin,
+    getRole,
+    getAllUserDocuments);
   return router;
 };

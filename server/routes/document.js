@@ -7,6 +7,7 @@ import {
   deleteDocument
 } from '../controllers/document';
 import auth from '../config/auth';
+import cleanParam from '../middlewares/cleanParam';
 import { isAdmin } from '../helpers/helper';
 
 const router = express.Router();
@@ -59,7 +60,7 @@ export default () => {
       *            items:
       *              $ref: '#/definitions/Document'
       */
-    .get(isAdmin, findAllDocument)
+    .get(isAdmin, cleanParam, findAllDocument)
 
     /**
      * @swagger

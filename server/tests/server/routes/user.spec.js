@@ -16,8 +16,8 @@ describe('Routes: user', () => {
   let secondRegUser;
   let fourthRegUser;
   let fifthRegUserToken;
-  let customRoles = [];
-  let customRolesToken = [];
+  const customRoles = [];
+  const customRolesToken = [];
   beforeEach((done) => {
     Role.bulkCreate([{
       title: 'custom', id: 3
@@ -61,7 +61,8 @@ describe('Routes: user', () => {
               }, process.env.JWT_SECRET);
               const docs = faker.createDocument(fakeUID.id)
                 .concat(faker.createDocument(secondRegUser.id))
-                .concat(faker.createDocument(admin.id));
+                .concat(faker.createDocument(admin.id)
+                .concat(faker.createDocument(customRoles[0].id)));
               db.Access.bulkCreate(faker.allAccess)
                 .then(() => {
                   db.Document
@@ -551,6 +552,7 @@ describe('Routes: user', () => {
       })
       .expect(200)
       .end((err, res) => {
+        /* eslint-disable */
         expect(res.body.token).to.be.ok;
         done(err);
       });
@@ -778,7 +780,7 @@ describe('Routes: user', () => {
     it('should return only public documents of a user to another reqular users',
     (done) => {
       request.get(`/api/v1/users/${fakeUID.id}/documents`)
-        .set('Authorization', secondUserToken)
+        .set('Authorization', customRolesToken[1])
         .expect(200)
         .end((err, res) => {
           expect(res.body).to.have.lengthOf(5);
@@ -795,31 +797,43 @@ describe('Routes: user', () => {
           done(err);
         });
     });
-    // it('should return role documents if both users are on the same role',
-    //   (done) => {
-    //     request.get(`/api/v1/users/${customRoles[0].id}/documents`)
-    //       .set('Authorization', customRolesToken[1])
-    //       .expect(200)
-    //       .end((err, res) => {
-    //         expect(res.body).to.have.lengthOf(1);
-    //         done(err);
-    //       });
-    //   });
-    // it('should return both privte and public documents if admin requests',
-    //   (done) => {
-    //     request.get(`/api/v1/users/${secondRegUser.id}/documents`)
-    //       .set('Authorization', token)
-    //       .expect(200)
-    //       .end((err, res) => {
-    //         expect(res.body).to.have.lengthOf(7);
-    //         done(err);
-    //       });
-    //   });
-    // it('should reject requests from an unauthorized user', (done) => {
-    //
-    // });
-    // it('should reject request if user does not exist', (done) => {
-    //
-    // });
+    it('should return role documents if both users are on the same role',
+      (done) => {
+        request.get(`/api/v1/users/${customRoles[0].id}/documents`)
+          .set('Authorization', customRolesToken[1])
+          .expect(200)
+          .end((err, res) => {
+            expect(res.body).to.have.lengthOf(6);
+            done(err);
+          });
+      });
+    it('should return both private and public documents if admin requests',
+      (done) => {
+        request.get(`/api/v1/users/${secondRegUser.id}/documents`)
+          .set('Authorization', adminToken)
+          .expect(200)
+          .end((err, res) => {
+            expect(res.body).to.have.lengthOf(7);
+            done(err);
+          });
+      });
+    it('should reject requests from an unauthorized user', (done) => {
+      request.get(`/api/v1/users/${customRoles[0].id}/documents`)
+        .set('Authorization', `q${customRolesToken[1]}`)
+        .expect(401)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Unauthorized');
+          done(err);
+        });
+    });
+    it('should reject request if user does not exist', (done) => {
+      request.get('/api/v1/users/10345/documents')
+        .set('Authorization', customRolesToken[0])
+        .expect(404)
+        .end((err, res) => {
+          expect(res.body.error_code).to.eql('Not found');
+          done(err);
+        });
+    });
   });
 });
