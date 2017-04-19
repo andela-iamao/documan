@@ -2,10 +2,7 @@ module.exports = (sequelize, DataType) => {
   const Document = sequelize.define('Document', {
     title: {
       type: DataType.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: true
-      }
+      allowNull: false
     },
     content: {
       type: DataType.TEXT,

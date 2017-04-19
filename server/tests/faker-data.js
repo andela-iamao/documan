@@ -30,6 +30,20 @@ const fakeData = {
     email: faker.internet.email(),
     password: faker.internet.password()
   },
+  firstname_more_quote: {
+    firstname: 'O\'\'Hara',
+    lastname: faker.name.lastName(),
+    username: 'usernam_',
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  },
+  firstname_more_hyphen: {
+    firstname: 'Mary--Jo',
+    lastname: faker.name.lastName(),
+    username: 'usernam_',
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  },
   hyphen_firstname_user: {
     firstname: 'Mary-Jo',
     lastname: faker.name.lastName(),
@@ -45,7 +59,7 @@ const fakeData = {
     password: faker.internet.password()
   },
   noletter_firstname_user: {
-    firstname: '-\'\'------',
+    firstname: '-\'',
     lastname: faker.name.lastName(),
     username: 'usernam_',
     email: faker.internet.email(),
@@ -66,7 +80,7 @@ const fakeData = {
   },
   noletter_lastname_user: {
     firstname: faker.name.firstName(),
-    lastname: '-----\'',
+    lastname: '-\'',
     username: 'usernam_',
     email: faker.internet.email(),
     password: faker.internet.password()
@@ -161,6 +175,20 @@ const fakeData = {
     email: faker.internet.email(),
     password: faker.internet.password()
   },
+  lastname_more_quote: {
+    firstname: faker.name.firstName(),
+    lastname: 'O\'\'Connor',
+    username: 'usernam_',
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  },
+  lastname_more_hyphen: {
+    firstname: faker.name.firstName(),
+    lastname: 'Mary--Jo',
+    username: 'usernam_',
+    email: faker.internet.email(),
+    password: faker.internet.password()
+  },
   long_username_user: {
     firstname: faker.name.firstName(),
     lastname: faker.name.lastName(),
@@ -186,7 +214,8 @@ const fakeData = {
     username: 'HARRYp',
     email: 'harryp@gmail.com',
     password: bcrypt.hashSync('I love lord vold', bcrypt.genSaltSync()),
-    firstname: 'Harry'
+    firstname: 'Harry',
+    roleId: 1
   }, {
     lastname: 'Fain',
     username: 'dark_friend',
@@ -200,6 +229,22 @@ const fakeData = {
     password: bcrypt.hashSync('password!', bcrypt.genSaltSync()),
     roleId: 1,
     firstname: 'Inumidun'
+  }, {
+    lastname: 'User',
+    username: 'reguse',
+    email: 'reg@user.com',
+    password: bcrypt.hashSync('password!', bcrypt.genSaltSync()),
+    firstname: 'Regular',
+    id: 4002,
+    roleId: 3
+  }, {
+    lastname: faker.name.lastName(),
+    username: 'second_reg',
+    email: 'second@user.com',
+    password: bcrypt.hashSync('password!', bcrypt.genSaltSync()),
+    firstname: faker.name.firstName(),
+    id: 5002,
+    roleId: 3
   }],
   adminRole: {
     title: 'Admin'
@@ -210,24 +255,76 @@ const fakeData = {
   newRole: {
     title: 'normal'
   },
-  document: {
-    title: `${faker.lorem.words()} = title`,
-    content: faker.lorem.paragraph()
+  allAccess: [
+    { title: 'public', id: 1 },
+    { title: 'private', id: 2 },
+    { title: 'role', id: 3 }
+  ],
+  createDocument(ownerId) {
+    return [
+      {
+        title: `${faker.lorem.words()} = title`,
+        content: faker.lorem.paragraph(),
+        accessId: 1,
+        ownerId
+      },
+      {
+        title: `${faker.lorem.words()} = title`,
+        content: faker.lorem.paragraph(),
+        accessId: 2,
+        ownerId
+      },
+      {
+        title: faker.lorem.words(),
+        content: faker.lorem.paragraph(),
+        accessId: 3,
+        ownerId
+      },
+      {
+        title: `${faker.lorem.words()}`,
+        content: faker.lorem.paragraph(),
+        accessId: 1,
+        ownerId
+      },
+      {
+        title: `${faker.lorem.words()}`,
+        content: faker.lorem.paragraph(),
+        accessId: 1,
+        ownerId
+      },
+      {
+        title: `${faker.lorem.words()}`,
+        content: faker.lorem.paragraph(),
+        accessId: 1,
+        ownerId
+      },
+      {
+        title: `${faker.lorem.words()}`,
+        content: faker.lorem.paragraph(),
+        accessId: 1,
+        ownerId
+      }
+    ];
   },
-  privateDoc: {
+  publicDocument: {
     title: `${faker.lorem.words()} = title`,
     content: faker.lorem.paragraph(),
-    access: 'private'
+    accessId: 1
+  },
+  privateDocument: {
+    title: `${faker.lorem.words()} = title`,
+    content: faker.lorem.paragraph(),
+    accessId: 2
   },
   roleDocument: {
     title: faker.lorem.words(),
     content: faker.lorem.paragraph(),
-    access: 'role'
+    accessId: 3
   },
   updateDoc: {
     title: faker.lorem.words(),
     content: faker.lorem.paragraph(),
-    access: 'role'
+    accessId: 3
   }
 };
 

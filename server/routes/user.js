@@ -1,6 +1,17 @@
 import express from 'express';
-import { create, findOne, findAll, updateUser, deleteUser, login } from '../controllers/user';
+import {
+  create,
+  findOne,
+  findAll,
+  updateUser,
+  deleteUser,
+  login,
+  getAllUserDocuments
+} from '../controllers/user';
+import getRole from '../middlewares/checkRoles';
+import validate from '../middlewares/validate';
 import auth from '../config/auth';
+import { isAdmin, targetIsAdmin } from '../helpers/helper';
 
 const router = express.Router();
 
@@ -42,6 +53,21 @@ export default () => {
  *         id:
  *           type: integer
  *           format: int64
+ *   NewLogin:
+ *    type: object
+ *    required:
+ *      - email
+ *      - password
+ *    properties:
+ *      email:
+ *        type: string
+ *      password:
+ *        type: string
+ *        format: password
+ *   Login:
+ *    allOf:
+ *      - $ref: '#/definitions/NewLogin'
+ *
  */
 
   router.route('/api/v1/users')
@@ -54,6 +80,12 @@ export default () => {
      *        - Get users
      *      produces:
      *        - application/json
+     *      parameters:
+     *        - name: Authorization
+     *          in: header
+     *          description: an authorization header
+     *          required: true
+     *          type: string
      *      responses:
      *        200:
      *          description: users
@@ -70,6 +102,12 @@ export default () => {
      *       - Get users
      *     produces:
      *        - application/json
+     *     parameters:
+     *        - name: Authorization
+     *          in: header
+     *          description: an authorization header
+     *          required: true
+     *          type: string
      *     responses:
      *        200:
      *          description: users
@@ -78,7 +116,7 @@ export default () => {
      *            items:
      *              $ref: '#/definitions/User'
      */
-    .get(auth, findAll)
+    .get(auth, isAdmin, findAll)
     /**
      * @swagger
      * /api/v1/users:
@@ -104,10 +142,10 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/User'
      */
-    .post(create);
+    .post(validate, create);
 
   router.route('/api/v1/users/:id')
-
+    .all()
   /**
    * @swagger
    * /api/v1/users/1:
@@ -117,6 +155,12 @@ export default () => {
    *        - Get user
    *      produces:
    *        - application/json
+   *      parameters:
+   *        - name: Authorization
+   *          in: header
+   *          description: an authorization header
+   *          required: true
+   *          type: string
    *      responses:
    *        200:
    *          description: users
@@ -125,7 +169,7 @@ export default () => {
    *            items:
    *              $ref: '#/definitions/User'
    */
-    .get(auth, findOne)
+    .get(auth, isAdmin, findOne)
     /**
      * @swagger
      * /api/v1/users/1:
@@ -136,6 +180,11 @@ export default () => {
      *     produces:
      *      - application/json
      *     parameters:
+     *       - name: Authorization
+     *         in: header
+     *         description: an authorization header
+     *         required: true
+     *         type: string
      *       - name: body
      *         description: User object
      *         in:  body
@@ -151,7 +200,8 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/User'
      */
-    .put(auth, updateUser)
+    .put(auth, isAdmin, targetIsAdmin, updateUser)
+
     /**
      * @swagger
      * /api/v1/users/1:
@@ -161,6 +211,12 @@ export default () => {
      *        - Delete user
      *      produces:
      *        - application/json
+     *      parameters:
+     *        - name: Authorization
+     *          in: header
+     *          description: an authorization header
+     *          required: true
+     *          type: string
      *      responses:
      *        200:
      *          description: users
@@ -169,8 +225,67 @@ export default () => {
      *            items:
      *              $ref: '#/definitions/User'
      */
-    .delete(auth, deleteUser);
+    .delete(auth, isAdmin, targetIsAdmin, deleteUser);
 
+  /**
+   * @swagger
+   * /api/v1/users/login:
+   *   post:
+   *     description: Logs in a user
+   *     tags:
+   *      - Login User
+   *     produces:
+   *      - application/json
+   *     parameters:
+   *       - name: Authorization
+   *         in: header
+   *         description: an authorization header
+   *         required: true
+   *         type: string
+   *       - name: body
+   *         description: User object
+   *         in:  body
+   *         required: true
+   *         type: string
+   *         schema:
+   *           $ref: '#/definitions/NewLogin'
+   *     responses:
+   *       200:
+   *         description: users
+   *         schema:
+   *          type: object,
+   *          items:
+   *            $ref: '#/definitions/Login'
+   */
   router.post('/api/v1/users/login', login);
+
+  /**
+   * @swagger
+   * /api/v1/users/1/documents:
+   *    get:
+   *      description: Returns the documents belonging to the user of id 1
+   *      tags:
+   *        - Get Documents of A User
+   *      produces:
+   *        - application/json
+   *      parameters:
+   *        - name: Authorization
+   *          in: header
+   *          description: an authorization header
+   *          required: true
+   *          type: string
+   *      responses:
+   *        200:
+   *          description: user's documents
+   *          schema:
+   *            type: array
+   */
+  router.get(
+    '/api/v1/users/:id/documents',
+    auth,
+    isAdmin,
+    targetIsAdmin,
+    getRole,
+    getAllUserDocuments);
   return router;
 };
