@@ -9,7 +9,7 @@ import {
   getAllUserDocuments
 } from '../controllers/user';
 import getRole from '../middlewares/checkRoles';
-import validate from '../middlewares/validate';
+import { signup } from '../middlewares/validate';
 import auth from '../config/auth';
 import { isAdmin, targetIsAdmin } from '../helpers/helper';
 
@@ -142,7 +142,7 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/User'
      */
-    .post(validate, create);
+    .post(signup, create);
 
   router.route('/api/v1/users/:id')
     .all()

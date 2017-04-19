@@ -1,7 +1,7 @@
 import db from '../models/index';
 
 const isAdmin = (req, res, next) => {
-  const id = req.decoded.id;
+  const id = req.decoded.id || req.decoded;
   db.Users.findById(id)
     .then((user) => {
       if (!user) {
@@ -59,10 +59,23 @@ function requiredField(fields, values) {
   let errorMessage = '';
   fields.forEach((field) => {
     if ((!values[field] || values[field] === '') && !errorMessage) {
-      errorMessage = `${field} cannot be null`;
+      errorMessage = `${field} cannot be empty`;
     }
   });
   return errorMessage || false;
 }
 
-export { requiredField, isAdmin, hasAccess, targetIsAdmin };
+/**
+ * @param {Integer} status - contains status code
+ * @param {Object} error - contsains error object
+ * @param {Object} res - contains the response object from node
+ *
+ * @returns {Object} - returns response to be sent
+ */
+function errorRender(status, error, res) {
+  return res.status(status).json({
+    message: error.message
+  });
+}
+
+export { requiredField, isAdmin, hasAccess, targetIsAdmin, errorRender };

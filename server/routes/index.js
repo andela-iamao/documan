@@ -3,6 +3,7 @@ import user from './user';
 import document from './document';
 import search from './search';
 import swagger from './swagger';
+import folder from './folder';
 
 module.exports = (app) => {
   app.use(swagger());
@@ -10,4 +11,5 @@ module.exports = (app) => {
   app.use(user());
   app.use(document());
   app.use(search());
+  app.use(folder());
 };
