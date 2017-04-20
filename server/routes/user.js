@@ -117,6 +117,7 @@ export default () => {
      *              $ref: '#/definitions/User'
      */
     .get(auth, isAdmin, findAll)
+    
     /**
      * @swagger
      * /api/v1/users:
