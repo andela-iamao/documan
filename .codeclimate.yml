@@ -13,3 +13,7 @@ ratings:
   paths:
   - "server/*.js"
   - "server/**/*.js"
+exclude_paths:
+  - server/tests/**
+  - server/seeders/**
+  - migrations/**

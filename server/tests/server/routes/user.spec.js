@@ -122,7 +122,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('email cannot be null');
+          expect(res.body.message).to.eql('email cannot be empty');
           done(err);
         });
     });
@@ -142,7 +142,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('firstname cannot be null');
+          expect(res.body.message).to.eql('firstname cannot be empty');
           done(err);
         });
     });
@@ -226,7 +226,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('lastname cannot be null');
+          expect(res.body.message).to.eql('lastname cannot be empty');
           done(err);
         });
     });
@@ -329,7 +329,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('username cannot be null');
+          expect(res.body.message).to.eql('username cannot be empty');
           done(err);
         });
     });
@@ -402,7 +402,7 @@ describe('Routes: user', () => {
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
           expect(res.body.message)
-            .to.eql('password cannot be null');
+            .to.eql('password cannot be empty');
           done(err);
         });
     });

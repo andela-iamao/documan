@@ -260,49 +260,63 @@ const fakeData = {
     { title: 'private', id: 2 },
     { title: 'role', id: 3 }
   ],
-  createDocument(ownerId) {
+  createFolders(ownerId) {
+    return [
+      { title: faker.name.title(), ownerId },
+      { title: faker.name.title(), ownerId },
+      { title: faker.name.title(), ownerId },
+      { title: faker.name.title(), ownerId }
+    ];
+  },
+  createDocument(ownerId, folderId = null) {
     return [
       {
         title: `${faker.lorem.words()} = title`,
         content: faker.lorem.paragraph(),
-        accessId: 1,
-        ownerId
+        ownerId,
+        folderId
       },
       {
         title: `${faker.lorem.words()} = title`,
         content: faker.lorem.paragraph(),
         accessId: 2,
-        ownerId
+        ownerId,
+        folderId
       },
       {
         title: faker.lorem.words(),
         content: faker.lorem.paragraph(),
         accessId: 3,
-        ownerId
+        ownerId,
+        folderId
       },
       {
         title: `${faker.lorem.words()}`,
         content: faker.lorem.paragraph(),
         accessId: 1,
-        ownerId
+        ownerId,
+        folderId
       },
       {
         title: `${faker.lorem.words()}`,
         content: faker.lorem.paragraph(),
         accessId: 1,
-        ownerId
+        ownerId,
+        folderId
       },
       {
         title: `${faker.lorem.words()}`,
         content: faker.lorem.paragraph(),
         accessId: 1,
-        ownerId
+        ownerId,
+        folderId
       },
       {
         title: `${faker.lorem.words()}`,
         content: faker.lorem.paragraph(),
         accessId: 1,
-        ownerId
+        ownerId,
+        folderId
       }
     ];
   },
