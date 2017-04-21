@@ -4,9 +4,9 @@
 /* global request:true */
 /* global jwt:true */
 /* global faker:true */
-const tokenize = id => jwt.sign({
+const tokenize = (id, username, roleId) => jwt.sign({
   exp: Math.floor(Date.now() / 1000) + (60),
-  data: { id }
+  data: { id, username, roleId }
 }, process.env.JWT_SECRET);
 
 
@@ -35,17 +35,29 @@ describe('Routes: search', () => {
                 switch (user.roleId) {
                   case 1:
                     users.admin.push(user.id);
-                    tokens.admin.push(tokenize(user.id));
+                    tokens.admin.push(tokenize(
+                      user.id,
+                      user.username,
+                      user.roleId
+                    ));
                     usernames.admin.push(user.username);
                     break;
                   case 3:
                     users.custom.push(user.id);
-                    tokens.custom.push(tokenize(user.id));
+                    tokens.custom.push(tokenize(
+                      user.id,
+                      user.username,
+                      user.roleId
+                    ));
                     usernames.custom.push(user.username);
                     break;
                   default:
                     users.regular.push(user.id);
-                    tokens.regular.push(tokenize(user.id));
+                    tokens.regular.push(tokenize(
+                      user.id,
+                      user.username,
+                      user.roleId
+                    ));
                     usernames.regular.push(user.username);
                 }
               });

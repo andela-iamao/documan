@@ -10,7 +10,9 @@ const defaultState = {
 export default (state = defaultState, action) => {
   switch (action.type) {
     case 'CREATE_USER': {
-      return { ...state, creating: true };
+      return {
+        ...state,
+        creating: true };
     }
     case 'USER_IS_CREATED': {
       return {

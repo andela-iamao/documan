@@ -9,7 +9,7 @@ const isAdmin = (req, res, next) => {
           error_code: 'Not found',
           message: 'User not found'
         });
-      } else if (user.roleId === 1) {
+      } else if (req.decoded.roleId === 1) {
         req.admin = user;
         next();
       } else {
@@ -70,7 +70,7 @@ function requiredField(fields, values) {
  * @param {Object} error - contsains error object
  * @param {Object} res - contains the response object from node
  *
- * @returns {Object} - returns response to be sent
+ * @returns {Object} - returns response to be sen
  */
 function errorRender(status, error, res) {
   return res.status(status).json({

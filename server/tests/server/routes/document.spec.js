@@ -4,9 +4,9 @@
 /* global request:true */
 /* global jwt:true */
 /* global faker:true */
-const tokenize = id => jwt.sign({
+const tokenize = (id, username, roleId) => jwt.sign({
   exp: Math.floor(Date.now() / 1000) + (60),
-  data: { id }
+  data: { id, username, roleId }
 }, process.env.JWT_SECRET);
 
 
@@ -30,20 +30,31 @@ describe('Routes: documents', () => {
           .then(() => {
             User.bulkCreate(faker.bulkCreateUser, { individualHooks: true })
             .then((res) => {
-              // fakeUID = res.id;
               res.forEach((user) => {
                 switch (user.roleId) {
                   case 1:
                     users.admin.push(user.id);
-                    tokens.admin.push(tokenize(user.id));
+                    tokens.admin.push(tokenize(
+                      user.id,
+                      user.username,
+                      1
+                    ));
                     break;
                   case 3:
                     users.custom.push(user.id);
-                    tokens.custom.push(tokenize(user.id));
+                    tokens.custom.push(tokenize(
+                      user.id,
+                      user.username,
+                      3
+                    ));
                     break;
                   default:
                     users.regular.push(user.id);
-                    tokens.regular.push(tokenize(user.id));
+                    tokens.regular.push(tokenize(
+                      user.id,
+                      user.username,
+                      2
+                    ));
                 }
               });
               db.Access.bulkCreate(faker.allAccess).then(() => {

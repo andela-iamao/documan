@@ -1,11 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Router, Route, browserHistory } from 'react-router';
+import { Router, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Index from './Index.component';
-// import Login from '../containers/Login.container';
+import Login from './Login.component';
+import Logout from './reusable/Logout.component';
 // import User from '../containers/User.container';
+
+const routes = [
+  {
+    path: '/app/',
+    component: Index
+  },
+  {
+    path: '/app/login',
+    component: Login
+  },
+  {
+    path: '/app/logout',
+    component: Logout
+  }
+];
 
 @connect(store => ({
   user: store,
@@ -17,25 +33,13 @@ import Index from './Index.component';
  */
 class App extends React.Component {
 
-/**
- * propTypes
- * @property {array} selectable counrty list
- */
-  static get propTypes() {
-    return {
-      countries: React.PropTypes.array
-    };
-  }
-
   /**
    * @return {ReactElement} jf
    */
   render() {
     return (
       <MuiThemeProvider>
-        <Router history={ this.props.history }>
-          <Route path="/app/"component={ Index } />
-        </Router>
+        <Router history={ this.props.history } routes={ routes } />
       </MuiThemeProvider>
     );
   }
@@ -51,5 +55,4 @@ App.propTypes = {
 
 export default App;
 
-// <Route exact path='/app/login' component={ Login } />
 // <Route exact path='/app/user' component={ User } />

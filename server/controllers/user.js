@@ -10,11 +10,16 @@ const create = (req, res) => {
   }
   db.Users.create(req.body)
     .then((result) => {
+      const payload = {
+        id: result.id,
+        username: result.username,
+        roleId: result.roleId
+      };
       res.status(200).json({
         user: result,
         token: jwt.sign({
           exp: Math.floor(Date.now() / 1000) + (60 * 60 * 3),
-          data: result.id
+          data: { payload }
         }, process.env.JWT_SECRET)
       });
     })
@@ -158,7 +163,11 @@ const login = (req, res) => {
       .then((user) => {
         if (user) {
           if (user.isPassword(user.password, password)) {
-            const payload = { id: user.id };
+            const payload = {
+              id: user.id,
+              username: user.username,
+              roleId: user.roleId
+            };
             res.status(200).json({
               token: jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (60 * 60 * 3),
