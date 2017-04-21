@@ -1,0 +1,13 @@
+$primary-dark-color: #222222;
+$viewport-height: 100vh;
+$viewport-width: 100vw;
+
+.fullpage-overlay {
+  width: $viewport-width;
+  height: $viewport-height;
+  position: absolute;
+  z-index: -1;
+  background-color: $primary-dark-color;
+  top: 0;
+  opacity: 0.6;
+}
