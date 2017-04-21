@@ -5,6 +5,11 @@
 /* global jwt:true */
 /* global faker:true */
 
+const tokenize = (id, username, roleId) => jwt.sign({
+  exp: Math.floor(Date.now() / 1000) + (60 * 60),
+  data: { id, username, roleId }
+}, process.env.JWT_SECRET);
+
 describe('Routes: user', () => {
   const User = db.Users;
   const Role = db.Roles;
@@ -36,29 +41,36 @@ describe('Routes: user', () => {
               secondRegUser = res[2];
               fourthRegUser = res[4];
               customRoles.push(res[4], res[5]);
-              customRolesToken.push(jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[4].id }
-              }, process.env.JWT_SECRET), jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[5].id }
-              }, process.env.JWT_SECRET));
-              token = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[0].id }
-              }, process.env.JWT_SECRET);
-              secondUserToken = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[2].id }
-              }, process.env.JWT_SECRET);
-              fifthRegUserToken = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[5].id }
-              }, process.env.JWT_SECRET);
-              adminToken = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[3].id }
-              }, process.env.JWT_SECRET);
+
+              customRolesToken.push(tokenize(
+                res[4].id,
+                res[4].username,
+                res[4].roleId
+              ), tokenize(
+                res[5].id,
+                res[5].username,
+                res[5].roleId
+              ));
+              token = tokenize(
+                res[0].id,
+                res[0].username,
+                res[0].roleId
+              );
+              secondUserToken = tokenize(
+                res[2].id,
+                res[2].username,
+                res[2].roleId
+              );
+              fifthRegUserToken = tokenize(
+                res[5].id,
+                res[5].username,
+                res[5].roleId
+              );
+              adminToken = tokenize(
+                res[3].id,
+                res[3].username,
+                res[3].roleId
+              );
               const docs = faker.createDocument(fakeUID.id)
                 .concat(faker.createDocument(secondRegUser.id))
                 .concat(faker.createDocument(admin.id)

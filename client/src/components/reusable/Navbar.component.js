@@ -12,6 +12,43 @@ const style = {
   zIndex: 10
 };
 
+const isAuthenticated = props => (
+  <div>
+    <Link to={ props.isAuthenticated.userPage } >
+      Hello { props.isAuthenticated.username }!
+    </Link>
+    <Link to={ '/app/logout' } >
+      <RaisedButton
+        label="Sign Out"
+        primary={ true }
+      />
+    </Link>
+  </div>
+);
+
+const notAuthenticated = props => (
+  <div>
+    {
+      (props.showLogin) ?
+        <Link to={ props.loginLink } >
+          <RaisedButton
+            label="Login"
+            primary={ true }
+            style={ { marginRight: '15px' } }
+          />
+        </Link>
+      :
+        ''
+    }
+
+    <RaisedButton
+      onClick={ () => browserHistory.push('/app/login') }
+      label="Sign Up"
+      primary={ true }
+    />
+  </div>
+);
+
 /**
  * React component for
  * @class Navbar
@@ -28,30 +65,22 @@ class Navbar extends React.Component {
         style={ style }
         title={ this.props.title }
         iconElementRight={
-          <div>
-            <Link to={ this.props.loginLink } >
-              <RaisedButton
-                label="Login"
-                primary={ true }
-                style={ { marginRight: '15px' } }
-              />
-            </Link>
-
-            <RaisedButton
-              onClick={ () => browserHistory.push('/app/login') }
-              label="Sign Up"
-              primary={ true }
-            />
-          </div>
+          (this.props.isAuthenticated) ?
+            isAuthenticated(this.props) : notAuthenticated(this.props)
         }
       />
     );
   }
 }
 
-Navbar.PropTypes = {
+Navbar.defaultProps = {
+  showLogin: true
+};
+
+Navbar.propTypes = {
   title: PropTypes.string,
-  loginLink: PropTypes.string
+  loginLink: PropTypes.string,
+  showLogin: PropTypes.bool
 };
 
 export default Navbar;

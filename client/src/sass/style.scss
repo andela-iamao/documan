@@ -2,6 +2,10 @@ $primary-dark-color: #222222;
 $viewport-height: 100vh;
 $viewport-width: 100vw;
 
+#login-wrapper {
+  background-color: #EFEFEF;
+}
+
 .fullpage-overlay {
   width: $viewport-width;
   height: $viewport-height;
@@ -10,4 +14,16 @@ $viewport-width: 100vw;
   background-color: $primary-dark-color;
   top: 0;
   opacity: 0.6;
+}
+
+.view-width {
+  width: $viewport-width;
+}
+
+.view-height {
+  height: $viewport-height;
+}
+
+.no-pad {
+  padding:0;
 }
