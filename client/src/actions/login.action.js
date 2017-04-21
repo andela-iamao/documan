@@ -9,7 +9,7 @@ import jwt from 'jwt-decode';
 */
 export default function (loginData) {
   return (dispatch) => {
-    axios.post('http://localhost:5000/api/v1/users/login', loginData)
+    axios.post('/api/v1/users/login', loginData)
       .then((response) => {
         dispatch({
           type: 'LOGIN_USER',
