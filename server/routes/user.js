@@ -261,7 +261,7 @@ export default () => {
 
   /**
    * @swagger
-   * /api/v1/users/1/documents:
+   * /api/v1/users/{param}/documents:
    *    get:
    *      description: Returns the documents belonging to the user of id 1
    *      tags:

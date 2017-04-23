@@ -24,7 +24,7 @@ class Index extends React.Component {
    * @return {Object} user details
    * @return {null} if no token is found
    */
-  currentUser() {
+  currentUser() { //eslint-disable-line
     if (window.localStorage.getItem('token')) {
       return JSON.parse(window.localStorage.getItem('user')).data;
     }
@@ -41,6 +41,7 @@ class Index extends React.Component {
           type="dark"
           title="iAmDocuman"
           loginLink="/app/login"
+          signupLink="/app/signup"
           isAuthenticated={
             (this.currentUser()) ?
             {
@@ -48,9 +49,21 @@ class Index extends React.Component {
               userPage: '/app/user'
             } : null
           }
-         >
-         </Navbar>
-         <FullPageSlider />
+         />
+         <FullPageSlider>
+           <li>
+             <img src="/images/carousel_image_1.jpg" />
+           </li>
+           <li>
+             <img src="/images/carouserl_image_2.jpg" />
+           </li>
+           <li>
+             <img src="/images/carousel_image_3.jpeg" />
+           </li>
+           <li>
+             <img src="http://lorempixel.com/580/250/nature/4" />
+           </li>
+         </FullPageSlider>
          <IntroText
           color={ '#EFEFEF' }
           title={ 'Create, Manage and Extend' }

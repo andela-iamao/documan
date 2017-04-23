@@ -12,6 +12,12 @@ export default (state = { isAuthenticated: false }, action) => {
         isAuthenticated: false
       };
     }
+    case 'CREATE_USER': {
+      return {
+        ...state,
+        isAuthenticated: true
+      };
+    }
     default: {
       return { ...state };
     }

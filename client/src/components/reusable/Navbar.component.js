@@ -30,7 +30,7 @@ const notAuthenticated = props => (
   <div>
     {
       (props.showLogin) ?
-        <Link to={ props.loginLink } >
+        <Link to={ props.loginLink } className="navbar-login-btn">
           <RaisedButton
             label="Login"
             primary={ true }
@@ -40,12 +40,17 @@ const notAuthenticated = props => (
       :
         ''
     }
-
-    <RaisedButton
-      onClick={ () => browserHistory.push('/app/login') }
-      label="Sign Up"
-      primary={ true }
-    />
+    {
+      (props.showSignup) ?
+        <Link to={ props.signupLink } className="navbar-signup-btn" >
+          <RaisedButton
+            label="Sign Up"
+            primary={ true }
+          />
+        </Link>
+        :
+        ''
+    }
   </div>
 );
 
@@ -62,8 +67,10 @@ class Navbar extends React.Component {
     return (
       <AppBar
         iconStyleLeft={ { display: 'none' } }
-        style={ style }
+        className="react-navbar"
+        style={ this.props.style }
         title={ this.props.title }
+        onTitleTouchTap={ () => browserHistory.push('/app/') }
         iconElementRight={
           (this.props.isAuthenticated) ?
             isAuthenticated(this.props) : notAuthenticated(this.props)
@@ -74,13 +81,22 @@ class Navbar extends React.Component {
 }
 
 Navbar.defaultProps = {
-  showLogin: true
+  showLogin: true,
+  loginLink: '/login',
+  showSignup: true,
+  signupLink: '/signup',
+  isAuthenticated: null,
+  title: window.location.origin.split('//')[1],
+  style
 };
 
 Navbar.propTypes = {
   title: PropTypes.string,
   loginLink: PropTypes.string,
-  showLogin: PropTypes.bool
+  signupLink: PropTypes.string,
+  isAuthenticated: PropTypes.object,
+  showLogin: PropTypes.bool,
+  showSignup: PropTypes.bool
 };
 
 export default Navbar;

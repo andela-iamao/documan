@@ -19,7 +19,7 @@ const create = (req, res) => {
         user: result,
         token: jwt.sign({
           exp: Math.floor(Date.now() / 1000) + (60 * 60 * 3),
-          data: { payload }
+          data: payload
         }, process.env.JWT_SECRET)
       });
     })

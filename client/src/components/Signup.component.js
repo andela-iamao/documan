@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import loginUser from '../actions/login.action';
-import { login } from '../util/validate-form';
+import signupUser from '../actions/signup.action';
+import { signup } from '../util/validate-form';
 import Navbar from './reusable/Navbar.component';
 import PageCenter from './reusable/PageCenter.component';
-import ReduxFormLogin from './reusable/ReduxFormLogin.component';
+import ReduxFormSignup from './reusable/ReduxFormSignup.component';
 import { clearError, validationError } from '../actions/error.action';
 
 @connect(store => ({
@@ -15,10 +15,10 @@ import { clearError, validationError } from '../actions/error.action';
   auth: store.auth
 }))
 /**
- * React component for Login.
- * @class Login
+ * React component for Signup.
+ * @class Signup
  */
-class Login extends React.Component {
+class Signup extends React.Component {
 
   /**
     * constructor
@@ -71,11 +71,11 @@ class Login extends React.Component {
    * @return {void}
    */
   handleSubmit(values) {
-    const validation = login(values) || null;
+    const validation = signup(values) || null;
     if (validation) {
       this.props.dispatch(validationError(validation));
     } else {
-      this.props.dispatch(loginUser(values));
+      this.props.dispatch(signupUser(values));
     }
   }
 
@@ -90,12 +90,12 @@ class Login extends React.Component {
         <Navbar
           type="dark"
           title="iAmDocuman"
-          showLogin={ false }
-          signupLink="/app/signup"
+          showSignup={ false }
+          loginLink="/app/login"
         />
         <PageCenter>
           <div>
-            <ReduxFormLogin
+            <ReduxFormSignup
               bg-color="#FFFFFF"
               onSubmit={ this.handleSubmit }
               failed={ this.props.error }
@@ -108,4 +108,4 @@ class Login extends React.Component {
   }
 }
 
-export default Login;
+export default Signup;
