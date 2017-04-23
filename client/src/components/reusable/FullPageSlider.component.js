@@ -43,18 +43,7 @@ class FullPageSlider extends React.Component {
         className="slider fullscreen"
         style={ position(this.props) }>
         <ul className="slides">
-          <li>
-            <img src="/images/carousel_image_1.jpg" />
-          </li>
-          <li>
-            <img src="/images/carouserl_image_2.jpg" />
-          </li>
-          <li>
-            <img src="/images/carousel_image_3.jpeg" />
-          </li>
-          <li>
-            <img src="http://lorempixel.com/580/250/nature/4" />
-          </li>
+          { this.props.children }
         </ul>
       </div>
     </div>
@@ -66,9 +55,13 @@ FullPageSlider.defaultProps = {
   style: {},
   position: 'back',
   startSlider() {
-    $(document).ready(() => {
-      $('.slider').slider();
-    });
+    if (process.env.NODE_ENV !== 'test') {
+      $(document).ready(() => {
+        $('.slider').slider();
+      });
+    } else {
+      return null;
+    }
   }
 };
 

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="1"
+            failures="0"
+            tests="4">
+
+  <testsuite name="index.spec"
+    errors="1" failures="0" hostname="" id="" package="index.spec" skipped="0"
+    tests="4" time="21.66" timestamp="Sun, 23 Apr 2017 01:03:05 GMT">
+  
+    <testcase name="App Starts" time="8.052" assertions="4">
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+      <system-err>
+        ERROR: Unable to locate element: &quot;a.intro-link&quot; using: css selector
+    at Object.ChangeRouteOnLinkClick [as Change route on link click] (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/client/test/e2e/index.spec.js:73:8)
+    at Module.call (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/module.js:62:34)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/testcase.js:70:29
+    at _fulfilled (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:816:13)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:570:49
+    at runSingle (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:137:13)
+    at flush (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+      </system-err>
+  
+    <testcase name="Landing page" time="1.760" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+      <system-err>
+        ERROR: Unable to locate element: &quot;a.intro-link&quot; using: css selector
+    at Object.ChangeRouteOnLinkClick [as Change route on link click] (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/client/test/e2e/index.spec.js:73:8)
+    at Module.call (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/module.js:62:34)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/testcase.js:70:29
+    at _fulfilled (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:816:13)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:570:49
+    at runSingle (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:137:13)
+    at flush (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+      </system-err>
+  
+    <testcase name="Landing page elements" time="2.154" assertions="9">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+      <system-err>
+        ERROR: Unable to locate element: &quot;a.intro-link&quot; using: css selector
+    at Object.ChangeRouteOnLinkClick [as Change route on link click] (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/client/test/e2e/index.spec.js:73:8)
+    at Module.call (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/module.js:62:34)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/testcase.js:70:29
+    at _fulfilled (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:816:13)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:570:49
+    at runSingle (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:137:13)
+    at flush (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+      </system-err>
+  
+    <testcase name="Change route on link click" time="9.693" assertions="6">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+      <system-err>
+        ERROR: Unable to locate element: &quot;a.intro-link&quot; using: css selector
+    at Object.ChangeRouteOnLinkClick [as Change route on link click] (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/client/test/e2e/index.spec.js:73:8)
+    at Module.call (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/module.js:62:34)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/nightwatch/lib/runner/testcase.js:70:29
+    at _fulfilled (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:816:13)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:570:49
+    at runSingle (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:137:13)
+    at flush (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/node_modules/q/q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+      </system-err>
+  
+  
+  </testsuite>
+</testsuites>

@@ -1,7 +1,9 @@
 import React from 'react';
 
 /**
- * React component for
+ * React component for PageCenter
+ * It takes in children elements and aligns them to center of
+ * a screen, both vertically and horizontally
  * @class PageCenter
  */
 class PageCenter extends React.Component {

@@ -26,7 +26,18 @@ export const signup = (values) => {
 
   if (required) {
     return required;
+  } else if (values.firstname.length < 2) {
+    return 'First name cannot be less than 2 characters';
+  } else if (values.lastname.length < 2) {
+    return 'Last name cannot be less than 2 characters';
+  } else if (values.username.length < 5) {
+    return 'Username cannot be less than 5 characters';
+  } else if (values.password.length < 8) {
+    return 'password cannot be less than 8 characters';
+  } else if (values.password !== values.verifyPassword) {
+    return 'Passwords do not match';
   }
+  return null;
 };
 
 export const login = (values) => {

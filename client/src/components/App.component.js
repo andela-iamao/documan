@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Index from './Index.component';
 import Login from './Login.component';
+import Signup from './Signup.component';
 import Logout from './reusable/Logout.component';
 // import User from '../containers/User.container';
 
@@ -16,6 +17,10 @@ const routes = [
   {
     path: '/app/login',
     component: Login
+  },
+  {
+    path: '/app/signup',
+    component: Signup
   },
   {
     path: '/app/logout',

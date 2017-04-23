@@ -3,11 +3,11 @@ import RaisedButton from 'material-ui/RaisedButton';
 import PropTypes from 'prop-types';
 
 
-const rootDivStyle = props => ({
+const rootDivStyle = {
   textAlign: 'center',
   height: '100vh',
-  color: props.color
-});
+  color: '#FFFFFF'
+};
 
 const centerDivStyle = {
   width: '100vw',
@@ -28,13 +28,13 @@ class IntroText extends React.Component {
    */
   render() {
     return (
-      <div style={ rootDivStyle(this.props) } className={ 'valign-wrapper' }>
-        <div className={ 'valign' } style={ centerDivStyle }>
-          <h3>{ this.props.title }</h3>
+      <div style={ this.props.rootDivStyle } className={ 'valign-wrapper' }>
+        <div className="valign" style={ this.props.centerDivStyle }>
+          <h3 className="intro-text-title">{ this.props.title }</h3>
           <p className="header-text">{ this.props.text }</p>
           {
             (this.props.link) ?
-            <a href={ this.props.link.href }>
+            <a className="intro-link" href={ this.props.link.href }>
               <RaisedButton
                 label={ this.props.link.label }
                 primary={ true }
@@ -49,11 +49,21 @@ class IntroText extends React.Component {
   }
 }
 
+IntroText.defaultProps = {
+  link: null,
+  title: window.location.origin.split('//')[1],
+  text: window.location.origin,
+  rootDivStyle,
+  centerDivStyle
+};
+
 IntroText.propTypes = {
   link: PropTypes.object,
   color: PropTypes.string,
   text: PropTypes.string,
-  title: PropTypes.string
+  title: PropTypes.string,
+  rootDivStyle: PropTypes.object,
+  centerDivStyle: PropTypes.object
 };
 
 export default IntroText;
