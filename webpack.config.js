@@ -2,6 +2,11 @@ const webpack = require('webpack');
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
+// let baseUrl = 'http://localhost:5000';
+// if (process.NODE_ENV === 'production') {
+//   baseUrl
+// }
+
 module.exports = {
   entry: [
     './client/src/index'
@@ -34,7 +39,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'client/dist/'),
-    publicPath: 'http://localhost:5000/app/',
+    publicPath: '/app/',
     filename: 'bundle.js'
   },
   devServer: {
