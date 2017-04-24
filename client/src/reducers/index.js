@@ -4,12 +4,16 @@ import reduceReducers from 'reduce-reducers';
 import users from './user.reducer';
 import error from './error.reducer';
 import auth from './auth.reducer';
+import documents from './documents.reducer';
+import folder from './folder.reducer';
 
 const combinedReducers = combineReducers({
   users,
   form,
   error,
-  auth
+  auth,
+  folder,
+  documents
 });
 
 export default reduceReducers(combinedReducers);

@@ -7,7 +7,9 @@ import Index from './Index.component';
 import Login from './Login.component';
 import Signup from './Signup.component';
 import Logout from './reusable/Logout.component';
-// import User from '../containers/User.container';
+import User from './User.component';
+import Document from './Document.component';
+import Folder from './Folder.component';
 
 const routes = [
   {
@@ -25,6 +27,18 @@ const routes = [
   {
     path: '/app/logout',
     component: Logout
+  },
+  {
+    path: '/app/dashboard',
+    component: User
+  },
+  {
+    path: '/app/document/:id',
+    component: Document
+  },
+  {
+    path: '/app/folder/:id',
+    component: Folder
   }
 ];
 
@@ -59,5 +73,3 @@ App.propTypes = {
 };
 
 export default App;
-
-// <Route exact path='/app/user' component={ User } />

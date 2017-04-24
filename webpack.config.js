@@ -18,6 +18,10 @@ module.exports = {
         }
       },
       {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader?root=.'
+      },
+      {
         test: /\.scss$/,
         loader: ExtractTextPlugin.extract('css!sass')
       },
@@ -30,7 +34,7 @@ module.exports = {
   },
   output: {
     path: path.join(__dirname, 'client/dist/'),
-    publicPath: '/app/',
+    publicPath: 'http://localhost:5000/app/',
     filename: 'bundle.js'
   },
   devServer: {
@@ -43,6 +47,10 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin('css/bundle.css', {
       allChunks: true
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
     })
   ]
 };

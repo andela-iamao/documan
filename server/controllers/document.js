@@ -83,7 +83,7 @@ const updateDocument = (req, res) => {
 };
 
 const deleteDocument = (req, res) => {
-  const id = req.body.ownerId;
+  const id = req.body.ownerId || req.decoded.id;
   Document.findById(req.params.id)
     .then((document) => {
       if (document.ownerId === id || req.admin) {

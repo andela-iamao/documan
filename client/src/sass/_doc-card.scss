@@ -1,0 +1,51 @@
+.doc-card-root {
+  width: 95%;
+  padding:5px;
+  display: block;
+  .doc-icon-action-wrapper {
+    position: relative;
+  }
+  .doc-card-icon img {
+    width: 70%;
+    z-index: -1;
+  }
+  .doc-card-action-container {
+    font-size: 15px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0s, opacity 0.5s linear;
+    .doc-card-action-helper {
+      height: 60%;
+      opacity: 0.2;
+      background-color: green;
+    }
+    .doc-card-actions {
+      height: 40%;
+      text-align: center;
+      background-color: #00BCD4;
+    }
+    .card-actions {
+      font-size: 15px;
+      margin: 5px;
+      cursor: pointer;
+      }
+      .card-actions:hover {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .doc-card-info {
+    text-align: center;
+    font-weight: bold;
+    text-overflow: ellipsis;
+    max-width: 120px;
+  }
+  .doc-icon-action-wrapper:hover .doc-card-action-container {
+    visibility: visible;
+    opacity: 1;
+  }

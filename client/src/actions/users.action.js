@@ -1,4 +1,4 @@
-// // import
+import axios from 'axios';
 //
 // export default token => ({
 //   return (dispatch) => {
@@ -21,3 +21,29 @@
 //       });
 //   };
 // });
+
+export function getUserDocs() {
+  return (dispatch) => {
+    const userId = JSON.parse(window.localStorage.getItem('user')).data.id;
+    axios.get(`/api/v1/users/${userId}/documents`)
+      .then((response) => {
+        dispatch({
+          type: 'FETCHED_DOCUMENTS',
+          payload: response.data
+        });
+      });
+  };
+}
+
+export function getUser() {
+  return (dispatch) => {
+    const userId = JSON.parse(window.localStorage.getItem('user')).data.id;
+    axios.get(`/api/v1/users/${userId}`)
+      .then((response) => {
+        dispatch({
+          type: 'GOT_USER',
+          payload: response.data
+        });
+      });
+  };
+}
