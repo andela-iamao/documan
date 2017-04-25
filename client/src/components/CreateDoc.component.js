@@ -5,7 +5,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import DocumentAdd from 'material-ui/svg-icons/action/note-add';
-import Fraola from './reusable/Fraola.component';
+import { FroalaEditor } from './reusable/Fraola.component';
 
 const customContentStyle = {
   width: '70%',
@@ -15,8 +15,8 @@ const customContentStyle = {
 };
 
 /**
+ * A dialog box to create documents
  * @class CreateDoc
- *
  */
 class CreateDoc extends React.Component {
 
@@ -39,20 +39,39 @@ class CreateDoc extends React.Component {
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
-  handleOpen = () => {
+  /**
+   * handleOpen - change the open state of component to true
+   * @return {void}
+   */
+  handleOpen() {
     this.setState({ open: true });
-  };
+  }
 
-  handleClose = () => {
+  /**
+   * handleClose - change the open state of component to false
+   * @return {void}
+   */
+  handleClose() {
     this.setState({ open: false });
-  };
+  }
+
+  /**
+   * handleSubmit
+   * @param {object} event - properties of element
+   * @return {void}
+   */
   handleSubmit = (event) => {
     event.preventDefault();
     this.props.onCreate(this.state);
     this.handleClose();
   }
 
-  handleChange = (event) => {
+  /**
+   * handleChange
+   * @param {object} event - properties of element
+   * @return {void}
+   */
+  handleChange(event) {
     const value = event.target.value;
     this.setState({ title: value });
   }
@@ -68,7 +87,12 @@ class CreateDoc extends React.Component {
     this.setState({ accessId: value });
   }
 
-  handleContentChange = (content) => {
+  /**
+   * handleContentChange
+   * @param {object} content - text in the content text area
+   * @return {void}
+   */
+  handleContentChange(content) {
     this.setState({ content });
   }
 
@@ -135,7 +159,7 @@ class CreateDoc extends React.Component {
               </SelectField>
             </div>
           </div>
-          <Fraola
+          <FroalaEditor
             tag='textarea'
             model={
               (this.props.type === 'edit') ?

@@ -1,5 +1,7 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Edit from 'material-ui/svg-icons/image/edit';
 import FlatButton from 'material-ui/FlatButton';
 
 const customContentStyle = {
@@ -105,6 +107,19 @@ class EditFolder extends React.Component {
 
     return (
       <div className="col s3 m3 l1">
+        {
+          (this.props.editButton) ?
+            <FloatingActionButton
+              mini={true}
+              onTouchTap={
+                this.props.openDialog
+              }
+            >
+              <Edit />
+            </FloatingActionButton>
+            :
+            ''
+        }
         <Dialog
           title="Update Folder"
           contentStyle={ customContentStyle }

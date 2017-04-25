@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import FlatButton from 'material-ui/FlatButton';
-import Fraola from './reusable/Fraola.component';
+import { FroalaEditor } from './reusable/Fraola.component';
 
 
 const customContentStyle = {
@@ -178,7 +178,7 @@ class EditDoc extends React.Component {
             </SelectField>
           </div>
         </div>
-          <Fraola
+          <FroalaEditor
             tag='textarea'
             model={ this.state.content }
             onModelChange={ this.handleContentChange }

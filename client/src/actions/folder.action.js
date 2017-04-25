@@ -23,7 +23,7 @@ export function createFolder(value) {
       }).catch((error) => {
         dispatch({
           type: 'ERROR_CREATING_FOLDER',
-          payload: error.response.payload
+          payload: error.response.data
         });
       });
   };
@@ -40,7 +40,7 @@ export function deleteFolder(value) {
       }).catch((error) => {
         dispatch({
           type: 'ERROR_DELETING_FOLDER',
-          payload: error.response.payload
+          payload: error.response.data
         });
       });
   };
@@ -58,7 +58,7 @@ export function getFolder(id) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_GETTING_FOLDER',
-          payload: error.response.payload
+          payload: error.response
         });
       });
   };
@@ -84,7 +84,7 @@ export function editFolder(values) {
   };
 }
 
-export function updateFolder(values) {
+export function updateFolder(values, refresh = false) {
   return (dispatch) => {
     axios.put(`/api/v1/folders/${values.id}`, values)
       .then((response) => {
@@ -93,11 +93,14 @@ export function updateFolder(values) {
           type: 'UPDATED_FOLDER',
           payload: response.data
         });
+        if (refresh) {
+          dispatch(refresh.action(refresh.payload));
+        }
       })
       .catch((error) => {
         dispatch({
           type: 'ERROR_UPDATING_FOLDER',
-          payload: error.response.payload
+          payload: error.response.data
         });
       });
   };
@@ -106,5 +109,44 @@ export function updateFolder(values) {
 export function clearEditFolder() {
   return {
     type: 'CLEAR_EDIT_FOLDER'
+  };
+}
+
+export function getFolderDocs(id) {
+  console.log('getting folder docs');
+  return (dispatch) => {
+    axios.get(`/api/v1/folders/${id}/documents`)
+      .then((response) => {
+        console.log(response);
+        dispatch({
+          type: 'GOT_FOLDER_DOCUMENTS',
+          payload: response.data
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: 'ERROR_GETTING_FOLDER_DOCUMENTS',
+          payload: error.response.data
+        });
+      });
+  };
+}
+
+export function addDoc(folderId, doc) {
+  return (dispatch) => {
+    axios.put(`/api/v1/folders/${folderId}/add`, doc)
+      .then((response) => {
+        dispatch(getFolderDocs(folderId));
+        dispatch({
+          type: 'ADDED_DOCUMENT_TO_FOLDER',
+          payload: response.data
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: 'ERROR_ADDING_DOCUMENT_TO_FOLDER',
+          payload: error.response.data
+        });
+      });
   };
 }

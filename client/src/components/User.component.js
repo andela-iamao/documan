@@ -27,6 +27,12 @@ import {
 import {
   getUser
 } from '../actions/users.action';
+import {
+  showOnlyFolder,
+  showOnlyDoc,
+  showAll
+} from '../actions/views.action';
+
 
 @connect(store => ({
   user: store,
@@ -34,7 +40,8 @@ import {
   error: store.error.error,
   auth: store.auth,
   docs: store.documents,
-  folder: store.folder
+  folder: store.folder,
+  views: store.views
 }))
 /**
  * React component for
@@ -48,6 +55,9 @@ class User extends React.Component {
    */
   constructor(props) {
     super(props);
+    this.handleShowAll = this.handleShowAll.bind(this);
+    this.handleShowOnlyDoc = this.handleShowOnlyDoc.bind(this);
+    this.handleShowOnlyFolder = this.handleShowOnlyFolder.bind(this);
     this.handleCreateFolder = this.handleCreateFolder.bind(this);
     this.handleDeleteFolder = this.handleDeleteFolder.bind(this);
     this.handleDeleteDoc = this.handleDeleteDoc.bind(this);
@@ -87,12 +97,21 @@ class User extends React.Component {
   }
 
   /**
+   * handleClearEditDoc
+   * @return {void}
+   */
+  handleClearEditDoc() {
+    this.props.dispatch(clearEditDoc());
+  }
+
+  /**
    * handleEditDoc
    * @param {object} values - values to render dialog with
    * @return {void}
    */
   handleEditDoc(values) {
     this.props.dispatch(editDoc(values));
+    browserHistory.push(`/app/edit/${values.id}`);
   }
 
   /**
@@ -137,15 +156,7 @@ class User extends React.Component {
    */
   handleDeleteDoc(id) {
     this.props.dispatch(deleteDoc(id));
-  }
-
-  /**
-   * handleClearEditDoc
-   * @return {void}
-   */
-  handleClearEditDoc() {
-    this.props.dispatch(clearEditDoc());
-  }
+  }s
 
   /**
    * handleConfirmDeleteDoc
@@ -192,10 +203,22 @@ class User extends React.Component {
     this.props.dispatch(deleteFolder(value));
   }
 
+  handleShowOnlyFolder() {
+    this.props.dispatch(showOnlyFolder());
+  }
+
+  handleShowOnlyDoc() {
+    this.props.dispatch(showOnlyDoc());
+  }
+
+  handleShowAll() {
+    this.props.dispatch(showAll());
+  }
   /**
    * @return {ReactElement} jf
    */
   render() {
+    console.log(this.props.views);
     return (
       <div>
         <Navbar
@@ -211,12 +234,16 @@ class User extends React.Component {
         </div>
         <CustomDrawer
           title="iAmDocuman"
+          showAll={ this.handleShowAll }
+          showOnlyDoc={ this.handleShowOnlyDoc }
+          showOnlyFolder={ this.handleShowOnlyFolder }
           username={ this.props.user.users.details.username }
           fullname={
             `${this.props.user.users.details.firstname}
              ${this.props.user.users.details.lastname}`}
         />
         <DocumentsGrid
+          views={ this.props.views }
           docs={ this.props.docs.data || null }
           folders={ this.props.folder.data || null }
           onFolderCreate={ this.handleCreateFolder }

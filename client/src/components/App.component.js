@@ -10,6 +10,7 @@ import Logout from './reusable/Logout.component';
 import User from './User.component';
 import Document from './Document.component';
 import Folder from './Folder.component';
+import EditDocument from './EditDocument.component';
 
 const routes = [
   {
@@ -39,6 +40,10 @@ const routes = [
   {
     path: '/app/folder/:id',
     component: Folder
+  },
+  {
+    path: '/app/edit/:id',
+    component: EditDocument
   }
 ];
 

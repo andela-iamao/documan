@@ -5,7 +5,8 @@ const initialState = {
   data: null,
   confirmDelete: null,
   folder: null,
-  editFolder: false
+  editFolder: false,
+  documents: null
 };
 
 export default (state = initialState, action) => {
@@ -20,6 +21,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         folder: action.payload
+      };
+    }
+    case 'GOT_FOLDER_DOCUMENTS': {
+      return {
+        ...state,
+        documents: action.payload
       };
     }
     case 'EDIT_FOLDER': {
@@ -53,6 +60,17 @@ export default (state = initialState, action) => {
     }
     case 'CLEAR_FOLDER_DELETE_CONFIRMATION': {
       return { ...state, confirmDelete: null };
+    }
+    case 'ADDED_DOCUMENT_TO_FOLDER': {
+      return {
+        ...state
+      };
+    }
+    case 'ERROR_ADDING_DOCUMENT_TO_FOLDER': {
+      return {
+        ...state,
+        error: action.payload
+      };
     }
     default: {
       return { ...state };

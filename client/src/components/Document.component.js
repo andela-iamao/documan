@@ -1,39 +1,58 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
+import CircularProgress from 'material-ui/CircularProgress';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import Edit from 'material-ui/svg-icons/image/edit';
 import Navbar from './reusable/Navbar.component';
-import DocumentsGrid from './DocumentsGrid.component';
+import { FroalaEditorView } from './reusable/Fraola.component';
 import CustomDrawer from './CustomDrawer.component';
+import FolderDialog from './FolderDialog.component';
+import DeleteDialog from './DeleteDialog.component';
 import {
   getDoc,
   createDoc,
+  deleteDoc,
+  editDoc,
   confirmDeleteDoc,
   clearConfirmDeleteDoc
 } from '../actions/document.action';
 import {
+  addDoc,
   getUserFolders,
-  createFolder,
-  confirmDeleteFolder,
-  clearConfirmDeleteFolder,
-  deleteFolder
 } from '../actions/folder.action';
+import {
+  getUser
+} from '../actions/users.action';
 
-@connect((store) => {
-  return {
+@connect(store =>
+  ({
     user: store,
     form: store.form,
     error: store.error.error,
     auth: store.auth,
     docs: store.documents,
     folder: store.folder
-  };
-})
+  }))
 /**
  * React component for
  * @class User
  */
-class User extends React.Component {
+class Document extends React.Component {
 
+  /**
+   * constructor
+   * @param {object} props - object properties of component
+   */
+  constructor(props) {
+    super(props);
+    this.handleAddDoc = this.handleAddDoc.bind(this);
+    this.handleEditDoc = this.handleEditDoc.bind(this);
+    this.handleGetUsersFolders = this.handleGetUsersFolders.bind(this);
+    this.handleDeleteDoc = this.handleDeleteDoc.bind(this);
+    this.handleConfirmDeleteDoc = this.handleConfirmDeleteDoc.bind(this);
+    this.clearDeleteConfirmation = this.clearDeleteConfirmation.bind(this);
+  }
   /**
    * componentDidMount
    * @return {void}
@@ -42,8 +61,19 @@ class User extends React.Component {
     if (!window.localStorage.getItem('token')) {
       browserHistory.push('/app/login');
     } else {
+      this.props.dispatch(getUser());
       this.props.dispatch(getDoc(this.props.params.id));
     }
+  }
+
+  /**
+   * handleGetUsersFolders
+   * @return {void}
+   */
+  handleGetUsersFolders() {
+    setTimeout(() => {
+      this.props.dispatch(getUserFolders());
+    }, 2000);
   }
 
   /**
@@ -56,12 +86,27 @@ class User extends React.Component {
   }
 
   /**
+   * handleDeleteDoc
+   * @param {object} id - document id to delete
+   * @return {void}
+   */
+  handleDeleteDoc(id) {
+    this.props.dispatch(deleteDoc(id));
+    browserHistory.push('/app/dashboard');
+  }
+
+  /**
    * handleConfirmDeleteDoc
    * @param {object} id - id of document to delete
    * @return {void}
    */
-  handleConfirmDeleteDoc(id) {
-    this.props.dispatch(confirmDeleteDoc(id));
+  handleConfirmDeleteDoc() {
+    const values = {
+      id: this.props.params.id,
+      title: this.props.docs.doc.title,
+      type: 'document'
+    };
+    this.props.dispatch(confirmDeleteDoc(values));
   }
 
   /**
@@ -70,39 +115,31 @@ class User extends React.Component {
    */
   clearDeleteConfirmation() {
     this.props.dispatch(clearConfirmDeleteDoc());
-    this.props.dispatch(clearConfirmDeleteFolder());
   }
 
   /**
-   * handleConfirmDeleteFolder
-   * @param {object} values - values needed by
-   * confirmation dialog of folder to delete
+   * handleEditDoc
+   * @param {object} values - values to render dialog with
    * @return {void}
    */
-  handleConfirmDeleteFolder(values) {
-    this.props.dispatch(confirmDeleteFolder(values));
+  handleEditDoc(values) {
+    this.props.dispatch(editDoc(values));
+    browserHistory.push(`/app/edit/${this.props.docs.doc.id}`);
   }
 
   /**
-   * handleCreateFolder
-   * @param {object} values - data to create folder with
+   * handleAddDoc
+   * @param {number} folderId - id of folder to add document to
    * @return {void}
    */
-  handleCreateFolder(values) {
-    this.props.dispatch(createFolder(values));
+  handleAddDoc(folderId) {
+    this.props.dispatch(addDoc(folderId,
+      { id: this.props.docs.doc.id }));
+    browserHistory.push(`/app/folder/${folderId}`);
   }
 
   /**
-   * handleDeleteFolder
-   * @param {object} id - id of folder to delete
-   * @return {void}
-   */
-  handleDeleteFolder(id) {
-    this.props.dispatch(deleteFolder(id));
-  }
-
-  /**
-   * @return {ReactElement} jf
+   * @return {object} react element to render
    */
   render() {
     return (
@@ -118,11 +155,63 @@ class User extends React.Component {
         />
         <div className="close-drawer">
         </div>
-        <CustomDrawer />
-        <h2>Document</h2>
+        <CustomDrawer
+          title="iAmDocuman"
+          username={ this.props.user.users.details.username }
+          fullname={
+            `${this.props.user.users.details.firstname}
+             ${this.props.user.users.details.lastname}`}
+        />
+          <div className="content-display">
+            <div className="row">
+              {
+                (this.props.docs.doc) ?
+                <div className="col s12 m12 l12">
+                  <FolderDialog
+                    folders={ this.props.folder.data }
+                    onAddDoc={ this.handleAddDoc }
+                    onGetFolders={ this.handleGetUsersFolders }
+                  />
+                  <div className="col s3 m3 l1">
+                      <FloatingActionButton
+                        mini={true}
+                        onTouchTap={
+                          this.handleEditDoc
+                        }
+                      >
+                        <Edit />
+                      </FloatingActionButton>
+                  </div>
+                  <DeleteDialog
+                    deleteButton={ this.props.docs.doc }
+                    onDelete={ this.handleDeleteDoc }
+                    openDialog={ this.handleConfirmDeleteDoc }
+                    onDeleteConfirmation={ this.props.docs.confirmDelete }
+                    clearDeleteConfirmation={ this.clearDeleteConfirmation }
+                  />
+
+                  <hr />
+                  <div>
+                    <div id="document-title">
+                      <h5>{ this.props.docs.doc.title}</h5>
+                    </div>
+                    <div id="document-content">
+                      <FroalaEditorView
+                        model={ this.props.docs.doc.content } />
+                    </div>
+                  </div>
+                </div>
+                :
+                <div className="circular-loading">
+                  <CircularProgress />
+                  <h6>Loading document</h6>
+                </div>
+              }
+            </div>
+          </div>
       </div>
     );
   }
 }
 
-export default User;
+export default Document;

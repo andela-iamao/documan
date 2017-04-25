@@ -1,6 +1,8 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
+import FloatingActionButton from 'material-ui/FloatingActionButton';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import returnFromProp from '../util/helper';
 
 
@@ -11,10 +13,10 @@ const customContentStyle = {
 };
 
 /**
- * @class DeleteFolder
+ * @class DeleteDialog
  *
  */
-class DeleteFolder extends React.Component {
+class DeleteDialog extends React.Component {
 
   /**
    * constructor
@@ -39,7 +41,7 @@ class DeleteFolder extends React.Component {
    */
   componentWillReceiveProps(nextProps) {
     if (nextProps.onDeleteConfirmation
-      && typeof nextProps.onDeleteConfirmation.id === 'number'
+      && typeof nextProps.onDeleteConfirmation.id
       && !this.state.open) {
       this.handleOpen();
     }
@@ -51,8 +53,13 @@ class DeleteFolder extends React.Component {
   }
 
   handleSubmit = () => {
-    this.props
-      .onDelete(this.props.onDeleteConfirmation.id);
+    if (this.props.deleteButton) {
+      this.props
+        .onDelete(this.props.deleteButton.id);
+    } else {
+      this.props
+        .onDelete(this.props.onDeleteConfirmation.id);
+    }
     this.handleClose();
   }
 
@@ -77,6 +84,17 @@ class DeleteFolder extends React.Component {
 
     return (
       <div>
+        {
+          (this.props.deleteButton) ?
+          <FloatingActionButton
+            mini={true}
+            onTouchTap={ this.props.openDialog }
+          >
+            <DeleteIcon />
+          </FloatingActionButton>
+          :
+          ''
+        }
         <Dialog
           title={ `Delete ${
             returnFromProp(this.props.onDeleteConfirmation, 'type')
@@ -110,4 +128,4 @@ class DeleteFolder extends React.Component {
   }
 }
 
-export default DeleteFolder;
+export default DeleteDialog;

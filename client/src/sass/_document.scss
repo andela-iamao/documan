@@ -1,0 +1,17 @@
+// .document-container {
+//   overflow-y: scroll;
+// }
+#document-title {
+  text-align: center;
+}
+#document-content {
+  padding: 15px 50px;
+  height:65vh;
+  overflow-y: scroll;
+}
+.fr-wrapper {
+  max-height: 50vh;
+}
+.fr-element {
+  max-height: 50vh;
+}

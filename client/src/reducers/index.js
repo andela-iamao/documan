@@ -6,6 +6,7 @@ import error from './error.reducer';
 import auth from './auth.reducer';
 import documents from './documents.reducer';
 import folder from './folder.reducer';
+import views from './views.reducer';
 
 const combinedReducers = combineReducers({
   users,
@@ -13,7 +14,8 @@ const combinedReducers = combineReducers({
   error,
   auth,
   folder,
-  documents
+  documents,
+  views
 });
 
 export default reduceReducers(combinedReducers);

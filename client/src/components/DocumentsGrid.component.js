@@ -4,7 +4,6 @@ import DocCard from './DocCard.component';
 import FolderCard from './FolderCard.component';
 import CreateFolder from './CreateFolder.component';
 import CreateDoc from './CreateDoc.component';
-import EditDoc from './EditDoc.component';
 import EditFolder from './EditFolder.component';
 import DeleteDialog from './DeleteDialog.component';
 import renderFromProps from '../util/helper';
@@ -52,8 +51,8 @@ class DocumentGrid extends React.Component {
    */
   renderDocs(documents) {
     const self = this;
-    return documents.map((doc, index) =>
-      (
+    return documents.map((doc, index) => (
+      (doc.folderId === null) ?
         <div className="col s4 m3 l2" key={`root-div-${doc.title} ${index}`}>
           <DocCard
             title={ doc.title }
@@ -64,12 +63,14 @@ class DocumentGrid extends React.Component {
             onDelete={ self.props.onConfirmDocDelete }
             onEdit={ self.props.onEditDoc }
             />
-        </div>));
+        </div>
+        : ''
+    ));
   }
 
   /**
    * render
-   * @return {object} jf
+   * @return {object} react element to render
    */
   render() {
     return (
@@ -80,12 +81,6 @@ class DocumentGrid extends React.Component {
             onCreate={ this.props.onDocCreate }
           />
         </div>
-        <EditDoc
-          onEdit={ this.props.onUpdateDoc }
-          edit={ this.props.toEdit }
-          open={ (this.props.toEdit) ? true : false }
-          onClose={ this.props.clearEdit }
-        />
         <EditFolder
           onEdit={ this.props.onUpdateFolder }
           edit={ this.props.toEditFolder }
@@ -106,21 +101,28 @@ class DocumentGrid extends React.Component {
         />
         <hr />
         <div className="row ">
-        {
-          (this.props.folders) ?
-            this.renderFolders(this.props.folders)
-            : ''
-        }
-        {
-          (this.props.docs) ?
-            this.renderDocs(this.props.docs)
-            : ''
-        }
+          {
+            (this.props.folders && !this.props.views.showOnlyDoc) ?
+              this.renderFolders(this.props.folders)
+              : ''
+          }
+          {
+            (this.props.docs && !this.props.views.showOnlyFolder) ?
+              this.renderDocs(this.props.docs)
+              : ''
+          }
         </div>
       </div>
     );
   }
 }
+
+DocumentGrid.defaultProps = {
+  views: {
+    showOnlyFolder: false,
+    showOnlyDoc: false
+  }
+};
 
 DocumentGrid.propTypes = {
   data: PropTypes.array,

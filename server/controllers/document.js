@@ -37,9 +37,12 @@ const findAllDocument = (req, res) => {
 };
 
 const findOneDocument = (req, res) => {
+  const id = req.decoded.id;
   Document.findById(req.params.id)
     .then((document) => {
-      if (req.admin || document.accessId === 1) {
+      if (id === document.ownerId
+          || req.admin
+          || document.accessId === 1) {
         res.status(200).json(document);
       } else {
         res.status(401).json({
