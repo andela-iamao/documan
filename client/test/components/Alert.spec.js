@@ -14,7 +14,6 @@ describe('<Alert />', () => {
     const wrapper = shallow(
       <Alert info={ { error: 'An error occured' } }/>
     );
-    console.log();
     expect(wrapper.find('.card-content')
       .props().children.props.children)
   });

@@ -30,9 +30,9 @@ class DeleteDialog extends React.Component {
     this.state = { open: false };
   }
 
-  handleOpen = () => {
+  handleOpen() {
     this.setState({ open: true });
-  };
+  }
 
   /**
    * componentWillReceiveProps
@@ -47,12 +47,12 @@ class DeleteDialog extends React.Component {
     }
   }
 
-  handleClose = () => {
+  handleClose() {
     this.setState({ open: false });
     this.props.clearDeleteConfirmation();
   }
 
-  handleSubmit = () => {
+  handleSubmit() {
     if (this.props.deleteButton) {
       this.props
         .onDelete(this.props.deleteButton.id);

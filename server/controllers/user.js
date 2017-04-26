@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import db from '../models/index';
-import helper from '../helpers/error-render';
+import errorRender from '../helpers/error-render';
+import { paginate } from '../helpers/helper';
 
 const create = (req, res) => {
   if (req.body.roleId) {
@@ -24,7 +25,7 @@ const create = (req, res) => {
       });
     })
     .catch((errors) => {
-      const error = helper(errors);
+      const error = errorRender(errors);
       res.status(error.status)
         .json({
           error_code: error.error_code,
@@ -67,7 +68,7 @@ const findOne = (req, res) => {
     .then((user) => {
       res.status(200).json(user);
     }).catch((errors) => {
-      const error = helper(errors);
+      const error = errorRender(errors);
       res.status(error.status)
         .json({
           error_code: error.error_code,
@@ -77,6 +78,7 @@ const findOne = (req, res) => {
 };
 
 const findAll = (req, res) => {
+  let limit, offset;
   const query = {
     where: {},
     attributes: ['id', 'firstname', 'lastname', 'username', 'email', 'roleId'] };
@@ -84,12 +86,12 @@ const findAll = (req, res) => {
     query.attributes.push('password', 'createdAt', 'updatedAt');
   }
   if (req.query) {
-    query.limit = req.query.limit || null;
-    query.offset = req.query.offset || 0;
+    limit = req.query.limit || 100;
+    offset = req.query.offset || 0;
   }
   db.Users.findAll(query)
     .then((users) => {
-      res.status(200).json(users);
+      res.status(200).json(paginate(limit, offset, users, 'users'));
     });
 };
 
@@ -120,7 +122,7 @@ const updateUser = (req, res) => {
   } }).then(() => {
     res.sendStatus(204);
   }).catch((errors) => {
-    const error = helper(errors);
+    const error = errorRender(errors);
     res.status(error.status)
       .json({
         error_code: error.error_code,
@@ -146,7 +148,7 @@ const deleteUser = (req, res) => {
   } }).then(() => {
     res.sendStatus(204);
   }).catch((errors) => {
-    const error = helper(errors);
+    const error = errorRender(errors);
     res.status(error.status)
       .json({
         error_code: error.error_code,

@@ -4,26 +4,21 @@ const defaultState = {
   creating: false,
   created: false,
   details: {},
-  error: null
+  error: null,
+  users: null
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
     case 'GOT_USER': {
-      console.log(action.payload);
       return {
         ...state,
         details: action.payload
       };
     }
-    case 'FETCH_ALL_USER': {
-      return { ...state, creating: true };
-    }
-    case 'USERS_ARE_FETCHED': {
+    case 'GOT_ALL_USERS': {
       return {
         ...state,
-        creating: false,
-        created: true,
         users: action.payload
       };
     }

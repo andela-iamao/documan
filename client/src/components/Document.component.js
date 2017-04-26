@@ -119,11 +119,14 @@ class Document extends React.Component {
 
   /**
    * handleEditDoc
-   * @param {object} values - values to render dialog with
    * @return {void}
    */
-  handleEditDoc(values) {
-    this.props.dispatch(editDoc(values));
+  handleEditDoc() {
+    this.props.dispatch(editDoc({
+      id: this.props.docs.doc.id,
+      title: this.props.docs.doc.title,
+      content: this.props.docs.doc.content
+    }));
     browserHistory.push(`/app/edit/${this.props.docs.doc.id}`);
   }
 
@@ -158,6 +161,8 @@ class Document extends React.Component {
         <CustomDrawer
           title="iAmDocuman"
           username={ this.props.user.users.details.username }
+          id={ this.props.user.users.details.id }
+          userRole={ this.props.user.users.details.roleId }
           fullname={
             `${this.props.user.users.details.firstname}
              ${this.props.user.users.details.lastname}`}
@@ -176,7 +181,7 @@ class Document extends React.Component {
                       <FloatingActionButton
                         mini={true}
                         onTouchTap={
-                          this.handleEditDoc
+                          () => this.handleEditDoc()
                         }
                       >
                         <Edit />

@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'underscore';
 import Dialog from 'material-ui/Dialog';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Edit from 'material-ui/svg-icons/image/edit';
@@ -68,6 +69,7 @@ class EditFolder extends React.Component {
    * @return {void}
    */
   handleSubmit(event) {
+    event.persist();
     event.preventDefault();
     this.props.onEdit({
       id: this.props.edit.id,
@@ -78,11 +80,11 @@ class EditFolder extends React.Component {
 
   /**
    * handleChange
-   * @param {object} event - properties of target element
+   * @param {object} target - properties of target element
    * @return {void}
    */
-  handleChange(event) {
-    const value = event.target.value;
+  handleChange(target) {
+    const value = target.value;
     this.setState({ folderName: value });
   }
 
@@ -104,6 +106,11 @@ class EditFolder extends React.Component {
         onTouchTap={ this.handleSubmit }
       />,
     ];
+
+    const changeHandler = _.compose(
+      _.debounce(this.handleChange.bind(this), 100),
+      _.property('target')
+    );
 
     return (
       <div className="col s3 m3 l1">
@@ -131,6 +138,7 @@ class EditFolder extends React.Component {
           onRequestClose={ this.handleClose }
         >
           <img src="/images/folder.png" style={ { width: '35%' } } />
+          <h6>{ this.props.edit.title }</h6>
           <form
             onSubmit={
               event => this.handleSubmit(event)
@@ -138,10 +146,8 @@ class EditFolder extends React.Component {
             <input
               type="text"
               name="title"
-              value={ this.state.folderName }
-              onChange={
-                event => this.handleChange(event)
-              }
+              placeholder={ this.state.folderName }
+              onChange={ changeHandler }
             />
             <label>Enter folder name</label>
           </form>

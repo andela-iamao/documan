@@ -113,11 +113,9 @@ export function clearEditFolder() {
 }
 
 export function getFolderDocs(id) {
-  console.log('getting folder docs');
   return (dispatch) => {
     axios.get(`/api/v1/folders/${id}/documents`)
       .then((response) => {
-        console.log(response);
         dispatch({
           type: 'GOT_FOLDER_DOCUMENTS',
           payload: response.data

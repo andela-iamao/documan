@@ -1,26 +1,16 @@
 import axios from 'axios';
-//
-// export default token => ({
-//   return (dispatch) => {
-//     axios.post('http://localhost:5000/api/v1/users/login', loginData)
-//       .then((response) => {
-//         dispatch({
-//           type: 'LOGIN_USER',
-//           payload: response.data
-//         });
-//         dispatch({
-//           type: 'CLEAR_ERROR'
-//         });
-//         axios.defaults.headers.common.Authorization = response.data.token;
-//       })
-//       .catch((error) => {
-//         dispatch({
-//           type: 'VALIDATION_ERROR',
-//           payload: error.response.data.message
-//         });
-//       });
-//   };
-// });
+
+export function getAllUsers() {
+  return (dispatch) => {
+    axios.get('/api/v1/users')
+      .then((response) => {
+        dispatch({
+          type: 'GOT_ALL_USERS',
+          payload: response.data
+        });
+      });
+  };
+}
 
 export function getUserDocs() {
   return (dispatch) => {
@@ -42,6 +32,34 @@ export function getUser() {
       .then((response) => {
         dispatch({
           type: 'GOT_USER',
+          payload: response.data
+        });
+      });
+  };
+}
+
+export function deleteUser(id) {
+  return (dispatch) => {
+    axios.delete(`/api/v1/users/${id}`)
+      .then((response) => {
+        dispatch(getUser());
+        dispatch(getAllUsers());
+        dispatch({
+          type: 'DELETE_USER',
+          payload: response.data
+        });
+      });
+  };
+}
+
+export function updateUser(id, values) {
+  return (dispatch) => {
+    axios.put(`/api/v1/users/${id}`, values)
+      .then((response) => {
+        dispatch(getUser());
+        dispatch(getAllUsers());
+        dispatch({
+          type: 'UPDATE_USER_INFO',
           payload: response.data
         });
       });

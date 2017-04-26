@@ -1,11 +1,6 @@
-export default (prop, field) => {
-  if (prop) {
-    return prop[field] || '';
-  }
-  return '';
-};
+import React from 'react';
 
-function paginate (handlePageChange, paginationMeta) {
+export default (handlePageChange, paginationMeta) => {
   const paginated = [];
   for (let count = 0; count < paginationMeta.page_count; count += 1) {
     paginated.push(
@@ -18,4 +13,5 @@ function paginate (handlePageChange, paginationMeta) {
       </span>
     );
   }
-}
+  return paginated;
+};

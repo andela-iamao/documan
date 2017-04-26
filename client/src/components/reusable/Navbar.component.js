@@ -15,19 +15,27 @@ const style = {
 
 const isAuthenticated = props => (
   <div className="row navbar-right-element" style= {{ marginBottom: 0 }}>
-    <div className="col m8 l9 search-navbar">
-      <form>
-        <div className="input-field col s12">
-          <input id="search" type="search" required />
-          <label htmlFor="search">
-            search
-          </label>
-          <i className="material-icons">
-            <span className="fa fa-close"></span>
-          </i>
-        </div>
-      </form>
-    </div>
+    {
+      (props.showSearch) ?
+      <div className="col m8 l9 search-navbar">
+        <form>
+          <div className="input-field col s12">
+            <input
+              id="search"
+              type="search"
+              onChange={ props.handleSearch }
+              required />
+            <label htmlFor="search">
+              search
+            </label>
+            <i className="material-icons">
+              <span className="fa fa-close"></span>
+            </i>
+          </div>
+        </form>
+      </div>
+      : ''
+    }
     <div className="col m4 l3 navbar-right-buttons">
       <Link to={ props.isAuthenticated.userPage } >
         <h6>
@@ -82,8 +90,6 @@ const notAuthenticated = props => (
  */
 class Navbar extends React.Component {
 
-  handleToggle = () => this.setState({ open: !this.state.open });
-
   /**
    * @return {ReactElement} jf
    */
@@ -123,6 +129,7 @@ Navbar.defaultProps = {
 
 Navbar.propTypes = {
   title: PropTypes.string,
+  handleSearch: PropTypes.func,
   loginLink: PropTypes.string,
   signupLink: PropTypes.string,
   isAuthenticated: PropTypes.object,

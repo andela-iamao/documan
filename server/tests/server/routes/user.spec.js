@@ -504,43 +504,33 @@ describe('Routes: user', () => {
     });
   });
   describe('GET /api/v1/users', () => {
-    it('should get and return all users', (done) => {
+    it('should get and return all users with default limit of 10 per page',
+    (done) => {
       request.get('/api/v1/users')
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(6);
-          expect(Object.keys(res.body[0]).length).to.eql(6);
+          expect(res.body.success.users.length).to.eql(6);
           done(err);
         });
     });
-    it('should return 3 users starting from the second', (done) => {
-      request.get('/api/v1/users/?limit=3&offset=1')
+    it('should return 3 users per page', (done) => {
+      request.get('/api/v1/users/?limit=3')
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(3);
-          expect(res.body[0].firstname).to.not.eql('Thomas');
+          expect(res.body.success.users.length).to.eql(3);
+          expect(res.body.success.paginationMeta.page).to.eql(1);
           done(err);
         });
     });
-    it('should return all users starting from the second', (done) => {
+    it('should return all users from the second with default limit of 10',
+    (done) => {
       request.get('/api/v1/users/?offset=1')
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(5);
-          expect(res.body[0].firstname).to.not.eql('Thomas');
-          done(err);
-        });
-    });
-    it('should return 2 users', (done) => {
-      request.get('/api/v1/users/?limit=2')
-        .set('Authorization', token)
-        .expect(200)
-        .end((err, res) => {
-          expect(res.body.length).to.eql(2);
-          expect(res.body[0].firstname).to.eql('Thomas');
+          expect(res.body.success.users.length).to.eql(5);
           done(err);
         });
     });
@@ -549,8 +539,7 @@ describe('Routes: user', () => {
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(6);
-          expect(res.body[0].firstname).to.eql('Thomas');
+          expect(res.body.success.users.length).to.eql(6);
           done(err);
         });
     });

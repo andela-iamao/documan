@@ -240,6 +240,7 @@ class Folder extends React.Component {
         <CustomDrawer
           title="iAmDocuman"
           username={ this.props.user.users.details.username }
+          userRole={ this.props.user.users.details.roleId }
           fullname={
             `${this.props.user.users.details.firstname}
              ${this.props.user.users.details.lastname}`}

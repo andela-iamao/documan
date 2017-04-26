@@ -105,6 +105,23 @@ export function updateDoc(values, refresh = true) {
   };
 }
 
+
+/**
+* getAllDocs - sends an action to fetch all documents
+* @return {object} action to send to reducers
+*/
+export function getAllDocs() {
+  return (dispatch) => {
+    axios.get('/api/v1/documents')
+      .then((response) => {
+        dispatch({
+          type: 'GOT_ALL_DOCUMENTS',
+          payload: response.data
+        });
+      });
+  };
+}
+
 /**
 * deleteDoc
 * @param {number} id - id of document to delete
@@ -120,8 +137,10 @@ export function deleteDoc(id, refresh = false) {
           type: 'DELETED_DOCUMENT',
           payload: id
         });
-        if (refresh) {
+        if (refresh && !refresh === 'auto') {
           dispatch(refresh.action(refresh.id));
+        } else {
+          dispatch(getAllDocs());
         }
       }).catch((error) => {
         dispatch({

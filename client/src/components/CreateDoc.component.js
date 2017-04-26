@@ -60,7 +60,8 @@ class CreateDoc extends React.Component {
    * @param {object} event - properties of element
    * @return {void}
    */
-  handleSubmit = (event) => {
+  handleSubmit(event) {
+    event.persist();
     event.preventDefault();
     this.props.onCreate(this.state);
     this.handleClose();
@@ -72,6 +73,7 @@ class CreateDoc extends React.Component {
    * @return {void}
    */
   handleChange(event) {
+    event.persist();
     const value = event.target.value;
     this.setState({ title: value });
   }

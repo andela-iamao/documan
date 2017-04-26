@@ -10,7 +10,9 @@ import Logout from './reusable/Logout.component';
 import User from './User.component';
 import Document from './Document.component';
 import Folder from './Folder.component';
+import ManageUsers from './ManageUsers.component';
 import EditDocument from './EditDocument.component';
+import EditProfile from './EditProfile.component';
 
 const routes = [
   {
@@ -44,6 +46,14 @@ const routes = [
   {
     path: '/app/edit/:id',
     component: EditDocument
+  },
+  {
+    path: '/app/manage/users',
+    component: ManageUsers
+  },
+  {
+    path: '/app/user/:id/edit',
+    component: EditProfile
   }
 ];
 

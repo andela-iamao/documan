@@ -1,27 +1,20 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
+import _ from 'underscore';
 import { connect } from 'react-redux';
 import FlatButton from 'material-ui/FlatButton';
+import SelectField from 'material-ui/SelectField';
+import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
 import Navbar from './reusable/Navbar.component';
 import { FroalaEditor } from './reusable/Fraola.component';
 import CustomDrawer from './CustomDrawer.component';
 import {
   getDoc,
-  createDoc,
-  deleteDoc,
   updateDoc,
-  clearEditDoc,
-  confirmDeleteDoc,
-  clearConfirmDeleteDoc
+  clearEditDoc
 } from '../actions/document.action';
-import {
-  getUserFolders,
-  createFolder,
-  confirmDeleteFolder,
-  clearConfirmDeleteFolder,
-  deleteFolder
-} from '../actions/folder.action';
+
 import {
   getUser
 } from '../actions/users.action';
@@ -50,6 +43,7 @@ class EditDocument extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleUpdateDoc = this.handleUpdateDoc.bind(this);
     this.handleClose = this.handleClose.bind(this);
+    this.handleSelectChange = this.handleSelectChange.bind(this);
     this.state = {
       title: '',
       content: '',
@@ -102,6 +96,28 @@ class EditDocument extends React.Component {
   }
 
   /**
+   * handleChange
+   * @param {object} event - properties of element
+   * @return {void}
+   */
+  handleChange(event) {
+    event.persist();
+    const value = event.target.value;
+    this.setState({ title: value });
+  }
+
+  /**
+   * handleSelectChange
+   * @param {object} event - event properties of selected option
+   * @param {number} index - index location of selected option
+   * @param {string} value - current option from SelectField
+   * @return {void}
+   */
+  handleSelectChange(event, index, value) {
+    this.setState({ accessId: value });
+  }
+
+  /**
    * handleModelChange
    * @param {string} value - current values in text field
    * @return {void}
@@ -132,6 +148,10 @@ class EditDocument extends React.Component {
    * @return {ReactElement} jf
    */
   render() {
+    const changeHandler = _.compose(
+      _.debounce(this.handleModelChange.bind(this), 300)
+    );
+
     return (
       <div>
         <Navbar
@@ -148,6 +168,8 @@ class EditDocument extends React.Component {
         <CustomDrawer
           title="iAmDocuman"
           username={ this.props.user.users.details.username }
+          id={ this.props.user.users.details.id }
+          userRole={ this.props.user.users.details.roleId }
           fullname={
             `${this.props.user.users.details.firstname}
              ${this.props.user.users.details.lastname}`}
@@ -158,12 +180,32 @@ class EditDocument extends React.Component {
                 (this.props.docs.doc) ?
                 <div>
                   <div>
-                    <div id="document-title">
-                      <h5>{ this.state.title}</h5>
+                    <div id="document-title row">
+                      <div className="input-field col s6 m6 l6">
+                        <input
+                          type="text"
+                          name="title"
+                          value={ this.state.title }
+                          onChange={
+                            event => this.handleChange(event)
+                          }
+                        />
+                        <label>Enter document title</label>
+                      </div>
+                      <div className="input-field col l6 m6 s6">
+                        <SelectField
+                          floatingLabelText="Select Access Level"
+                          value={this.state.accessId}
+                          onChange={this.handleSelectChange}
+                        >
+                          <MenuItem value={1} primaryText="PUBLIC" />
+                          <MenuItem value={2} primaryText="PRIVATE" />
+                        </SelectField>
+                      </div>
                     </div>
                     <div id="document-content">
                       <FroalaEditor
-                        onModelChange={ this.handleModelChange }
+                        onModelChange={ changeHandler }
                         model={ this.state.content } />
                     </div>
                     <div className="editor-actions">

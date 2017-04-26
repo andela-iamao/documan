@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import Navbar from './reusable/Navbar.component';
 import DocumentsGrid from './DocumentsGrid.component';
 import CustomDrawer from './CustomDrawer.component';
+import Search from './Search.component';
 import {
   getUserDocs,
   createDoc,
@@ -32,7 +33,7 @@ import {
   showOnlyDoc,
   showAll
 } from '../actions/views.action';
-
+import { searchUser, searchDocs, clearSearch } from '../actions/search.action';
 
 @connect(store => ({
   user: store,
@@ -41,7 +42,8 @@ import {
   auth: store.auth,
   docs: store.documents,
   folder: store.folder,
-  views: store.views
+  views: store.views,
+  search: store.search
 }))
 /**
  * React component for
@@ -71,6 +73,7 @@ class User extends React.Component {
     this.handleEditFolder = this.handleEditFolder.bind(this);
     this.handleUpdateFolder = this.handleUpdateFolder.bind(this);
     this.handleClearEditFolder = this.handleClearEditFolder.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
   }
 
   /**
@@ -156,7 +159,7 @@ class User extends React.Component {
    */
   handleDeleteDoc(id) {
     this.props.dispatch(deleteDoc(id));
-  }s
+  }
 
   /**
    * handleConfirmDeleteDoc
@@ -214,11 +217,23 @@ class User extends React.Component {
   handleShowAll() {
     this.props.dispatch(showAll());
   }
+
+  handleSearch(query) {
+    if (query.target.value.length > 0) {
+      this.props.dispatch(searchDocs(query.target.value));
+      this.props.dispatch(searchUser(query.target.value));
+    } else {
+      this.handleClearSearch();
+    }
+  }
+
+  handleClearSearch() {
+    this.props.dispatch(clearSearch());
+  }
   /**
-   * @return {ReactElement} jf
+   * @return {object} react element to render
    */
   render() {
-    console.log(this.props.views);
     return (
       <div>
         <Navbar
@@ -229,6 +244,8 @@ class User extends React.Component {
            userPage: '/app/dashboard'
          } }
          showSignout={ false }
+         showSearch={ true }
+         handleSearch={ this.handleSearch }
         />
         <div className="close-drawer">
         </div>
@@ -236,36 +253,44 @@ class User extends React.Component {
           title="iAmDocuman"
           showAll={ this.handleShowAll }
           showOnlyDoc={ this.handleShowOnlyDoc }
+          id={ this.props.user.users.details.id }
+          userRole={ this.props.user.users.details.roleId }
           showOnlyFolder={ this.handleShowOnlyFolder }
           username={ this.props.user.users.details.username }
           fullname={
             `${this.props.user.users.details.firstname}
              ${this.props.user.users.details.lastname}`}
         />
-        <DocumentsGrid
-          views={ this.props.views }
-          docs={ this.props.docs.data || null }
-          folders={ this.props.folder.data || null }
-          onFolderCreate={ this.handleCreateFolder }
-          onEditFolder={ this.handleEditFolder }
-          toEditFolder={ this.props.folder.editFolder }
-          clearEditFolder={ this.handleClearEditFolder }
-          onFolderDelete={ this.handleDeleteFolder }
-          onUpdateFolder={ this.handleUpdateFolder }
-          openDeleteDialog={
-            this.props.folder.confirmDelete
-            || this.props.docs.confirmDelete
-          }
-          onConfirmFolderDelete={ this.handleConfirmDeleteFolder }
-          onDocCreate={ this.handleCreateDoc }
-          onDocDelete={ this.handleDeleteDoc }
-          onConfirmDocDelete={ this.handleConfirmDeleteDoc }
-          clearDeleteConfirmation={ this.clearDeleteConfirmation }
-          onEditDoc={ this.handleEditDoc }
-          toEdit={ this.props.docs.editDoc }
-          clearEdit={ this.handleClearEditDoc }
-          onUpdateDoc={ this.handleUpdateDoc }
-        />
+        {
+          (this.props.search.results.users
+            || this.props.search.results.docs) ?
+            <Search data={ this.props.search.results }/>
+          :
+          <DocumentsGrid
+            views={ this.props.views }
+            docs={ this.props.docs.data || null }
+            folders={ this.props.folder.data || null }
+            onFolderCreate={ this.handleCreateFolder }
+            onEditFolder={ this.handleEditFolder }
+            toEditFolder={ this.props.folder.editFolder }
+            clearEditFolder={ this.handleClearEditFolder }
+            onFolderDelete={ this.handleDeleteFolder }
+            onUpdateFolder={ this.handleUpdateFolder }
+            openDeleteDialog={
+              this.props.folder.confirmDelete
+              || this.props.docs.confirmDelete
+            }
+            onConfirmFolderDelete={ this.handleConfirmDeleteFolder }
+            onDocCreate={ this.handleCreateDoc }
+            onDocDelete={ this.handleDeleteDoc }
+            onConfirmDocDelete={ this.handleConfirmDeleteDoc }
+            clearDeleteConfirmation={ this.clearDeleteConfirmation }
+            onEditDoc={ this.handleEditDoc }
+            toEdit={ this.props.docs.editDoc }
+            clearEdit={ this.handleClearEditDoc }
+            onUpdateDoc={ this.handleUpdateDoc }
+          />
+        }
       </div>
     );
   }

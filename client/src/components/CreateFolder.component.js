@@ -1,4 +1,5 @@
 import React from 'react';
+import _ from 'underscore';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -29,14 +30,16 @@ class CreateFolder extends React.Component {
     this.state = { open: false, folderName: '' };
   }
 
-  handleOpen = () => {
+  handleOpen() {
     this.setState({ open: true });
-  };
+  }
 
-  handleClose = () => {
+  handleClose() {
     this.setState({ open: false });
-  };
-  handleSubmit = (event) => {
+  }
+
+  handleSubmit(event) {
+    event.persist();
     event.preventDefault();
     this.props.onCreate({
       title: this.state.folderName
@@ -44,13 +47,13 @@ class CreateFolder extends React.Component {
     this.handleClose();
   }
 
-  handleChange = (event) => {
-    const value = event.target.value;
+  handleChange(target) {
+    const value = target.value;
     this.setState({ folderName: value });
   }
 
   /**
-   * @return {object} jf
+   * @return {object} return react element
    */
   render() {
     const actions = [
@@ -66,6 +69,11 @@ class CreateFolder extends React.Component {
         onTouchTap={ this.handleSubmit }
       />,
     ];
+
+    const changeHandler = _.compose(
+      _.debounce(this.handleChange.bind(this), 100),
+      _.property('target')
+    );
 
     return (
       <div className="col s3 m3 l1">
@@ -96,9 +104,7 @@ class CreateFolder extends React.Component {
               type="text"
               name="title"
               value={ this.state.folderName }
-              onChange={
-                event => this.handleChange(event)
-              }
+              onChange={ changeHandler }
             />
             <label>Enter folder name</label>
           </form>

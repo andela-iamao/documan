@@ -34,27 +34,24 @@ class FolderDialog extends React.Component {
     this.state = { open: false, folderName: '' };
   }
 
-  handleOpen = () => {
+  handleOpen() {
     if (!this.props.folders) {
       this.props.onGetFolders();
     }
     this.setState({ open: true });
   };
 
-  handleClose = () => {
+  handleClose() {
     this.setState({ open: false });
   };
-  handleSubmit = (event) => {
+
+  handleSubmit(event) {
+    event.persist();
     event.preventDefault();
     this.props.onCreate({
       title: this.state.folderName
     });
     this.handleClose();
-  }
-
-  handleChange = (event) => {
-    const value = event.target.value;
-    this.setState({ folderName: value });
   }
 
   /**

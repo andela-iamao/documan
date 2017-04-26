@@ -1,6 +1,6 @@
 import db from '../models/index';
-import helper from '../helpers/error-render';
-// import { isAdmin } from '../helpers/helper';
+import errorRender from '../helpers/error-render';
+import { paginate } from '../helpers/helper';
 
 const Document = db.Document;
 
@@ -12,7 +12,7 @@ const createDocument = (req, res) => {
     .then((result) => {
       res.status(200).json(result);
     }).catch((errors) => {
-      const error = helper(errors);
+      const error = errorRender(errors);
       res.status(error.status)
         .json({
           error_code: error.error_code,
@@ -22,18 +22,19 @@ const createDocument = (req, res) => {
 };
 
 const findAllDocument = (req, res) => {
-  let query;
+  let query, limit, offset;
   if (req.admin) {
     query = { where: {} };
   } else {
     query = { where: { accessId: 1 } };
   }
   if (req.query) {
-    query.limit = req.query.limit || null;
-    query.offset = req.query.offset || 0;
+    limit = req.query.limit || 100;
+    offset = req.query.offset || 0;
   }
   Document.findAll(query)
-    .then(documents => res.status(200).json(documents));
+    .then(documents => res.status(200).json(
+      paginate(limit, offset, documents, 'documents')));
 };
 
 const findOneDocument = (req, res) => {
@@ -51,7 +52,7 @@ const findOneDocument = (req, res) => {
         });
       }
     }).catch((errors) => {
-      const error = helper(errors);
+      const error = errorRender(errors);
       res.status(error.status)
         .json({
           error_code: error.error_code,

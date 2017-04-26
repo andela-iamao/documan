@@ -5,7 +5,8 @@ const initialState = {
   data: null,
   confirmDelete: null,
   doc: null,
-  editDoc: false
+  editDoc: false,
+  documents: null
 };
 
 export default (state = initialState, action) => {
@@ -59,6 +60,12 @@ export default (state = initialState, action) => {
       return {
         ...state,
         confirmDelete: null
+      };
+    }
+    case 'GOT_ALL_DOCUMENTS': {
+      return {
+        ...state,
+        documents: action.payload
       };
     }
     default: {

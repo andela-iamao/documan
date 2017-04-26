@@ -52,7 +52,7 @@ class DocumentGrid extends React.Component {
   renderDocs(documents) {
     const self = this;
     return documents.map((doc, index) => (
-      (doc.folderId === null) ?
+      (doc.folderId === null || self.props.showOnlyDoc) ?
         <div className="col s4 m3 l2" key={`root-div-${doc.title} ${index}`}>
           <DocCard
             title={ doc.title }

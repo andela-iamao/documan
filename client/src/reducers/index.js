@@ -7,6 +7,7 @@ import auth from './auth.reducer';
 import documents from './documents.reducer';
 import folder from './folder.reducer';
 import views from './views.reducer';
+import search from './search.reducers';
 
 const combinedReducers = combineReducers({
   users,
@@ -15,7 +16,8 @@ const combinedReducers = combineReducers({
   auth,
   folder,
   documents,
-  views
+  views,
+  search
 });
 
 export default reduceReducers(combinedReducers);
