@@ -5,6 +5,11 @@
 /* global jwt:true */
 /* global faker:true */
 
+const tokenize = (id, username, roleId) => jwt.sign({
+  exp: Math.floor(Date.now() / 1000) + (60 * 60),
+  data: { id, username, roleId }
+}, process.env.JWT_SECRET);
+
 describe('Routes: user', () => {
   const User = db.Users;
   const Role = db.Roles;
@@ -36,29 +41,36 @@ describe('Routes: user', () => {
               secondRegUser = res[2];
               fourthRegUser = res[4];
               customRoles.push(res[4], res[5]);
-              customRolesToken.push(jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[4].id }
-              }, process.env.JWT_SECRET), jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[5].id }
-              }, process.env.JWT_SECRET));
-              token = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[0].id }
-              }, process.env.JWT_SECRET);
-              secondUserToken = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[2].id }
-              }, process.env.JWT_SECRET);
-              fifthRegUserToken = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[5].id }
-              }, process.env.JWT_SECRET);
-              adminToken = jwt.sign({
-                exp: Math.floor(Date.now() / 1000) + (60 * 10),
-                data: { id: res[3].id }
-              }, process.env.JWT_SECRET);
+
+              customRolesToken.push(tokenize(
+                res[4].id,
+                res[4].username,
+                res[4].roleId
+              ), tokenize(
+                res[5].id,
+                res[5].username,
+                res[5].roleId
+              ));
+              token = tokenize(
+                res[0].id,
+                res[0].username,
+                res[0].roleId
+              );
+              secondUserToken = tokenize(
+                res[2].id,
+                res[2].username,
+                res[2].roleId
+              );
+              fifthRegUserToken = tokenize(
+                res[5].id,
+                res[5].username,
+                res[5].roleId
+              );
+              adminToken = tokenize(
+                res[3].id,
+                res[3].username,
+                res[3].roleId
+              );
               const docs = faker.createDocument(fakeUID.id)
                 .concat(faker.createDocument(secondRegUser.id))
                 .concat(faker.createDocument(admin.id)
@@ -122,7 +134,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('email cannot be null');
+          expect(res.body.message).to.eql('email cannot be empty');
           done(err);
         });
     });
@@ -142,7 +154,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('firstname cannot be null');
+          expect(res.body.message).to.eql('firstname cannot be empty');
           done(err);
         });
     });
@@ -226,7 +238,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('lastname cannot be null');
+          expect(res.body.message).to.eql('lastname cannot be empty');
           done(err);
         });
     });
@@ -329,7 +341,7 @@ describe('Routes: user', () => {
         .expect(400)
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
-          expect(res.body.message).to.eql('username cannot be null');
+          expect(res.body.message).to.eql('username cannot be empty');
           done(err);
         });
     });
@@ -402,7 +414,7 @@ describe('Routes: user', () => {
         .end((err, res) => {
           expect(res.body.error_code).to.eql('notNull Violation');
           expect(res.body.message)
-            .to.eql('password cannot be null');
+            .to.eql('password cannot be empty');
           done(err);
         });
     });
@@ -492,43 +504,33 @@ describe('Routes: user', () => {
     });
   });
   describe('GET /api/v1/users', () => {
-    it('should get and return all users', (done) => {
+    it('should get and return all users with default limit of 10 per page',
+    (done) => {
       request.get('/api/v1/users')
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(6);
-          expect(Object.keys(res.body[0]).length).to.eql(6);
+          expect(res.body.success.users.length).to.eql(6);
           done(err);
         });
     });
-    it('should return 3 users starting from the second', (done) => {
-      request.get('/api/v1/users/?limit=3&offset=1')
+    it('should return 3 users per page', (done) => {
+      request.get('/api/v1/users/?limit=3')
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(3);
-          expect(res.body[0].firstname).to.not.eql('Thomas');
+          expect(res.body.success.users.length).to.eql(3);
+          expect(res.body.success.paginationMeta.page).to.eql(1);
           done(err);
         });
     });
-    it('should return all users starting from the second', (done) => {
+    it('should return all users from the second with default limit of 10',
+    (done) => {
       request.get('/api/v1/users/?offset=1')
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(5);
-          expect(res.body[0].firstname).to.not.eql('Thomas');
-          done(err);
-        });
-    });
-    it('should return 2 users', (done) => {
-      request.get('/api/v1/users/?limit=2')
-        .set('Authorization', token)
-        .expect(200)
-        .end((err, res) => {
-          expect(res.body.length).to.eql(2);
-          expect(res.body[0].firstname).to.eql('Thomas');
+          expect(res.body.success.users.length).to.eql(5);
           done(err);
         });
     });
@@ -537,8 +539,7 @@ describe('Routes: user', () => {
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.length).to.eql(6);
-          expect(res.body[0].firstname).to.eql('Thomas');
+          expect(res.body.success.users.length).to.eql(6);
           done(err);
         });
     });

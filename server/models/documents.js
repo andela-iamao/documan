@@ -24,6 +24,10 @@ module.exports = (sequelize, DataType) => {
           foreignKey: 'ownerId',
           onDelete: 'CASCADE'
         });
+        Document.belongsTo(models.Folders, {
+          foreignKey: 'folderId',
+          onDelete: 'CASCADE'
+        });
         Document.belongsTo(models.Access, {
           foreignKey: 'accessId'
         });

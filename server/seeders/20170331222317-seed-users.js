@@ -26,35 +26,11 @@ module.exports = {
       lastname: 'Mitchell',
       email: 'mag@me.com',
       username: 'maggie',
+      roleId: 1,
       password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
       createdAt: '2017-03-31 13:51:40.653+01',
       updatedAt: '2017-03-31 13:51:40.653+01'
-    }, {
-      firstname: 'Emily',
-      lastname: 'Bronte',
-      email: 'emmy@g.com',
-      username: 'milly',
-      password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
-      createdAt: '2017-03-31 13:51:40.653+01',
-      updatedAt: '2017-03-31 13:51:40.653+01'
-    }, {
-      firstname: 'Emily',
-      lastname: 'Dickinson',
-      email: 'emd@g.com',
-      username: 'emdee',
-      password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
-      createdAt: '2017-03-31 13:51:40.653+01',
-      updatedAt: '2017-03-31 13:51:40.653+01'
-    }, {
-      firstname: 'Bram',
-      lastname: 'Stoker',
-      email: 'bstoke@g.com',
-      username: 'drac_baba',
-      password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
-      createdAt: '2017-03-31 13:51:40.653+01',
-      updatedAt: '2017-03-31 13:51:40.653+01'
-    }
-    ], {});
+    }], {});
   },
 
   down(queryInterface/* , Sequelize*/) {

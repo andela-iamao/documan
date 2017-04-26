@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import db from '../models/index';
-import helper from '../helpers/error-render';
+import errorRender from '../helpers/error-render';
+import { paginate } from '../helpers/helper';
 
 const create = (req, res) => {
   if (req.body.roleId) {
@@ -10,16 +11,21 @@ const create = (req, res) => {
   }
   db.Users.create(req.body)
     .then((result) => {
+      const payload = {
+        id: result.id,
+        username: result.username,
+        roleId: result.roleId
+      };
       res.status(200).json({
         user: result,
         token: jwt.sign({
           exp: Math.floor(Date.now() / 1000) + (60 * 60 * 3),
-          data: result.id
+          data: payload
         }, process.env.JWT_SECRET)
       });
     })
     .catch((errors) => {
-      const error = helper(errors);
+      const error = errorRender(errors);
       res.status(error.status)
         .json({
           error_code: error.error_code,
@@ -62,7 +68,7 @@ const findOne = (req, res) => {
     .then((user) => {
       res.status(200).json(user);
     }).catch((errors) => {
-      const error = helper(errors);
+      const error = errorRender(errors);
       res.status(error.status)
         .json({
           error_code: error.error_code,
@@ -72,6 +78,7 @@ const findOne = (req, res) => {
 };
 
 const findAll = (req, res) => {
+  let limit, offset;
   const query = {
     where: {},
     attributes: ['id', 'firstname', 'lastname', 'username', 'email', 'roleId'] };
@@ -79,12 +86,12 @@ const findAll = (req, res) => {
     query.attributes.push('password', 'createdAt', 'updatedAt');
   }
   if (req.query) {
-    query.limit = req.query.limit || null;
-    query.offset = req.query.offset || 0;
+    limit = req.query.limit || 100;
+    offset = req.query.offset || 0;
   }
   db.Users.findAll(query)
     .then((users) => {
-      res.status(200).json(users);
+      res.status(200).json(paginate(limit, offset, users, 'users'));
     });
 };
 
@@ -115,7 +122,7 @@ const updateUser = (req, res) => {
   } }).then(() => {
     res.sendStatus(204);
   }).catch((errors) => {
-    const error = helper(errors);
+    const error = errorRender(errors);
     res.status(error.status)
       .json({
         error_code: error.error_code,
@@ -141,7 +148,7 @@ const deleteUser = (req, res) => {
   } }).then(() => {
     res.sendStatus(204);
   }).catch((errors) => {
-    const error = helper(errors);
+    const error = errorRender(errors);
     res.status(error.status)
       .json({
         error_code: error.error_code,
@@ -158,7 +165,11 @@ const login = (req, res) => {
       .then((user) => {
         if (user) {
           if (user.isPassword(user.password, password)) {
-            const payload = { id: user.id };
+            const payload = {
+              id: user.id,
+              username: user.username,
+              roleId: user.roleId
+            };
             res.status(200).json({
               token: jwt.sign({
                 exp: Math.floor(Date.now() / 1000) + (60 * 60 * 3),

@@ -141,6 +141,13 @@ module.exports = (sequelize, DataTypes) => {
           },
           onDelete: 'CASCADE'
         });
+        Users.hasMany(models.Folders, {
+          foreignKey: {
+            name: 'ownerId',
+            allowNull: false,
+          },
+          onDelete: 'CASCADE'
+        });
       }
     },
     instanceMethods: {

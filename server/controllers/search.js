@@ -1,4 +1,5 @@
 import db from '../models/index';
+import { paginate } from '../helpers/helper';
 
 const searchQuery = (table, field, query, as) => {
   const sequelizeQuery = (as) ?
@@ -9,6 +10,8 @@ const searchQuery = (table, field, query, as) => {
 };
 
 const searchDoc = (req, res) => {
+  const offset = req.query.offset || 0;
+  const limit = req.query.limit || 10;
   if (req.query.q) {
     db.sequelize.query(searchQuery('Documents', 'title', req.query.q))
       .then((result) => {
@@ -17,7 +20,7 @@ const searchDoc = (req, res) => {
             message: 'document not found'
           });
         }
-        res.status(200).json(result[0]);
+        res.status(200).json(paginate(limit, offset, result[0], 'documents'));
       });
   } else {
     res.status(400).json({
@@ -28,6 +31,8 @@ const searchDoc = (req, res) => {
 };
 
 const searchUser = (req, res) => {
+  const offset = req.query.offset || 0;
+  const limit = req.query.limit || 10;
   if (req.query.q) {
     db.sequelize.query(searchQuery('Users', 'username', req.query.q, 'Users'))
       .then((result) => {
@@ -36,7 +41,7 @@ const searchUser = (req, res) => {
             message: 'user not found'
           });
         }
-        res.status(200).json(result[0]);
+        res.status(200).json(paginate(limit, offset, result[0], 'users'));
       });
   } else {
     res.status(400).json({
