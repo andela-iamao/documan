@@ -1,5 +1,33 @@
 import db from '../models/index';
 
+const cutList = (list, start, end) => {
+  let limit = 0;
+  const sliced = [];
+  list.forEach((item, index) => {
+    if (index >= start && limit < end) {
+      sliced.push(item);
+      limit += 1;
+    }
+  });
+  return sliced;
+};
+
+const paginate = (limit, offset, response, field) => {
+  const pageCount = Math.ceil(response.length / limit);
+  const paginated = { success: {
+    paginationMeta: {
+      page_count: (pageCount > 1) ? pageCount : 1,
+      total_count: response.length,
+      page_size: parseInt(limit, 10),
+      page: Math.floor(
+        (parseInt(limit, 10) + parseInt(offset, 10))
+        / parseInt(limit, 10))
+    }
+  } };
+  paginated.success[field] = cutList(response, offset, limit);
+  return paginated;
+};
+
 const isAdmin = (req, res, next) => {
   const id = req.decoded.id || req.decoded;
   db.Users.findById(id)
@@ -78,4 +106,10 @@ function errorRender(status, error, res) {
   });
 }
 
-export { requiredField, isAdmin, hasAccess, targetIsAdmin, errorRender };
+export {
+  paginate,
+  requiredField,
+  isAdmin,
+  hasAccess,
+  targetIsAdmin,
+  errorRender };

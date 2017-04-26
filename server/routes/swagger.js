@@ -8,7 +8,7 @@ const swaggerDefinition = {
   info: {
     title: 'iamdocuman API',
     version: '1.0.0',
-    description: 'Demonstrating how to describe a RESTful API with Swagger',
+    description: 'API documentation for iAmDocuman',
   }
 };
 

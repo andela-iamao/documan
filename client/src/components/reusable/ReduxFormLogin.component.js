@@ -46,7 +46,7 @@ class ReduxFormLogin extends React.Component {
               }
               <form onSubmit={ handleSubmit }>
                 <div>
-                  <div className="row">
+                  <div className="row" style={ { padding: 0 } }>
                     <div className="input-field col s12">
                       <Field
                         className="validate"

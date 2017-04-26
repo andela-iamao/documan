@@ -84,12 +84,13 @@ describe('Routes: documents', () => {
       });
   });
   describe('GET /api/v1/documents', () => {
-    it('returns all documents in the database', (done) => {
+    it('returns all documents in the database with default limit of 10 per page',
+    (done) => {
       request.get('/api/v1/documents')
         .set('Authorization', tokens.admin[0])
         .expect(200)
         .end((err, res) => {
-          expect(Object.keys(res.body)).to.have.lengthOf(28);
+          expect(Object.keys(res.body.success.documents)).to.have.lengthOf(10);
           done(err);
         });
     });
@@ -117,12 +118,13 @@ describe('Routes: documents', () => {
   });
 
   describe('GET /api/v1/documents/?limit={Integer}&offset={Integer}', () => {
-    it('should 3 documents starting from the second document', (done) => {
-      request.get('/api/v1/documents/?limit=3&offset=1')
+    it('should return 3 documents per page',
+    (done) => {
+      request.get('/api/v1/documents/?limit=3')
         .set('Authorization', tokens.admin[0])
         .expect(200)
         .end((err, res) => {
-          expect(Object.keys(res.body)).to.have.lengthOf(3);
+          expect(Object.keys(res.body.success.documents)).to.have.lengthOf(3);
           done(err);
         });
     });

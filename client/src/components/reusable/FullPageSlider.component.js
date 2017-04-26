@@ -55,13 +55,7 @@ FullPageSlider.defaultProps = {
   style: {},
   position: 'back',
   startSlider() {
-    if (process.env.NODE_ENV !== 'test') {
-      $(document).ready(() => {
-        $('.slider').slider();
-      });
-    } else {
-      return null;
-    }
+    return null;
   }
 };
 

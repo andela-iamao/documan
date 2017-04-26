@@ -38,7 +38,7 @@ class Login extends React.Component {
     this.clearError();
     if (window.localStorage.getItem('token')
     || this.props.auth.isAuthenticated) {
-      browserHistory.push('/app/');
+      browserHistory.push('/app/dashboard');
     }
   }
 
@@ -52,7 +52,9 @@ class Login extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated === true
         && !this.props.auth.isAuthenticated) {
-      browserHistory.push('/app/');
+      setTimeout(() => {
+        browserHistory.push('/app/dashboard');
+      }, 1000);
     }
   }
 

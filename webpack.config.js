@@ -10,12 +10,16 @@ module.exports = {
     loaders: [
       {
         test: /\.js?$/,
-        loader: 'babel',
         exclude: /node_modules/,
+        loader: ['babel-loader'],
         query: {
-          presets: ['react'],
+          presets: ['react', 'es2015'],
           plugins: ['transform-decorators-legacy']
         }
+      },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader?root=.'
       },
       {
         test: /\.scss$/,
@@ -43,6 +47,10 @@ module.exports = {
     new webpack.NoErrorsPlugin(),
     new ExtractTextPlugin('css/bundle.css', {
       allChunks: true
+    }),
+    new webpack.ProvidePlugin({
+      $: 'jquery',
+      jQuery: 'jquery'
     })
   ]
 };
