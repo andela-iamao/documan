@@ -26,7 +26,7 @@ import {
   deleteFolder
 } from '../actions/folder.action';
 import {
-  getUser
+  getActiveUser
 } from '../actions/users.action';
 import {
   showOnlyFolder,
@@ -84,9 +84,8 @@ class User extends React.Component {
     if (!window.localStorage.getItem('token')) {
       browserHistory.push('/app/login');
     } else {
-      this.props.dispatch(getUser());
+      this.props.dispatch(getActiveUser(getUserDocs));
       this.props.dispatch(getUserFolders());
-      this.props.dispatch(getUserDocs());
     }
   }
 
@@ -239,24 +238,24 @@ class User extends React.Component {
         <Navbar
          type="dark"
          title="iAmDocuman"
-         isAuthenticated={ {
+         isAuthenticated={{
            username: this.props.user.users.details.username,
            userPage: '/app/dashboard'
-         } }
-         showSignout={ false }
-         showSearch={ true }
-         handleSearch={ this.handleSearch }
+         }}
+         showSignout={false}
+         showSearch
+         handleSearch={this.handleSearch}
         />
         <div className="close-drawer">
         </div>
         <CustomDrawer
           title="iAmDocuman"
-          showAll={ this.handleShowAll }
-          showOnlyDoc={ this.handleShowOnlyDoc }
-          id={ this.props.user.users.details.id }
-          userRole={ this.props.user.users.details.roleId }
-          showOnlyFolder={ this.handleShowOnlyFolder }
-          username={ this.props.user.users.details.username }
+          showAll={this.handleShowAll}
+          showOnlyDoc={this.handleShowOnlyDoc}
+          id={this.props.user.users.details.id}
+          userRole={this.props.user.users.details.roleId}
+          showOnlyFolder={this.handleShowOnlyFolder}
+          username={this.props.user.users.details.username}
           fullname={
             `${this.props.user.users.details.firstname}
              ${this.props.user.users.details.lastname}`}
@@ -264,33 +263,33 @@ class User extends React.Component {
         {
           (this.props.search.results.users
             || this.props.search.results.docs) ?
-            <Search data={ this.props.search.results }/>
+            <Search data={this.props.search.results}/>
           :
           <DocumentsGrid
-            views={ this.props.views }
-            docs={ this.props.docs.data || null }
-            folders={ this.props.folder.data || null }
-            onFolderCreate={ this.handleCreateFolder }
-            onEditFolder={ this.handleEditFolder }
-            toEditFolder={ this.props.folder.editFolder }
-            clearEditFolder={ this.handleClearEditFolder }
-            onFolderDelete={ this.handleDeleteFolder }
-            onUpdateFolder={ this.handleUpdateFolder }
+            views={this.props.views}
+            docs={this.props.docs.data || null}
+            folders={this.props.folder.data || null}
+            onFolderCreate={this.handleCreateFolder}
+            onEditFolder={this.handleEditFolder}
+            toEditFolder={this.props.folder.editFolder}
+            clearEditFolder={this.handleClearEditFolder}
+            onFolderDelete={this.handleDeleteFolder}
+            onUpdateFolder={this.handleUpdateFolder}
             openDeleteDialog={
               this.props.folder.confirmDelete
               || this.props.docs.confirmDelete
-            }
-            onConfirmFolderDelete={ this.handleConfirmDeleteFolder }
-            onDocCreate={ this.handleCreateDoc }
-            onDocDelete={ this.handleDeleteDoc }
-            onConfirmDocDelete={ this.handleConfirmDeleteDoc }
-            clearDeleteConfirmation={ this.clearDeleteConfirmation }
-            onEditDoc={ this.handleEditDoc }
-            toEdit={ this.props.docs.editDoc }
-            clearEdit={ this.handleClearEditDoc }
-            onUpdateDoc={ this.handleUpdateDoc }
+           }
+            onConfirmFolderDelete={this.handleConfirmDeleteFolder}
+            onDocCreate={this.handleCreateDoc}
+            onDocDelete={this.handleDeleteDoc}
+            onConfirmDocDelete={this.handleConfirmDeleteDoc}
+            clearDeleteConfirmation={this.clearDeleteConfirmation}
+            onEditDoc={this.handleEditDoc}
+            toEdit={this.props.docs.editDoc}
+            clearEdit={this.handleClearEditDoc}
+            onUpdateDoc={this.handleUpdateDoc}
           />
-        }
+       }
       </div>
     );
   }

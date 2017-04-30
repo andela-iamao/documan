@@ -39,7 +39,8 @@ const getAllUserDocuments = (req, res) => {
   let query;
   if (id === parseInt(req.params.id, 10) || (req.admin && !req.adminTarget)) {
     query = { where: { ownerId: req.params.id } };
-  } else if ((id !== parseInt(req.params.id, 10)) && (req.userRole === req.targetRole)) {
+  } else if ((id !== parseInt(req.params.id, 10))
+    && (req.userRole === req.targetRole)) {
     query = `SELECT * FROM "Documents" WHERE "ownerId"=${req.params.id} AND ("accessId"=1 OR "accessId"=3)`;
   } else {
     query = { where: { ownerId: req.params.id, accessId: 1 } };
@@ -81,7 +82,8 @@ const findAll = (req, res) => {
   let limit, offset;
   const query = {
     where: {},
-    attributes: ['id', 'firstname', 'lastname', 'username', 'email', 'roleId'] };
+    attributes: ['id', 'firstname', 'lastname', 'username', 'email', 'roleId']
+  };
   if (req.admin) {
     query.attributes.push('password', 'createdAt', 'updatedAt');
   }
@@ -114,7 +116,8 @@ const updateUser = (req, res) => {
   } else {
     return res.status(401).json({
       error_code: 'Unauthorized',
-      message: `Cannot update properties of another ${(req.adminTarget) ? 'admin' : 'user'}`
+      message: `Cannot update properties of another ${(req.adminTarget)
+        ? 'admin' : 'user'}`
     });
   }
   db.Users.update(query, { where: {
@@ -155,6 +158,13 @@ const deleteUser = (req, res) => {
         message: error.message
       });
   });
+};
+
+const activeUser = (req, res) => {
+  db.Users.findById(req.decoded.id)
+    .then((user) => {
+      res.status(200).json(user);
+    });
 };
 
 const login = (req, res) => {
@@ -198,6 +208,13 @@ const login = (req, res) => {
   }
 };
 
+const logout = (req, res) => {
+  db.Blacklist.create(req.headers.authorization)
+    .then(() => {
+      res.sendStatus(204);
+    });
+};
+
 export {
   create,
   findOne,
@@ -205,5 +222,7 @@ export {
   updateUser,
   deleteUser,
   login,
-  getAllUserDocuments
+  getAllUserDocuments,
+  activeUser,
+  logout
  };

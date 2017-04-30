@@ -3,7 +3,7 @@ import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import returnFromProp from '../util/helper';
+import { returnFromProp } from '../util/helper';
 
 
 const customContentStyle = {
@@ -30,12 +30,19 @@ class DeleteDialog extends React.Component {
     this.state = { open: false };
   }
 
+  /**
+   * handleOpen - changes the state open of the Dialog from
+   * false to true
+   * @return {void}
+   */
   handleOpen() {
     this.setState({ open: true });
   }
 
   /**
-   * componentWillReceiveProps
+   * componentWillReceiveProps - before the next set of props is passed
+   * to the component, it checks the delete confirmation action is calculated
+   * and the current state is not open. It then opens the dialog
    * @param {object} nextProps
    * @return {void}
    */
@@ -47,11 +54,22 @@ class DeleteDialog extends React.Component {
     }
   }
 
+  /**
+   * handleClose - changes the state open of the dialog from true to
+   * false. Then it calls the clearDeleteConfirmation props
+   * @return {void}
+   */
   handleClose() {
     this.setState({ open: false });
     this.props.clearDeleteConfirmation();
   }
 
+  /**
+   * handleSubmit - happens when the submit action is clicked
+   * it checks if the deleteButton props is passed in or not,
+   * then sends it with the neccessary argument
+   * @return {void}
+   */
   handleSubmit() {
     if (this.props.deleteButton) {
       this.props

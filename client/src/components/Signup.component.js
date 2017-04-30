@@ -81,18 +81,11 @@ class Signup extends React.Component {
 
   /**
    * render - description
-   *
-   * @return {object}  description
+   * @return {object} returns react element to be rendered
    */
   render() {
     return (
       <div id="login-wrapper">
-        <Navbar
-          type="dark"
-          title="iAmDocuman"
-          showSignup={ false }
-          loginLink="/app/login"
-        />
         <PageCenter>
           <div>
             <ReduxFormSignup

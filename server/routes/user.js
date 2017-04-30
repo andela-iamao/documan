@@ -6,7 +6,9 @@ import {
   updateUser,
   deleteUser,
   login,
-  getAllUserDocuments
+  logout,
+  getAllUserDocuments,
+  activeUser
 } from '../controllers/user';
 import getRole from '../middlewares/checkRoles';
 import { signup } from '../middlewares/validate';
@@ -144,6 +146,8 @@ export default () => {
      */
     .post(signup, create);
 
+  router.get('/api/v1/users/active', auth, activeUser);
+
   router.route('/api/v1/users/:id')
     .all()
   /**
@@ -259,6 +263,8 @@ export default () => {
    */
   router.post('/api/v1/users/login', login);
 
+  router.post('/api/v1/users/logout', logout);
+
   /**
    * @swagger
    * /api/v1/users/{param}/documents:
@@ -286,6 +292,8 @@ export default () => {
     isAdmin,
     targetIsAdmin,
     getRole,
-    getAllUserDocuments);
+    getAllUserDocuments
+  );
+
   return router;
 };
