@@ -6,7 +6,7 @@ import CreateFolder from './CreateFolder.component';
 import CreateDoc from './CreateDoc.component';
 import EditFolder from './EditFolder.component';
 import DeleteDialog from './DeleteDialog.component';
-import renderFromProps from '../util/helper';
+import { renderFromProp } from '../util/helper';
 
 /**
  * React component for
@@ -76,28 +76,28 @@ class DocumentGrid extends React.Component {
     return (
       <div className="content-display">
         <div className="row">
-          <CreateFolder onCreate={ this.props.onFolderCreate } />
+          <CreateFolder onCreate={this.props.onFolderCreate} />
           <CreateDoc
-            onCreate={ this.props.onDocCreate }
+            onCreate={this.props.onDocCreate}
           />
         </div>
         <EditFolder
-          onEdit={ this.props.onUpdateFolder }
-          edit={ this.props.toEditFolder }
-          open={ (this.props.toEditFolder) ? true : false }
-          onClose={ this.props.clearEditFolder }
+          onEdit={this.props.onUpdateFolder}
+          edit={this.props.toEditFolder}
+          open={!this.props.toEditFolder}
+          onClose={this.props.clearEditFolder}
         />
         <DeleteDialog
           onDelete={
-            (renderFromProps(
+            (renderFromProp(
               this.props.openDeleteDialog,
               'type') === 'folder') ?
               this.props.onFolderDelete
               :
               this.props.onDocDelete
           }
-          onDeleteConfirmation={ this.props.openDeleteDialog }
-          clearDeleteConfirmation={ this.props.clearDeleteConfirmation }
+          onDeleteConfirmation={this.props.openDeleteDialog}
+          clearDeleteConfirmation={this.props.clearDeleteConfirmation}
         />
         <hr />
         <div className="row ">

@@ -10,7 +10,8 @@ const defaultState = {
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'GOT_USER': {
+    case 'GOT_USER':
+    case 'ACTIVE_USER': {
       return {
         ...state,
         details: action.payload

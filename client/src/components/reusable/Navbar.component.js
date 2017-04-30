@@ -1,8 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Avatar from 'material-ui/Avatar';
 import { Link, browserHistory } from 'react-router';
 import AppBar from 'material-ui/AppBar';
 import RaisedButton from 'material-ui/RaisedButton';
+import IconMenu from 'material-ui/IconMenu';
+import IconButton from 'material-ui/IconButton';
+import MenuItem from 'material-ui/MenuItem';
+import PowerButton from 'material-ui/svg-icons/action/power-settings-new';
+import PersonPin from 'material-ui/svg-icons/maps/person-pin';
 
 const style = {
   backgroundColor: '#222222',
@@ -10,7 +16,7 @@ const style = {
   position: 'fixed',
   top: 0,
   zIndex: 10,
-  paddingRight: 0
+  paddingRight: 40
 };
 
 const isAuthenticated = props => (
@@ -36,22 +42,41 @@ const isAuthenticated = props => (
       </div>
       : ''
     }
-    <div className="col m4 l3 navbar-right-buttons">
-      <Link to={ props.isAuthenticated.userPage } >
-        <h6>
-          Hello { props.isAuthenticated.username }!
-        </h6>
-      </Link>
-      {
-        (props.showSignout) ?
-        <Link to={ '/app/logout' } >
-          <RaisedButton
-            label="Sign Out"
-            primary={ true }
+    <div className={
+      (props.showSearch) ?
+      'col m4 l3 navbar-right-buttons' : ''
+    }>
+      <div>
+        <IconMenu
+          onKeyboardFocus={null}
+          keyboardFocused={null}
+          iconButtonElement={
+            <IconButton>
+              <Avatar size={30}>
+                <span>
+                  { props.isAuthenticated.username[0].toUpperCase()}
+                </span>
+              </Avatar>
+            </IconButton>
+          }
+          anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+          targetOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+        >
+          <MenuItem
+            focusState="none"
+            primaryText="View Profile"
+            leftIcon={<PersonPin />}
+            onTouchTap={() =>
+              browserHistory.push(props.isAuthenticated.userPage)}
           />
-        </Link>
-        : ''
-      }
+          <MenuItem
+            focusState="none"
+            primaryText="Sign out"
+            leftIcon={<PowerButton />}
+            onTouchTap={() => props.onSignout()}
+          />
+        </IconMenu>
+      </div>
     </div>
   </div>
 );
@@ -60,14 +85,14 @@ const notAuthenticated = props => (
   <div>
     {
       (props.showLogin) ?
-        <Link to={ props.loginLink } className="navbar-login-btn">
+        <Link to={props.loginLink} className="navbar-login-btn">
           <RaisedButton
             label="Login"
-            primary={ true }
-            style={ { marginRight: '15px' } }
+            primary
+            style={{ marginRight: '15px' }}
           />
         </Link>
-      :
+        :
         ''
     }
     {
@@ -75,7 +100,7 @@ const notAuthenticated = props => (
         <Link to={ props.signupLink } className="navbar-signup-btn" >
           <RaisedButton
             label="Sign Up"
-            primary={ true }
+            primary
           />
         </Link>
         :
@@ -97,7 +122,7 @@ class Navbar extends React.Component {
     return (
       <AppBar
         className="react-navbar"
-        iconStyleLeft={ { display: 'none' } }
+        iconStyleLeft={{ display: 'none' }}
         style={ this.props.style }
         title={
           this.props.title
@@ -106,9 +131,6 @@ class Navbar extends React.Component {
         iconElementRight={
           (this.props.isAuthenticated) ?
             isAuthenticated(this.props) : notAuthenticated(this.props)
-        }
-        iconStyleRight={
-          { width: '60%' }
         }
       />
     );
@@ -139,3 +161,17 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
+
+// <Link to={ props.isAuthenticated.userPage } >
+//   <h6>
+//     Hello { props.isAuthenticated.username }!
+//   </h6>
+// </Link>
+// {
+//   (props.showSignout) ?
+//   <Link to={ '/app/logout' } >
+//     <RaisedButton
+//       label="Sign Out"
+//       primary={ true }
+//     />
+//   </Link>

@@ -52,5 +52,8 @@ module.exports = {
       $: 'jquery',
       jQuery: 'jquery'
     })
-  ]
+  ],
+  externals: {
+    jquery: 'jQuery'
+  }
 };

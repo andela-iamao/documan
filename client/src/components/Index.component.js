@@ -1,10 +1,14 @@
 import React from 'react';
-import Navbar from './reusable/Navbar.component';
+import { connect } from 'react-redux';
+import { getActiveUser } from '../actions/users.action';
 import IntroText from './reusable/IntroText.component';
 import FullPageSlider from './reusable/FullPageSlider.component';
 
 const text = 'Store, share and manage all your business files on the cloud.';
 
+@connect(store => ({
+  user: store.auth
+}))
 /**
  * React component for
  * @class Index
@@ -21,35 +25,29 @@ class Index extends React.Component {
   }
 
   /**
-   * @return {Object} user details
-   * @return {null} if no token is found
+   * componentDidMount
+   * This runs just after the component has been rendered
+   * It dispatches the getActiveUser action to fetch the current user
+   * @return {void}
    */
-  currentUser() { //eslint-disable-line
-    if (window.localStorage.getItem('token')) {
-      return JSON.parse(window.localStorage.getItem('user')).data;
-    }
-    return null;
+  componentDidMount() {
+    this.props.dispatch(getActiveUser());
   }
 
   /**
-   * @return {ReactElement} jf
+   * @return {Object} user details
+   * @return {null} if no token is found
+   */
+  currentUser() {
+    return this.props.user.loggedInUser || null;
+  }
+
+  /**
+   * @return {Object} react element to be rendered to the DOM
    */
   render() {
     return (
       <div>
-         <Navbar
-          type="dark"
-          title="iAmDocuman"
-          loginLink="/app/login"
-          signupLink="/app/signup"
-          isAuthenticated={
-            (this.currentUser()) ?
-            {
-              username: this.currentUser().username,
-              userPage: '/app/user'
-            } : null
-          }
-         />
          <FullPageSlider>
            <li>
              <img src="/images/carousel_image_1.jpg" />
@@ -65,10 +63,10 @@ class Index extends React.Component {
            </li>
          </FullPageSlider>
          <IntroText
-          color={ '#EFEFEF' }
-          title={ 'Create, Manage and Extend' }
-          text={ text }
-          link={ { href: '/', label: 'Documentation' } }
+          color={'#EFEFEF'}
+          title={'Create, Manage and Extend'}
+          text={text}
+          link={{ href: '/', label: 'Documentation' }}
          />
       </div>
     );

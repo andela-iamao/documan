@@ -22,14 +22,16 @@ const createDocument = (req, res) => {
 };
 
 const findAllDocument = (req, res) => {
-  let query, limit, offset;
-  if (req.admin) {
+  let query;
+  let limit;
+  let offset;
+  if (req.admin || req.isAdmin) {
     query = { where: {} };
   } else {
     query = { where: { accessId: 1 } };
   }
   if (req.query) {
-    limit = req.query.limit || 100;
+    limit = req.query.limit || 10;
     offset = req.query.offset || 0;
   }
   Document.findAll(query)
