@@ -90,7 +90,7 @@ describe('Routes: documents', () => {
         .set('Authorization', tokens.admin[0])
         .expect(200)
         .end((err, res) => {
-          expect(Object.keys(res.body.success.documents)).to.have.lengthOf(10);
+          expect(Object.keys(res.body.documents.results)).to.have.lengthOf(10);
           done(err);
         });
     });
@@ -124,7 +124,7 @@ describe('Routes: documents', () => {
         .set('Authorization', tokens.admin[0])
         .expect(200)
         .end((err, res) => {
-          expect(Object.keys(res.body.success.documents)).to.have.lengthOf(3);
+          expect(Object.keys(res.body.documents.results)).to.have.lengthOf(3);
           done(err);
         });
     });

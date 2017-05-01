@@ -25,13 +25,13 @@ export function getAllUsers() {
  * @param {string} id - id of user to make request for
  * @return {object} object to be sent to all reducers
  */
-export function getUserDocs(id) {
+export function getUserDocs(id, limit = 10, offset = 0) {
   return (dispatch) => {
-    axios.get(`/api/v1/users/${id}/documents`)
+    axios.get(`/api/v1/users/${id}/documents/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
           type: 'FETCHED_DOCUMENTS',
-          payload: response.data
+          payload: response.data.documents
         });
       });
   };
@@ -44,7 +44,7 @@ export function getUserDocs(id) {
  * dispatches an action containing the user's information
  * @return {object} object to be sent to all reducers
  */
-export function getActiveUser() {
+export function getActiveUser(callback = false) {
   return (dispatch) => {
     axios.get('/api/v1/users/active')
       .then((response) => {
@@ -52,7 +52,9 @@ export function getActiveUser() {
           type: 'ACTIVE_USER',
           payload: response.data
         });
-        dispatch(getUserDocs(response.data.id));
+        if (callback) {
+            dispatch(callback(response.data.id));
+        }
       })
       .catch((error) => {
         dispatch({

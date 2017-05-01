@@ -1,7 +1,7 @@
 import React from 'react';
 import _ from 'underscore';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FolderAdd from 'material-ui/svg-icons/file/create-new-folder';
 
@@ -27,6 +27,7 @@ class CreateFolder extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.state = { open: false, folderName: '' };
   }
 
@@ -35,7 +36,7 @@ class CreateFolder extends React.Component {
   }
 
   handleClose() {
-    this.setState({ open: false });
+    this.setState({ open: false, folderName: '' });
   }
 
   handleSubmit(event) {
@@ -47,8 +48,8 @@ class CreateFolder extends React.Component {
     this.handleClose();
   }
 
-  handleChange(target) {
-    const value = target.value;
+  handleChange(event) {
+    const value = event.target.value;
     this.setState({ folderName: value });
   }
 
@@ -57,54 +58,44 @@ class CreateFolder extends React.Component {
    */
   render() {
     const actions = [
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="Cancel"
-        primary={ true }
-        onTouchTap={ this.handleClose }
+        secondary
+        onTouchTap={this.handleClose}
       />,
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="Create Folder"
-        primary={ true }
-        keyboardFocused={ true }
-        onTouchTap={ this.handleSubmit }
+        primary
+        keyboardFocused
+        onTouchTap={this.handleSubmit}
       />,
     ];
-
-    const changeHandler = _.compose(
-      _.debounce(this.handleChange.bind(this), 100),
-      _.property('target')
-    );
 
     return (
       <div className="col s3 m3 l1">
         <FloatingActionButton
-          mini={true}
-          onTouchTap={
-            this.handleOpen
-          }
+          mini
+          onTouchTap={this.handleOpen}
         >
           <FolderAdd />
         </FloatingActionButton>
         <Dialog
           title="Create Folder"
-          contentStyle={ customContentStyle }
-          actions={
-            actions
-          }
+          contentStyle={customContentStyle}
+          actions={actions}
           modal={false}
           open={this.state.open}
-          onRequestClose={ this.handleClose }
+          onRequestClose={this.handleClose}
         >
-          <img src="/images/folder.png" style={ { width: '35%' } } />
-          <form
-            onSubmit={
-              event => this.handleSubmit(event)
-            }>
+          <img src="/images/folder.png" style={{ width: '35%' }} />
+          <form onSubmit={event => this.handleSubmit(event)}>
             <input
               type="text"
               name="title"
-              value={ this.state.folderName }
-              onChange={ changeHandler }
+              value={this.state.folderName}
+              onChange={this.handleChange}
             />
             <label>Enter folder name</label>
           </form>

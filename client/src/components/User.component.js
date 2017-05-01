@@ -1,9 +1,9 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
+import Snackbar from 'material-ui/Snackbar';
 import Navbar from './reusable/Navbar.component';
 import DocumentsGrid from './DocumentsGrid.component';
-import CustomDrawer from './CustomDrawer.component';
 import Search from './Search.component';
 import {
   getUserDocs,
@@ -23,25 +23,20 @@ import {
   createFolder,
   confirmDeleteFolder,
   clearConfirmDeleteFolder,
-  deleteFolder
+  deleteFolder,
+  clearFolderError
 } from '../actions/folder.action';
 import {
   getActiveUser
 } from '../actions/users.action';
-import {
-  showOnlyFolder,
-  showOnlyDoc,
-  showAll
-} from '../actions/views.action';
-import { searchUser, searchDocs, clearSearch } from '../actions/search.action';
 
 @connect(store => ({
-  user: store,
+  user: store.users,
   form: store.form,
   error: store.error.error,
   auth: store.auth,
   docs: store.documents,
-  folder: store.folder,
+  folders: store.folder,
   views: store.views,
   search: store.search
 }))
@@ -57,9 +52,6 @@ class User extends React.Component {
    */
   constructor(props) {
     super(props);
-    this.handleShowAll = this.handleShowAll.bind(this);
-    this.handleShowOnlyDoc = this.handleShowOnlyDoc.bind(this);
-    this.handleShowOnlyFolder = this.handleShowOnlyFolder.bind(this);
     this.handleCreateFolder = this.handleCreateFolder.bind(this);
     this.handleDeleteFolder = this.handleDeleteFolder.bind(this);
     this.handleDeleteDoc = this.handleDeleteDoc.bind(this);
@@ -73,7 +65,8 @@ class User extends React.Component {
     this.handleEditFolder = this.handleEditFolder.bind(this);
     this.handleUpdateFolder = this.handleUpdateFolder.bind(this);
     this.handleClearEditFolder = this.handleClearEditFolder.bind(this);
-    this.handleSearch = this.handleSearch.bind(this);
+    this.handleNextPage = this.handleNextPage.bind(this);
+    this.handleClearFolderError = this.handleClearFolderError.bind(this);
   }
 
   /**
@@ -84,8 +77,14 @@ class User extends React.Component {
     if (!window.localStorage.getItem('token')) {
       browserHistory.push('/app/login');
     } else {
-      this.props.dispatch(getActiveUser(getUserDocs));
+      this.props.dispatch(getActiveUser());
       this.props.dispatch(getUserFolders());
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.user.details && !this.props.docs.documents) {
+      this.props.dispatch(getUserDocs(nextProps.user.details.id));
     }
   }
 
@@ -95,7 +94,10 @@ class User extends React.Component {
    * @return {void}
    */
   handleCreateDoc(values) {
-    this.props.dispatch(createDoc(values));
+    const documentCount = this.props.docs.documents.results.length;
+    const pageNum = this.props.docs.documents.paginationMeta.page;
+    const userId = this.props.user.details.id;
+    this.props.dispatch(createDoc(values, documentCount, pageNum, userId));
   }
 
   /**
@@ -151,6 +153,10 @@ class User extends React.Component {
     this.props.dispatch(updateFolder(values));
   }
 
+  handleClearFolderError() {
+    this.props.dispatch(clearFolderError());
+  }
+
   /**
    * handleDeleteDoc
    * @param {object} id - document id to delete
@@ -193,7 +199,9 @@ class User extends React.Component {
    * @return {void}
    */
   handleCreateFolder(values) {
-    this.props.dispatch(createFolder(values));
+    const folderCount = this.props.folders.folders.results.length;
+    const pageNum = this.props.folders.folders.paginationMeta.page;
+    this.props.dispatch(createFolder(values, folderCount, pageNum));
   }
 
   /**
@@ -205,91 +213,60 @@ class User extends React.Component {
     this.props.dispatch(deleteFolder(value));
   }
 
-  handleShowOnlyFolder() {
-    this.props.dispatch(showOnlyFolder());
+  handleNextPage(page) {
+    this.props.dispatch(getUserFolders(8, 8 * (page - 1)));
+    this.props.dispatch(getUserDocs(this.props.user.details.id, 10, 10 * (page - 1)));
   }
 
-  handleShowOnlyDoc() {
-    this.props.dispatch(showOnlyDoc());
-  }
-
-  handleShowAll() {
-    this.props.dispatch(showAll());
-  }
-
-  handleSearch(query) {
-    if (query.target.value.length > 0) {
-      this.props.dispatch(searchDocs(query.target.value));
-      this.props.dispatch(searchUser(query.target.value));
-    } else {
-      this.handleClearSearch();
-    }
-  }
-
-  handleClearSearch() {
-    this.props.dispatch(clearSearch());
-  }
   /**
    * @return {object} react element to render
    */
   render() {
     return (
       <div>
-        <Navbar
-         type="dark"
-         title="iAmDocuman"
-         isAuthenticated={{
-           username: this.props.user.users.details.username,
-           userPage: '/app/dashboard'
-         }}
-         showSignout={false}
-         showSearch
-         handleSearch={this.handleSearch}
-        />
         <div className="close-drawer">
         </div>
-        <CustomDrawer
-          title="iAmDocuman"
-          showAll={this.handleShowAll}
-          showOnlyDoc={this.handleShowOnlyDoc}
-          id={this.props.user.users.details.id}
-          userRole={this.props.user.users.details.roleId}
-          showOnlyFolder={this.handleShowOnlyFolder}
-          username={this.props.user.users.details.username}
-          fullname={
-            `${this.props.user.users.details.firstname}
-             ${this.props.user.users.details.lastname}`}
-        />
         {
-          (this.props.search.results.users
-            || this.props.search.results.docs) ?
-            <Search data={this.props.search.results}/>
-          :
-          <DocumentsGrid
-            views={this.props.views}
-            docs={this.props.docs.data || null}
-            folders={this.props.folder.data || null}
-            onFolderCreate={this.handleCreateFolder}
-            onEditFolder={this.handleEditFolder}
-            toEditFolder={this.props.folder.editFolder}
-            clearEditFolder={this.handleClearEditFolder}
-            onFolderDelete={this.handleDeleteFolder}
-            onUpdateFolder={this.handleUpdateFolder}
-            openDeleteDialog={
-              this.props.folder.confirmDelete
-              || this.props.docs.confirmDelete
-           }
-            onConfirmFolderDelete={this.handleConfirmDeleteFolder}
-            onDocCreate={this.handleCreateDoc}
-            onDocDelete={this.handleDeleteDoc}
-            onConfirmDocDelete={this.handleConfirmDeleteDoc}
-            clearDeleteConfirmation={this.clearDeleteConfirmation}
-            onEditDoc={this.handleEditDoc}
-            toEdit={this.props.docs.editDoc}
-            clearEdit={this.handleClearEditDoc}
-            onUpdateDoc={this.handleUpdateDoc}
-          />
-       }
+          (this.props.user.details) ?
+            <div>
+              {
+                (this.props.search.results.users
+                  || this.props.search.results.docs) ?
+                  <Search data={this.props.search.results}/>
+                :
+                <DocumentsGrid
+                  views={this.props.views}
+                  docs={this.props.docs.documents || null}
+                  folders={this.props.folders.folders || null}
+                  onFolderCreate={this.handleCreateFolder}
+                  onEditFolder={this.handleEditFolder}
+                  toEditFolder={this.props.folders.editFolder}
+                  clearEditFolder={this.handleClearEditFolder}
+                  onFolderDelete={this.handleDeleteFolder}
+                  onUpdateFolder={this.handleUpdateFolder}
+                  openDeleteDialog={
+                    this.props.folders.confirmDelete
+                    || this.props.docs.confirmDelete
+                 }
+                  onConfirmFolderDelete={this.handleConfirmDeleteFolder}
+                  onDocCreate={this.handleCreateDoc}
+                  onDocDelete={this.handleDeleteDoc}
+                  onConfirmDocDelete={this.handleConfirmDeleteDoc}
+                  clearDeleteConfirmation={this.clearDeleteConfirmation}
+                  onEditDoc={this.handleEditDoc}
+                  toEdit={this.props.docs.editDoc}
+                  clearEdit={this.handleClearEditDoc}
+                  onUpdateDoc={this.handleUpdateDoc}
+                  handleNextPage={this.handleNextPage}
+                />
+             }
+             <Snackbar
+              open={!!this.props.folders.error}
+              message={this.props.folders.error || ''}
+              onRequestClose={this.handleClearFolderError}
+            />
+           </div> : ''
+        }
       </div>
     );
   }

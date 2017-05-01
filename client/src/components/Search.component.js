@@ -13,11 +13,11 @@ class Search extends React.Component {
   }
 
   renderUserSearch(users) {
-    return users.success.users.map(user => (
-      <div className="col s6 m4 l2">
+    return users.users.results.map(user => (
+      <div className="col s6 m4 l2" key={user.username}>
         <img src="/images/person.png" className="icon-image" />
         <h6 className=" truncate doc-card-info chip tooltipped">
-          { user.username }
+          {user.username}
         </h6>
       </div>
     ));
@@ -28,11 +28,11 @@ class Search extends React.Component {
   }
 
   renderDocSearch(docs) {
-    return docs.success.documents.map(doc => (
-      <div className="col s6 m4 l2">
+    return docs.documents.results.map(doc => (
+      <div className="col s6 m4 l2" key={`${doc.title}${doc.index}`}>
         <img src="/images/file.png" className="icon-image" />
         <h6 className=" truncate doc-card-info chip tooltipped">
-          { doc.title }
+          {doc.title}
         </h6>
       </div>
     ));

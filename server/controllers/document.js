@@ -23,16 +23,12 @@ const createDocument = (req, res) => {
 
 const findAllDocument = (req, res) => {
   let query;
-  let limit;
-  let offset;
+  const limit = req.query.limit || 10;
+  const offset = req.query.offset || 0;
   if (req.admin || req.isAdmin) {
     query = { where: {} };
   } else {
     query = { where: { accessId: 1 } };
-  }
-  if (req.query) {
-    limit = req.query.limit || 10;
-    offset = req.query.offset || 0;
   }
   Document.findAll(query)
     .then(documents => res.status(200).json(

@@ -36,6 +36,8 @@ const create = (req, res) => {
 
 const getAllUserDocuments = (req, res) => {
   const id = req.decoded.id;
+  const limit = req.query.limit || 10;
+  const offset = req.query.offset || 0;
   let query;
   if (id === parseInt(req.params.id, 10) || (req.admin && !req.adminTarget)) {
     query = { where: { ownerId: req.params.id } };
@@ -48,12 +50,12 @@ const getAllUserDocuments = (req, res) => {
   if (typeof query === 'object') {
     db.Document.findAll(query)
     .then((results) => {
-      res.status(200).json(results);
+      res.status(200).json(paginate(limit, offset, results, 'documents'));
     });
   } else {
     db.sequelize.query(query)
       .then((results) => {
-        res.status(200).json(results[0]);
+        res.status(200).json(paginate(limit, offset, results[0], 'documents'));
       });
   }
 };
@@ -161,7 +163,12 @@ const deleteUser = (req, res) => {
 };
 
 const activeUser = (req, res) => {
-  db.Users.findById(req.decoded.id)
+  db.Users.findOne({
+    where: { id: req.decoded.id },
+    include: [{
+      model: db.Roles,
+      attributes: ['title']
+    }] })
     .then((user) => {
       res.status(200).json(user);
     });
