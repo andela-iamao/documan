@@ -53,7 +53,7 @@ export function getActiveUser(callback = false) {
           payload: response.data
         });
         if (callback) {
-            dispatch(callback(response.data.id));
+          dispatch(callback(response.data.id));
         }
       })
       .catch((error) => {

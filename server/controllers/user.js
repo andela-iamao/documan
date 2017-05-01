@@ -164,7 +164,7 @@ const deleteUser = (req, res) => {
 
 const activeUser = (req, res) => {
   db.Users.findOne({
-    where: { id: req.decoded.id },
+    where: { id: parseInt(req.decoded.id, 10) },
     include: [{
       model: db.Roles,
       attributes: ['title']
