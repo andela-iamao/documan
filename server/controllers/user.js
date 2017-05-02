@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import db from '../models/index';
 import errorRender from '../helpers/error-render';
+import { joinUsersRole } from '../config/sequelizeQueries';
 import { paginate } from '../helpers/helper';
 
 const create = (req, res) => {
@@ -163,15 +164,9 @@ const deleteUser = (req, res) => {
 };
 
 const activeUser = (req, res) => {
-  console.log(typeof req.decoded.id);
-  db.Users.findAll({
-    where: { id: req.decoded.id },
-    include: [{
-      model: db.Roles,
-      attributes: ['title']
-    }] })
+  db.sequelize.query(joinUsersRole(req.decoded.id))
       .then((user) => {
-        res.status(200).json(user);
+        res.status(200).json(user[0][0]);
       });
 };
 

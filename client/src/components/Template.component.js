@@ -107,7 +107,7 @@ class Template extends React.Component {
               showAll={this.handleShowAll}
               showOnlyDoc={this.handleShowOnlyDoc}
               id={this.props.auth.loggedInUser.id}
-              userRole={this.props.auth.loggedInUser.Role.title}
+              userRole={this.props.auth.loggedInUser['Role.title']}
               showOnlyFolder={this.handleShowOnlyFolder}
               username={this.props.auth.loggedInUser.username}
               fullname={
