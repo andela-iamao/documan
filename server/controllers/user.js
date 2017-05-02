@@ -163,15 +163,16 @@ const deleteUser = (req, res) => {
 };
 
 const activeUser = (req, res) => {
-  db.Users.findOne({
-    where: { id: parseInt(req.decoded.id, 10) },
+  console.log(typeof req.decoded.id);
+  db.Users.findAll({
+    where: { id: req.decoded.id },
     include: [{
       model: db.Roles,
       attributes: ['title']
     }] })
-    .then((user) => {
-      res.status(200).json(user);
-    });
+      .then((user) => {
+        res.status(200).json(user);
+      });
 };
 
 const login = (req, res) => {
