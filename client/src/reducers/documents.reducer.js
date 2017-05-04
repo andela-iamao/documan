@@ -3,6 +3,7 @@ const initialState = {
   fetched: false,
   error: null,
   documents: null,
+  allDocuments: null,
   confirmDelete: null,
   doc: null,
   editDoc: false
@@ -73,7 +74,7 @@ export default (state = initialState, action) => {
     case 'GOT_ALL_DOCUMENTS': {
       return {
         ...state,
-        documents: action.payload
+        allDocuments: action.payload.documents
       };
     }
     default: {

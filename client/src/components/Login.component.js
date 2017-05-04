@@ -51,7 +51,7 @@ class Login extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated === true
         && !this.props.auth.isAuthenticated) {
-      browserHistory.push('/app/');
+      browserHistory.push('/app/dashboard');
     }
   }
 
@@ -90,9 +90,9 @@ class Login extends React.Component {
           <div>
             <ReduxFormLogin
               bg-color="#FFFFFF"
-              onSubmit={ this.handleSubmit }
-              failed={ this.props.error }
-              onCloseAlert={ this.clearError }
+              onSubmit={this.handleSubmit}
+              failed={this.props.error}
+              onCloseAlert={this.clearError}
             />
           </div>
         </PageCenter>

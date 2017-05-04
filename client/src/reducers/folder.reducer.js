@@ -26,7 +26,7 @@ export default (state = initialState, action) => {
     case 'GOT_FOLDER_DOCUMENTS': {
       return {
         ...state,
-        documents: action.payload
+        documents: action.payload.documents
       };
     }
     case 'EDIT_FOLDER': {
@@ -49,6 +49,11 @@ export default (state = initialState, action) => {
               { ...folder, title: action.payload.title }
               : folder) } });
     }
+
+    case 'UPDATED_SINGLE_FOLDER': {
+      return { ...state, folder: action.payload };
+    }
+
     case 'CREATED_FOLDER': {
       return (state.folders.results.length < 8) ? Object.assign({}, state, {
         folders: {
@@ -65,10 +70,6 @@ export default (state = initialState, action) => {
           ...state.folders,
           results: [...state.folders.results].filter(folder =>
             (folder.id !== action.payload)) } });
-      // const cloneState = { ...state };
-      // cloneState.data = [...state.data]
-      //   .filter(data => (data.id !== action.payload));
-      // return cloneState;
     }
     case 'CLEAR_FOLDER_DELETE_CONFIRMATION': {
       return { ...state, confirmDelete: null };
@@ -78,6 +79,14 @@ export default (state = initialState, action) => {
         ...state
       };
     }
+    case 'REMOVED_DOCUMENT_FROM_FOLDER': {
+      return Object.assign({}, state, {
+        documents: {
+          ...state.documents,
+          results: [...state.documents.results]
+            .filter((document => (document.id !== action.payload)))
+        }});
+      }
     case 'ERROR_ADDING_DOCUMENT_TO_FOLDER':
     case 'ERROR_CREATING_FOLDER':
     case 'ERROR_UPDATING_FOLDER': {

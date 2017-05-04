@@ -9,6 +9,7 @@ import IconButton from 'material-ui/IconButton';
 import MenuItem from 'material-ui/MenuItem';
 import PowerButton from 'material-ui/svg-icons/action/power-settings-new';
 import PersonPin from 'material-ui/svg-icons/maps/person-pin';
+import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 
 const style = {
   backgroundColor: '#222222',
@@ -56,7 +57,14 @@ const isAuthenticated = props => (
         >
           <MenuItem
             focusState="none"
-            primaryText="View Profile"
+            primaryText="Dashboard"
+            leftIcon={<DashboardIcon />}
+            onTouchTap={() =>
+              browserHistory.push(props.isAuthenticated.userPage)}
+          />
+          <MenuItem
+            focusState="none"
+            primaryText="Your Information"
             leftIcon={<PersonPin />}
             onTouchTap={() =>
               browserHistory.push(props.isAuthenticated.userPage)}
@@ -75,8 +83,7 @@ const isAuthenticated = props => (
 
 const notAuthenticated = props => (
   <div className="nav-auth-buttons">
-    {
-      (props.showLogin) ?
+    {(props.showLogin) ?
         <Link to={props.loginLink} className="navbar-login-btn">
           <RaisedButton
             label="Login"

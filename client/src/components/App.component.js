@@ -9,19 +9,24 @@ import Login from './Login.component';
 import Signup from './Signup.component';
 import Logout from './reusable/Logout.component';
 import User from './User.component';
-import Document from './Document.component';
+import ViewDocument from './Document.component';
 import Folder from './Folder.component';
 import ManageUsers from './ManageUsers.component';
 import EditDocument from './EditDocument.component';
 import EditProfile from './EditProfile.component';
+import PublicDocuments from './public-doc/PublicDocuments.component';
 
-const r = (
+const routes = (
   <Route exact path="/app/" component={Template}>
     <IndexRoute component={Index} />
     <Route path='/app/login' component={Login} />
     <Route path="/app/signup" component={Signup} />
     <Route path='/app/logout' compoent={Logout} />
     <Route path="/app/dashboard" component={User} />
+    <Route path="/app/document/:id" component={ViewDocument} />
+    <Route path="/app/folder/:id" component={Folder} />
+    <Route path="/app/edit/:id" component={EditDocument} />
+    <Route path="/app/public" component={PublicDocuments} />
   </Route>
 );
 
@@ -41,7 +46,7 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider>
-        <Router history={ this.props.history } routes={r} />
+        <Router history={ this.props.history } routes={routes} />
       </MuiThemeProvider>
     );
   }

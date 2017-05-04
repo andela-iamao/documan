@@ -161,13 +161,16 @@ export const removeDoc = (req, res) => {
 
 export const folderDocs = (req, res) => {
   const id = req.decoded.id || req.decoded;
+  const limit = req.query.limit || 18;
+  const offset = req.query.offset || 0;
   Folders.findById(req.params.id)
     .then((folder) => {
       if (folder) {
         if (folder.ownerId === id) {
           Document.findAll({ where: { folderId: req.params.id } })
             .then((documents) => {
-              res.status(200).json(documents);
+              res.status(200)
+                .json(paginate(limit, offset, documents, 'documents'));
             });
         } else {
           res.status(401).json({

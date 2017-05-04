@@ -5,6 +5,7 @@ import Snackbar from 'material-ui/Snackbar';
 import Navbar from './reusable/Navbar.component';
 import DocumentsGrid from './DocumentsGrid.component';
 import Search from './Search.component';
+import { clearSearch } from '../actions/search.action';
 import {
   getUserDocs,
   createDoc,
@@ -26,9 +27,7 @@ import {
   deleteFolder,
   clearFolderError
 } from '../actions/folder.action';
-import {
-  getActiveUser
-} from '../actions/users.action';
+import { getActiveUser } from '../actions/users.action';
 
 @connect(store => ({
   user: store.users,
@@ -67,6 +66,7 @@ class User extends React.Component {
     this.handleClearEditFolder = this.handleClearEditFolder.bind(this);
     this.handleNextPage = this.handleNextPage.bind(this);
     this.handleClearFolderError = this.handleClearFolderError.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
   }
 
   /**
@@ -86,6 +86,10 @@ class User extends React.Component {
     if (nextProps.user.details && !this.props.docs.documents) {
       this.props.dispatch(getUserDocs(nextProps.user.details.id));
     }
+  }
+
+  clearSearch() {
+    this.props.dispatch(clearSearch());
   }
 
   /**
@@ -229,10 +233,11 @@ class User extends React.Component {
         {
           (this.props.user.details) ?
             <div>
-              {
-                (this.props.search.results.users
+              {(this.props.search.results.users
                   || this.props.search.results.docs) ?
-                  <Search data={this.props.search.results}/>
+                  <Search
+                    data={this.props.search.results}
+                    clearSearch={this.clearSearch}/>
                 :
                 <DocumentsGrid
                   views={this.props.views}

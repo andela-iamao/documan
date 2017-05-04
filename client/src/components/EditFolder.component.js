@@ -102,11 +102,13 @@ class EditFolder extends React.Component {
       />,
     ];
 
+    const props = this.props;
+
     return (
       <div className="col s3 m3 l1">
-        {
-          (this.props.editButton) ?
-            <FloatingActionButton mini onTouchTap={() => this.props.openDialog}>
+        {(this.props.editButton) ?
+            <FloatingActionButton mini onTouchTap={
+              () => props.openDialog(props.edit.title)}>
               <Edit />
             </FloatingActionButton>
             :
