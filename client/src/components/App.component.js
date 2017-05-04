@@ -21,6 +21,7 @@ const r = (
     <Route path='/app/login' component={Login} />
     <Route path="/app/signup" component={Signup} />
     <Route path='/app/logout' compoent={Logout} />
+    <Route path="/app/dashboard" component={User} />
   </Route>
 );
 

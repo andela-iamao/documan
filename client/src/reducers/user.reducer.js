@@ -3,7 +3,7 @@ const defaultState = {
   fetched: false,
   creating: false,
   created: false,
-  details: {},
+  details: null,
   error: null,
   users: null
 };

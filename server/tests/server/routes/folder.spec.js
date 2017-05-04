@@ -104,7 +104,7 @@ describe('Routes: folder', () => {
         .set('Authorization', tokens.admin[0])
         .expect(200)
         .end((err, res) => {
-          expect(Object.keys(res.body)).to.have.lengthOf(4);
+          expect(Object.keys(res.body.folders.results)).to.have.lengthOf(4);
           done(err);
         });
     });

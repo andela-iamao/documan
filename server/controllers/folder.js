@@ -1,4 +1,5 @@
 import db from '../models/index';
+import { paginate } from '../helpers/helper';
 // import helper from '../helpers/error-render';
 // import { isAdmin } from '../helpers/helper';
 
@@ -23,10 +24,12 @@ export const createFolder = (req, res) => {
 };
 
 export const getAllFolders = (req, res) => {
-  const ownerId = req.decoded.id || req.decoded;
-  Folders.findAll({ where: { ownerId } })
+  const limit = req.query.limit || 10;
+  const offset = req.query.offset || 0;
+  const ownerId = req.decoded.id;
+  Folders.findAll({ where: { ownerId }, order: [['updatedAt', 'DESC']] })
     .then((folders) => {
-      res.status(200).json(folders);
+      res.status(200).json(paginate(limit, offset, folders, 'folders'));
     });
 };
 

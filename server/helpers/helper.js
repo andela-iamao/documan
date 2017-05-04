@@ -14,7 +14,7 @@ const cutList = (list, start, end) => {
 
 const paginate = (limit, offset, response, field) => {
   const pageCount = Math.ceil(response.length / limit);
-  const paginated = { success: {
+  const paginated = { [field]: {
     paginationMeta: {
       page_count: (pageCount > 1) ? pageCount : 1,
       total_count: response.length,
@@ -24,7 +24,7 @@ const paginate = (limit, offset, response, field) => {
         / parseInt(limit, 10))
     }
   } };
-  paginated.success[field] = cutList(response, offset, limit);
+  paginated[field].results = cutList(response, offset, limit);
   return paginated;
 };
 

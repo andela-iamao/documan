@@ -52,17 +52,19 @@ class CustomDrawer extends React.Component {
           </h5>
           <br /><br />
           <div id="user-basic-info">
-            <Avatar size={ 40 }>
+            <Avatar size={ 60 }>
               { this.props.username[0].toUpperCase()}
             </Avatar>
-            <h5>{ this.props.fullname }</h5>
-            <h6>{ this.props.username }</h6>
-            <div id="user-options-list">
+            <h5>{this.props.fullname}</h5>
+            <h6>{this.props.username}</h6>
+            <div id="user-options-list" className="white-text">
               <List>
-                <div onClick={ () => {
-                  this.props.showAll();
-                  browserHistory.push('/app/dashboard');
-                } }>
+                <div
+                  className="white-text"
+                  onClick={() => {
+                    this.props.showAll();
+                    browserHistory.push('/app/dashboard');
+                }}>
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
@@ -73,8 +75,8 @@ class CustomDrawer extends React.Component {
                     primaryText="Dashboard"
                   />
                 </div>
-                <Divider inset={ true } />
-                <div onClick={ this.props.showOnlyFolder }>
+                <Divider inset />
+                <div onClick={this.props.showOnlyFolder}>
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
@@ -85,14 +87,14 @@ class CustomDrawer extends React.Component {
                     primaryText="Folders"
                   />
                 </div>
-                <Divider inset={ true } />
+                <Divider inset />
                 <div onClick={ this.props.showOnlyDoc }>
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
                         <ActionAssignment />
                         }
-                        backgroundColor={ blue500 }
+                        backgroundColor={blue500}
                       />
                     }
                     primaryText="Documents"
@@ -101,30 +103,30 @@ class CustomDrawer extends React.Component {
                 <div onClick={
                     () => browserHistory.push(`/app/user/${this.props.id}/edit`)
                   }>
-                  <Divider inset={ true } />
+                  <Divider inset />
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
                         <span className="fa fa-user"></span>
                         }
-                        backgroundColor={ blue500 }
+                        backgroundColor={blue500}
                       />
                     }
                     primaryText="Edit Info"
                   />
                 </div>
                 {
-                  (this.props.userRole === 1) ?
+                  (this.props.userRole === 'admin') ?
                     <div onClick={
                         () => browserHistory.push('/app/manage/users')
                       }>
-                      <Divider inset={ true } />
+                      <Divider inset />
                       <ListItem
                         leftAvatar={
                           <Avatar icon={
                             <span className="fa fa-users"></span>
                             }
-                            backgroundColor={ blue500 }
+                            backgroundColor={blue500}
                           />
                         }
                         primaryText="Manage Users"
@@ -134,14 +136,6 @@ class CustomDrawer extends React.Component {
                     ''
                 }
               </List>
-            </div>
-            <div className="fix-bottom">
-              <FloatingActionButton
-                secondary={ true }
-                onTouchTap={ () => browserHistory.push('/app/logout')}
-              >
-                <span className="fa fa-power-off"></span>
-              </FloatingActionButton>
             </div>
           </div>
         </PageCenter>

@@ -1,9 +1,9 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { returnFromProp } from '../util/helper';
+import { renderFromProp } from '../util/helper';
 
 
 const customContentStyle = {
@@ -87,16 +87,18 @@ class DeleteDialog extends React.Component {
    */
   render() {
     const actions = [
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="NO"
-        primary={ true }
-        onTouchTap={ this.handleClose }
+        primary
+        onTouchTap={this.handleClose}
       />,
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="YES"
-        primary={ true }
-        keyboardFocused={ true }
-        onTouchTap={ this.handleSubmit }
+        secondary
+        keyboardFocused
+        onTouchTap={this.handleSubmit}
       />,
     ];
 
@@ -115,7 +117,7 @@ class DeleteDialog extends React.Component {
         }
         <Dialog
           title={ `Delete ${
-            returnFromProp(this.props.onDeleteConfirmation, 'type')
+            renderFromProp(this.props.onDeleteConfirmation, 'type')
           }` }
           contentStyle={ customContentStyle }
           actions={
@@ -127,18 +129,18 @@ class DeleteDialog extends React.Component {
         >
           <img
             src={ (
-              returnFromProp(
+              renderFromProp(
                 this.props.onDeleteConfirmation,
                 'type') === 'folder') ?
               '/images/folder.png' : '/images/file.png'
           } style={ { width: '35%' } } />
           <p>
             <b>
-              { returnFromProp(this.props.onDeleteConfirmation, 'title') }
+              { renderFromProp(this.props.onDeleteConfirmation, 'title') }
             </b>
           </p>
           <h5>Are you sure you want to delete this {
-            returnFromProp(this.props.onDeleteConfirmation, 'type')
+            renderFromProp(this.props.onDeleteConfirmation, 'type')
           }?</h5>
         </Dialog>
       </div>

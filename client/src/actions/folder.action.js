@@ -1,18 +1,18 @@
 import axios from 'axios';
 
-export function getUserFolders() {
+export function getUserFolders(limit = 8, offset = 0) {
   return (dispatch) => {
-    axios.get('/api/v1/folders')
+    axios.get(`/api/v1/folders/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
           type: 'FETCHED_CURRENT_USER_FOLDERS',
-          payload: response.data
+          payload: response.data.folders
         });
       });
   };
 }
 
-export function createFolder(value) {
+export function createFolder(value, folderCount, pageNum = 1) {
   return (dispatch) => {
     axios.post('/api/v1/folders', value)
       .then((response) => {
@@ -20,22 +20,25 @@ export function createFolder(value) {
           type: 'CREATED_FOLDER',
           payload: response.data
         });
+        if (folderCount === 8) {
+          dispatch(getUserFolders(8, 8 * (pageNum - 1)));
+        }
       }).catch((error) => {
         dispatch({
           type: 'ERROR_CREATING_FOLDER',
-          payload: error.response.data
+          payload: error.response.data.message
         });
       });
   };
 }
 
-export function deleteFolder(value) {
+export function deleteFolder(id) {
   return (dispatch) => {
-    axios.delete(`/api/v1/folders/${value}`)
+    axios.delete(`/api/v1/folders/${id}`)
       .then(() => {
         dispatch({
           type: 'DELETED_FOLDER',
-          payload: value
+          payload: id
         });
       }).catch((error) => {
         dispatch({
@@ -58,7 +61,7 @@ export function getFolder(id) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_GETTING_FOLDER',
-          payload: error.response
+          payload: error.response.data
         });
       });
   };
@@ -84,23 +87,19 @@ export function editFolder(values) {
   };
 }
 
-export function updateFolder(values, refresh = false) {
+export function updateFolder(values, callback = false) {
   return (dispatch) => {
     axios.put(`/api/v1/folders/${values.id}`, values)
       .then((response) => {
-        dispatch(getUserFolders());
         dispatch({
           type: 'UPDATED_FOLDER',
-          payload: response.data
+          payload: values
         });
-        if (refresh) {
-          dispatch(refresh.action(refresh.payload));
-        }
       })
       .catch((error) => {
         dispatch({
           type: 'ERROR_UPDATING_FOLDER',
-          payload: error.response.data
+          payload: error.response.data.message
         });
       });
   };
@@ -146,5 +145,11 @@ export function addDoc(folderId, doc) {
           payload: error.response.data
         });
       });
+  };
+}
+
+export function clearFolderError() {
+  return {
+    type: 'CLEAR_FOLDER_ERRORS'
   };
 }

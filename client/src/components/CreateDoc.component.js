@@ -1,6 +1,6 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
@@ -30,12 +30,7 @@ class CreateDoc extends React.Component {
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleContentChange = this.handleContentChange.bind(this);
-    this.state = {
-      open: false,
-      title: '',
-      content: '',
-      accessId: 1
-    };
+    this.state = { open: false, title: '', content: '', accessId: 1 };
     this.handleSelectChange = this.handleSelectChange.bind(this);
   }
 
@@ -52,7 +47,7 @@ class CreateDoc extends React.Component {
    * @return {void}
    */
   handleClose() {
-    this.setState({ open: false });
+    this.setState({ open: false, title: '', content: '', accessId: 1 });
   }
 
   /**
@@ -103,39 +98,34 @@ class CreateDoc extends React.Component {
    */
   render() {
     const actions = [
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="Cancel"
-        primary={ true }
-        onTouchTap={ this.handleClose }
+        secondary
+        onTouchTap={this.handleClose}
       />,
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="Create Document"
-        primary={ true }
-        keyboardFocused={ true }
-        onTouchTap={ this.handleSubmit }
+        primary
+        keyboardFocused
+        onTouchTap={this.handleSubmit}
       />,
     ];
 
     return (
       <div className="col s3 m3 l1">
-        <FloatingActionButton
-          mini={true}
-          onTouchTap={
-            this.handleOpen
-          }
-        >
+        <FloatingActionButton mini onTouchTap={this.handleOpen}>
           <DocumentAdd />
         </FloatingActionButton>
         <Dialog
           title="Create Document"
-          contentStyle={ customContentStyle }
-          actions={
-            actions
-          }
+          contentStyle={customContentStyle}
+          actions={actions}
           modal={false}
           open={this.state.open}
-          onRequestClose={ this.handleClose }
-          autoScrollBodyContent={true}
+          onRequestClose={this.handleClose}
+          autoScrollBodyContent
           bodyClassName="create-doc"
         >
           <div className="row container">
@@ -143,10 +133,8 @@ class CreateDoc extends React.Component {
               <input
                 type="text"
                 name="title"
-                value={ this.state.title }
-                onChange={
-                  event => this.handleChange(event)
-                }
+                value={this.state.title}
+                onChange={event => this.handleChange(event)}
               />
               <label>Enter document title</label>
             </div>
@@ -169,7 +157,7 @@ class CreateDoc extends React.Component {
                 :
                 this.state.content
               }
-            onModelChange={ this.handleContentChange }
+            onModelChange={this.handleContentChange}
           />
         </Dialog>
       </div>

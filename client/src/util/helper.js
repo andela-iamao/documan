@@ -1,4 +1,4 @@
-export function renderFromProps(prop, field) {
+export function renderFromProp(prop, field) {
   if (prop) {
     return prop[field] || '';
   }

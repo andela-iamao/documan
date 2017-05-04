@@ -510,7 +510,7 @@ describe('Routes: user', () => {
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.success.users.length).to.eql(6);
+          expect(res.body.users.results.length).to.eql(6);
           done(err);
         });
     });
@@ -519,8 +519,8 @@ describe('Routes: user', () => {
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.success.users.length).to.eql(3);
-          expect(res.body.success.paginationMeta.page).to.eql(1);
+          expect(res.body.users.results.length).to.eql(3);
+          expect(res.body.users.paginationMeta.page).to.eql(1);
           done(err);
         });
     });
@@ -530,7 +530,7 @@ describe('Routes: user', () => {
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.success.users.length).to.eql(5);
+          expect(res.body.users.results.length).to.eql(5);
           done(err);
         });
     });
@@ -539,7 +539,7 @@ describe('Routes: user', () => {
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body.success.users.length).to.eql(6);
+          expect(res.body.users.results.length).to.eql(6);
           done(err);
         });
     });
@@ -795,7 +795,7 @@ describe('Routes: user', () => {
         .set('Authorization', customRolesToken[1])
         .expect(200)
         .end((err, res) => {
-          expect(res.body).to.have.lengthOf(5);
+          expect(res.body.documents.results).to.have.lengthOf(5);
           done(err);
         });
     });
@@ -805,7 +805,7 @@ describe('Routes: user', () => {
         .set('Authorization', token)
         .expect(200)
         .end((err, res) => {
-          expect(res.body).to.have.lengthOf(7);
+          expect(res.body.documents.results).to.have.lengthOf(7);
           done(err);
         });
     });
@@ -815,7 +815,7 @@ describe('Routes: user', () => {
           .set('Authorization', customRolesToken[1])
           .expect(200)
           .end((err, res) => {
-            expect(res.body).to.have.lengthOf(6);
+            expect(res.body.documents.results).to.have.lengthOf(6);
             done(err);
           });
       });
@@ -825,7 +825,7 @@ describe('Routes: user', () => {
           .set('Authorization', adminToken)
           .expect(200)
           .end((err, res) => {
-            expect(res.body).to.have.lengthOf(7);
+            expect(res.body.documents.results).to.have.lengthOf(7);
             done(err);
           });
       });

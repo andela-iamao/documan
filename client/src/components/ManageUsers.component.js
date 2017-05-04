@@ -24,7 +24,7 @@ import getUserInfo from '../util/getUserInfo';
 import paginate from '../util/paginate';
 
 @connect(store => ({
-  users: store.users,
+  user: store.users,
   form: store.form,
   error: store.error.error,
   auth: store.auth,
@@ -68,9 +68,9 @@ class ManageUser extends React.Component {
    * @return {void}
    */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.users.details) {
-      if (nextProps.users.details.roleId
-        && nextProps.users.details.roleId !== 1) {
+    if (nextProps.user.details) {
+      if (nextProps.user.details.roleId
+        && nextProps.user.details.roleId !== 1) {
         browserHistory.push('/app/dashboard');
       }
     }
@@ -98,7 +98,7 @@ class ManageUser extends React.Component {
 
   renderTable(users) {
     const self = this;
-    return users.success.users.map((user, index) => (
+    return users.users.results.map((user, index) => (
       <TableRow key={`${index}tablerow-user`}>
         <TableRowColumn key={ index + user.id + user.firstname }>
           {user.id}
@@ -151,7 +151,7 @@ class ManageUser extends React.Component {
       2: 'Private',
       3: 'Role'
     };
-    return docs.success.documents.map((doc, index) => (
+    return docs.documents.results.map((doc, index) => (
       <TableRow key={`${index}tablerow-doc`}>
         <TableRowColumn key={ index + doc.id + doc.title }>
           {doc.id}</TableRowColumn>
@@ -169,23 +169,19 @@ class ManageUser extends React.Component {
         <TableRowColumn key={ index + doc.id + doc.title}>
           { accessLevels[doc.accessId] }</TableRowColumn>
         <TableRowColumn key={ index + doc.id + doc.title}>{ getUserInfo(
-          self.props.users.users.success.users, doc.ownerId).username }
+          self.props.user.users.users.results, doc.ownerId).username }
         </TableRowColumn>
         <TableRowColumn key={ index + doc.id + doc.title}>{
           (getUserInfo(
-            self.props.users.users.success.users, doc.ownerId).roleId === 1
-            && doc.ownerId !== self.props.users.details.id
+            self.props.user.users.users.results, doc.ownerId).roleId === 1
+            && doc.ownerId !== self.props.user.details.id
           ) ?
             '' :
             <FlatButton
               key={ `${index}flat${doc.id}`}
               label="Delete"
               secondary={true}
-              onTouchTap={
-                () => {
-                  self.handleDeleteDoc(doc.id);
-                }
-              }
+              onTouchTap={() => self.handleDeleteDoc(doc.id)}
             />
           }
         </TableRowColumn>
@@ -201,8 +197,8 @@ class ManageUser extends React.Component {
     return (
       <div>
         {
-          (this.props.users.details
-            && this.props.users.users
+          (this.props.user.details
+            && this.props.user.users
             && this.props.docs.documents
           ) ?
           <div>
@@ -210,7 +206,7 @@ class ManageUser extends React.Component {
              type="dark"
              title="iAmDocuman"
              isAuthenticated={ {
-               username: this.props.users.details.username,
+               username: this.props.user.details.username,
                userPage: '/app/dashboard'
              } }
              showSignout={ false }
@@ -222,12 +218,12 @@ class ManageUser extends React.Component {
               title="iAmDocuman"
               showAll={ this.handleShowAll }
               showOnlyDoc={ this.handleShowOnlyDoc }
-              userRole={ this.props.users.details.roleId }
+              userRole={ this.props.user.details.roleId }
               showOnlyFolder={ this.handleShowOnlyFolder }
-              username={ this.props.users.details.username }
+              username={ this.props.user.details.username }
               fullname={
-                `${this.props.users.details.firstname}
-                 ${this.props.users.details.lastname}`}
+                `${this.props.user.details.firstname}
+                 ${this.props.user.details.lastname}`}
             />
             <div className="content-display users-table">
               <Tabs
@@ -248,7 +244,7 @@ class ManageUser extends React.Component {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                    { this.renderTable(this.props.users.users) }
+                    { this.renderTable(this.props.user.users) }
                     </TableBody>
                   </Table>
                 </Tab>
