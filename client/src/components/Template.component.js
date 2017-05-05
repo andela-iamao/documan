@@ -14,7 +14,8 @@ import {
 
 @connect(store => ({
   auth: store.auth,
-  user: store.users
+  user: store.users,
+  search: store.search
 }))
 /**
  * Template
@@ -41,6 +42,12 @@ class Template extends React.Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.search.searchPage !== this.props.search.searchPage) {
+      this.handlePageChange(nextProps.search.searchPage);
+    }
+  }
+
   signout() {
     window.localStorage.clear();
     this.props.dispatch(signout());
@@ -64,11 +71,17 @@ class Template extends React.Component {
 
   handleSearch(query) {
     if (query.target.value.length > 0) {
-      this.props.dispatch(searchDocs(query.target.value));
-      this.props.dispatch(searchUser(query.target.value));
+      this.props.dispatch(searchDocs(9, 0, query.target.value));
+      this.props.dispatch(searchUser(9, 0, query.target.value));
     } else {
       this.handleClearSearch();
     }
+  }
+
+  handlePageChange(pageNum) {
+    const page = pageNum || this.state.searchPage;
+    this.props.dispatch(searchDocs(9, 9 * (page - 1), query.target.value));
+    this.props.dispatch(searchUser(9, 9 * (page - 1), query.target.value));
   }
 
   /**
@@ -76,7 +89,11 @@ class Template extends React.Component {
    * @return {object} react elements to be rendered
    */
   render() {
-    const pathsForSearch = ['/app/dashboard', '/app/manage', '/app/public'];
+    const pathsForSearch = [
+    '/app/dashboard',
+    '/app/manage',
+    '/app/folder'
+  ];
     const pathsForNoDrawers = ['/app/login', '/app/signup', '/app/'];
     return (
       <div>

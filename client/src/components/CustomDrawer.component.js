@@ -7,7 +7,7 @@ import FileFolder from 'material-ui/svg-icons/file/folder';
 import { List, ListItem } from 'material-ui/List';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
-import Dashboard from 'material-ui/svg-icons/action/dashboard';
+import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import { blue500 } from 'material-ui/styles/colors';
 import PageCenter from './reusable/PageCenter.component';
 
@@ -35,25 +35,25 @@ class CustomDrawer extends React.Component {
   }
 
   /**
-   * @return {Object}return react element to render
+   * @return {Object} return react element to render
    */
   render() {
     return (
       <Drawer
-        open={ this.state.open }
+        open={this.state.open}
         containerClassName="dark-drawer"
-        containerStyle={ {
-          backgroundColor: this.props.bgColor
-        } }
+        containerStyle={{ backgroundColor: this.props.bgColor }}
       >
         <PageCenter>
-          <h5 className="white-text">
-            { this.props.title }
+          <h5 className="white-text" onClick={() => browserHistory.push('/app/')}>
+            {this.props.title}
           </h5>
           <br /><br />
           <div id="user-basic-info">
-            <Avatar size={ 60 }>
-              { this.props.username[0].toUpperCase()}
+            <Avatar
+              size={60}
+              onTouchTap={() => browserHistory.push('/app/dashboard')}>
+              {this.props.username[0].toUpperCase()}
             </Avatar>
             <h5>{this.props.fullname}</h5>
             <h6>{this.props.username}</h6>
@@ -66,12 +66,7 @@ class CustomDrawer extends React.Component {
                     browserHistory.push('/app/dashboard');
                 }}>
                   <ListItem
-                    leftAvatar={
-                      <Avatar icon={
-                        <Dashboard />
-                      }
-                      />
-                    }
+                    leftAvatar={ <Avatar icon={<DashboardIcon />}/>}
                     primaryText="Dashboard"
                   />
                 </div>
@@ -88,20 +83,32 @@ class CustomDrawer extends React.Component {
                   />
                 </div>
                 <Divider inset />
-                <div onClick={ this.props.showOnlyDoc }>
+                <div onClick={this.props.showOnlyDoc}>
                   <ListItem
                     leftAvatar={
-                      <Avatar icon={
-                        <ActionAssignment />
-                        }
+                      <Avatar
+                        icon={<ActionAssignment />}
                         backgroundColor={blue500}
                       />
                     }
                     primaryText="Documents"
                   />
                 </div>
-                <div onClick={
-                    () => browserHistory.push(`/app/user/${this.props.id}/edit`)
+                <div onClick={() => browserHistory.push('/app/public')}>
+                  <Divider inset />
+                  <ListItem
+                    leftAvatar={
+                      <Avatar icon={
+                        <span className="fa fa-user"></span>
+                        }
+                        backgroundColor={blue500}
+                      />
+                    }
+                    primaryText="Public Documents"
+                  />
+                </div>
+                <div onClick={() =>
+                    browserHistory.push(`/app/user/${this.props.id}/edit`)
                   }>
                   <Divider inset />
                   <ListItem
@@ -117,8 +124,8 @@ class CustomDrawer extends React.Component {
                 </div>
                 {
                   (this.props.userRole === 'admin') ?
-                    <div onClick={
-                        () => browserHistory.push('/app/manage/users')
+                    <div onClick={() =>
+                        browserHistory.push('/app/manage/users')
                       }>
                       <Divider inset />
                       <ListItem

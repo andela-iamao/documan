@@ -87,14 +87,22 @@ export function editFolder(values) {
   };
 }
 
-export function updateFolder(values, callback = false) {
+export function updateFolder(values, type = 'multiple') {
   return (dispatch) => {
     axios.put(`/api/v1/folders/${values.id}`, values)
       .then((response) => {
-        dispatch({
-          type: 'UPDATED_FOLDER',
-          payload: values
-        });
+        if (type === 'multiple') {
+          dispatch({
+            type: 'UPDATED_FOLDER',
+            payload: values
+          });
+        } else {
+          dispatch({
+            type: 'UPDATED_SINGLE_FOLDER',
+            payload: values
+          });
+        }
+
       })
       .catch((error) => {
         dispatch({
@@ -127,6 +135,24 @@ export function getFolderDocs(id) {
         });
       });
   };
+}
+
+export function removeFromFolder(docId, folderId) {
+  return (dispatch) => {
+    axios.put(`/api/v1/folders/${folderId}/remove`, { id: docId })
+      .then((response) => {
+        dispatch({
+          type: 'REMOVED_DOCUMENT_FROM_FOLDER',
+          payload: docId
+        });
+      })
+      .catch((error) => {
+        dispatch({
+          type: 'ERROR_REMOVING_DOCUMENT_FROM_FOLDER',
+          payload: error.response.data.message
+        });
+      });
+  }
 }
 
 export function addDoc(folderId, doc) {
