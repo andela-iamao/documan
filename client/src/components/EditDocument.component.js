@@ -2,19 +2,30 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import _ from 'underscore';
 import { connect } from 'react-redux';
-import RaisedButton from 'material-ui/RaisedButton';
+import FlatButton from 'material-ui/FlatButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
 import Navbar from './reusable/Navbar.component';
 import { FroalaEditor } from './reusable/Fraola.component';
-import PageCenter from './reusable/PageCenter.component';
 import CustomDrawer from './CustomDrawer.component';
-import { getDoc, updateDoc, clearEditDoc } from '../actions/document.action';
-import { getActiveUser } from '../actions/users.action';
+import {
+  getDoc,
+  updateDoc,
+  clearEditDoc
+} from '../actions/document.action';
+
+import {
+  getUser
+} from '../actions/users.action';
 
 @connect(store => ({
+  user: store,
+  form: store.form,
+  error: store.error.error,
+  auth: store.auth,
   docs: store.documents,
+  folder: store.folder
 }))
 /**
  * React component for
@@ -66,7 +77,7 @@ class EditDocument extends React.Component {
     } else if (!this.props.docs.editDoc) {
       browserHistory.push('/app/dashboard');
     } else {
-      this.props.dispatch(getActiveUser());
+      this.props.dispatch(getUser());
       this.props.dispatch(getDoc(this.props.params.id));
     }
   }
@@ -134,72 +145,93 @@ class EditDocument extends React.Component {
   }
 
   /**
-   * render
-   * @return {Object} react elements to render
+   * @return {ReactElement} jf
    */
   render() {
-    const state = this.state;
+    const changeHandler = _.compose(
+      _.debounce(this.handleModelChange.bind(this), 300)
+    );
+
     return (
-        <div>
-          <div className="content-display edit-document-view">
+      <div>
+        <Navbar
+         type="dark"
+         title="iAmDocuman"
+         isAuthenticated={ {
+           username: 'asheAmao',
+           userPage: '/app/dashboard'
+         } }
+         showSignout={ false }
+        />
+        <div className="close-drawer">
+        </div>
+        <CustomDrawer
+          title="iAmDocuman"
+          username={ this.props.user.users.details.username }
+          id={ this.props.user.users.details.id }
+          userRole={ this.props.user.users.details.roleId }
+          fullname={
+            `${this.props.user.users.details.firstname}
+             ${this.props.user.users.details.lastname}`}
+        />
+          <div className="content-display">
             <div className="row">
-              {(this.props.docs.doc) ?
-                <div className="edit-document">
-                  <div className="edit-title-access">
-                    <form className="col s12">
-                      <div className="row">
-                        <div className="input-field col s8 m8">
-                          <input
-                            id="edit-title"
-                            type="text"
-                            value={state.title}
-                            onChange={event => this.handleChange(event)}
-                          />
-                        </div>
-                        <div className="input-field col s4 m4">
-                          <SelectField
-                            floatingLabelText="Select Access Level"
-                            value={state.accessId}
-                            onChange={this.handleSelectChange}
-                          >
-                            <MenuItem value={1} primaryText="PUBLIC" />
-                            <MenuItem value={2} primaryText="PRIVATE" />
-                            <MenuItem value={3} primaryText="ROLE" />
-                          </SelectField>
-                        </div>
+              {
+                (this.props.docs.doc) ?
+                <div>
+                  <div>
+                    <div id="document-title row">
+                      <div className="input-field col s6 m6 l6">
+                        <input
+                          type="text"
+                          name="title"
+                          value={ this.state.title }
+                          onChange={
+                            event => this.handleChange(event)
+                          }
+                        />
+                        <label>Enter document title</label>
                       </div>
-                    </form>
-                  </div>
-                  <div className="editor-view">
-                    <FroalaEditor
-                      onModelChange={this.handleModelChange}
-                      model={state.content} />
-                  </div>
-                  <div className="edit-actions">
-                    <RaisedButton
-                      className="dialog-actions"
+                      <div className="input-field col l6 m6 s6">
+                        <SelectField
+                          floatingLabelText="Select Access Level"
+                          value={this.state.accessId}
+                          onChange={this.handleSelectChange}
+                        >
+                          <MenuItem value={1} primaryText="PUBLIC" />
+                          <MenuItem value={2} primaryText="PRIVATE" />
+                        </SelectField>
+                      </div>
+                    </div>
+                    <div id="document-content">
+                      <FroalaEditor
+                        onModelChange={ changeHandler }
+                        model={ this.state.content } />
+                    </div>
+                    <div className="editor-actions">
+                    <FlatButton
                       label="Cancel"
-                      secondary
-                      onTouchTap={this.handleClose}
+                      primary={ true }
+                      onTouchTap={ this.handleClose }
                     />
-                    <RaisedButton
-                      className="dialog-actions"
+                    <FlatButton
                       label="Update Document"
-                      primary
-                      keyboardFocused
-                      onTouchTap={this.handleUpdateDoc}
+                      primary={ true }
+                      keyboardFocused={ true }
+                      onTouchTap={ this.handleUpdateDoc }
                     />
+                    </div>
                   </div>
                 </div>
                 :
-                <PageCenter>
+                <div className="circular-loading">
                   <CircularProgress />
-                  <h6>Loading document...</h6>
-                </PageCenter>
+                  <h6>Loading document</h6>
+                </div>
               }
             </div>
           </div>
-        </div>
+      </div>
     );
   }
 }

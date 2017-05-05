@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { setLocalstorage } from '../util/helper';
+import jwt from 'jwt-decode';
 
 /**
 * loginUser gets user credentials as param and sends it post it
@@ -11,17 +11,17 @@ export default function (loginData) {
   return (dispatch) => {
     axios.post('/api/v1/users/login', loginData)
       .then((response) => {
-        setLocalstorage('token', response.data.token)
-          .then(() => {
-            axios.defaults.headers.common.Authorization = response.data.token;
-            dispatch({
-              type: 'LOGIN_USER',
-              payload: response.data
-            });
-            dispatch({
-              type: 'CLEAR_ERROR'
-            });
-          });
+        dispatch({
+          type: 'LOGIN_USER',
+          payload: response.data
+        });
+        dispatch({
+          type: 'CLEAR_ERROR'
+        });
+        const decoded = jwt(response.data.token);
+        window.localStorage.setItem('token', response.data.token);
+        window.localStorage.setItem('user', JSON.stringify(decoded));
+        axios.defaults.headers.common.Authorization = response.data.token;
       })
       .catch((error) => {
         dispatch({

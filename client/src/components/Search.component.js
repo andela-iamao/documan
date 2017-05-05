@@ -1,64 +1,51 @@
 import React from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import Paginate from './reusable/Paginate.component';
-import DocCard from './DocCard.component';
-import UserCard from './UserCard.component';
-import { changeSearchPage } from '../actions/search.action';
 
 class Search extends React.Component {
 
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
-    this.state = { show: 'all' };
+    this.state = {
+      show: 'all'
+    };
   }
 
   renderUserSearch(users) {
-    return users.users.results.map(user => (
-      <div className="col s4 m3 l2" key={`${user.username}${user.id}`}>
-        <UserCard title={user.username} id={user.id} />
+    return users.success.users.map(user => (
+      <div className="col s6 m4 l2">
+        <img src="/images/person.png" className="icon-image" />
+        <h6 className=" truncate doc-card-info chip tooltipped">
+          { user.username }
+        </h6>
       </div>
     ));
-  }
-
-  componentWillUnmount() {
-    this.props.clearSearch();
   }
 
   handleChange(event, index, value) {
     this.setState({ show: value });
   }
 
-  handlePageChange(event, index, value) {
-    this.props.dispatch(changeSearchPage(value));
-  }
-
   renderDocSearch(docs) {
-    return docs.documents.results.map(document => (
-      <div className="col s4 m3 l2" key={`${document.title} ${document.id}`}>
-        <DocCard
-          title={document.title}
-          id={document.id}
-          accessId={document.accessId}
-          content={document.content}
-          showActions={false}
-        />
+    return docs.success.documents.map(doc => (
+      <div className="col s6 m4 l2">
+        <img src="/images/file.png" className="icon-image" />
+        <h6 className=" truncate doc-card-info chip tooltipped">
+          { doc.title }
+        </h6>
       </div>
     ));
   }
 
   render() {
-    const documents = this.props.data.docs;
-    const users = this.props.data.users;
     return (
-      <div className="content-display search-view">
+      <div className="content-display">
         <div className="input-field col l6 m6 s6">
           <SelectField
             floatingLabelText="Select Access Level"
             value={this.state.show}
-            onChange={this.handleChange}
+            onChange={ this.handleChange }
           >
             <MenuItem value="all" primaryText="ALL" />
             <MenuItem value="users" primaryText="USERS" />
@@ -67,12 +54,16 @@ class Search extends React.Component {
         </div>
         <hr />
         <div className="row">
-        {(users && (this.state.show === 'all' || this.state.show === 'users')) ?
-          this.renderUserSearch(users) : ''
+        {
+          (this.props.data.users
+          && (this.state.show === 'all' || this.state.show === 'users')) ?
+            this.renderUserSearch(this.props.data.users)
+            : ''
         }
-        {(documents
+        {
+          (this.props.data.docs
           && (this.state.show === 'all' || this.state.show === 'documents')) ?
-            this.renderDocSearch(documents)
+            this.renderDocSearch(this.props.data.docs)
             : ''
         }
         </div>

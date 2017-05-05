@@ -7,7 +7,6 @@
   }
   .doc-card-icon img {
     width: 70%;
-    cursor: pointer;
     z-index: -1;
   }
   .doc-card-action-container {
@@ -43,7 +42,6 @@
   .doc-card-info {
     text-align: center;
     font-weight: bold;
-    width: 120px;
     text-overflow: ellipsis;
     max-width: 120px;
   }

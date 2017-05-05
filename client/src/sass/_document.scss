@@ -1,66 +1,17 @@
-.document {
-  height: 100vh;
-  overflow-y: hidden;
+// .document-container {
+//   overflow-y: scroll;
+// }
+#document-title {
+  text-align: center;
 }
-
+#document-content {
+  padding: 15px 50px;
+  height:65vh;
+  overflow-y: scroll;
+}
 .fr-wrapper {
   max-height: 50vh;
 }
 .fr-element {
   max-height: 50vh;
-}
-
-.document-page {
-  background-color: white;
-  padding-top: 5px;
-  width: 80%;
-  margin-left: 10%;
-  height: 77vh;
-}
-
-.document-title {
-  text-align: center;
-}
-
-.document-content {
-  height: 90%;
-  padding: 5px 15px;
-  overflow-y: scroll;
-}
-
-.edit-document-view {
-  margin-top: 50px;
-  background-color: #EFEFEF;
-  padding-top: 0;
-  height: 100vh;
-  overflow-y: hidden;
-}
-
-#edit-title {
-  margin-top: 18px;
-}
-
-.edit-title-access {
-  width: 60%;
-  margin-left: 20%;
-  text-align: center;
-}
-
-.editor-view {
-  width: 100%;
-  height: 67vh;
-  overflow-y: scroll;
-  .fr-wrapper {
-    max-height: 57vh;
-  }
-  .fr-element {
-    max-height: 57vh;
-  }
-}
-
-.edit-actions {
-  width: 100%;
-  text-align: right;
-  height: 100px;
-  overflow-y: hidden;
 }

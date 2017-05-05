@@ -1,18 +1,18 @@
 import axios from 'axios';
 
-export function getUserFolders(limit = 8, offset = 0) {
+export function getUserFolders() {
   return (dispatch) => {
-    axios.get(`/api/v1/folders/?limit=${limit}&offset=${offset}`)
+    axios.get('/api/v1/folders')
       .then((response) => {
         dispatch({
           type: 'FETCHED_CURRENT_USER_FOLDERS',
-          payload: response.data.folders
+          payload: response.data
         });
       });
   };
 }
 
-export function createFolder(value, folderCount, pageNum = 1) {
+export function createFolder(value) {
   return (dispatch) => {
     axios.post('/api/v1/folders', value)
       .then((response) => {
@@ -20,25 +20,22 @@ export function createFolder(value, folderCount, pageNum = 1) {
           type: 'CREATED_FOLDER',
           payload: response.data
         });
-        if (folderCount === 8) {
-          dispatch(getUserFolders(8, 8 * (pageNum - 1)));
-        }
       }).catch((error) => {
         dispatch({
           type: 'ERROR_CREATING_FOLDER',
-          payload: error.response.data.message
+          payload: error.response.data
         });
       });
   };
 }
 
-export function deleteFolder(id) {
+export function deleteFolder(value) {
   return (dispatch) => {
-    axios.delete(`/api/v1/folders/${id}`)
+    axios.delete(`/api/v1/folders/${value}`)
       .then(() => {
         dispatch({
           type: 'DELETED_FOLDER',
-          payload: id
+          payload: value
         });
       }).catch((error) => {
         dispatch({
@@ -61,7 +58,7 @@ export function getFolder(id) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_GETTING_FOLDER',
-          payload: error.response.data
+          payload: error.response
         });
       });
   };
@@ -87,27 +84,23 @@ export function editFolder(values) {
   };
 }
 
-export function updateFolder(values, type = 'multiple') {
+export function updateFolder(values, refresh = false) {
   return (dispatch) => {
     axios.put(`/api/v1/folders/${values.id}`, values)
       .then((response) => {
-        if (type === 'multiple') {
-          dispatch({
-            type: 'UPDATED_FOLDER',
-            payload: values
-          });
-        } else {
-          dispatch({
-            type: 'UPDATED_SINGLE_FOLDER',
-            payload: values
-          });
+        dispatch(getUserFolders());
+        dispatch({
+          type: 'UPDATED_FOLDER',
+          payload: response.data
+        });
+        if (refresh) {
+          dispatch(refresh.action(refresh.payload));
         }
-
       })
       .catch((error) => {
         dispatch({
           type: 'ERROR_UPDATING_FOLDER',
-          payload: error.response.data.message
+          payload: error.response.data
         });
       });
   };
@@ -137,24 +130,6 @@ export function getFolderDocs(id) {
   };
 }
 
-export function removeFromFolder(docId, folderId) {
-  return (dispatch) => {
-    axios.put(`/api/v1/folders/${folderId}/remove`, { id: docId })
-      .then((response) => {
-        dispatch({
-          type: 'REMOVED_DOCUMENT_FROM_FOLDER',
-          payload: docId
-        });
-      })
-      .catch((error) => {
-        dispatch({
-          type: 'ERROR_REMOVING_DOCUMENT_FROM_FOLDER',
-          payload: error.response.data.message
-        });
-      });
-  }
-}
-
 export function addDoc(folderId, doc) {
   return (dispatch) => {
     axios.put(`/api/v1/folders/${folderId}/add`, doc)
@@ -171,11 +146,5 @@ export function addDoc(folderId, doc) {
           payload: error.response.data
         });
       });
-  };
-}
-
-export function clearFolderError() {
-  return {
-    type: 'CLEAR_FOLDER_ERRORS'
   };
 }

@@ -1,8 +1,17 @@
 import express from 'express';
-import UserControllers from '../controllers/user';
-import { getRoles, isAdmin, targetIsAdmin } from '../middlewares/checkRoles';
+import {
+  create,
+  findOne,
+  findAll,
+  updateUser,
+  deleteUser,
+  login,
+  getAllUserDocuments
+} from '../controllers/user';
+import getRole from '../middlewares/checkRoles';
 import { signup } from '../middlewares/validate';
-import { verifyToken, isBlacklist } from '../middlewares/authenticate';
+import auth from '../config/auth';
+import { isAdmin, targetIsAdmin } from '../helpers/helper';
 
 const router = express.Router();
 
@@ -107,7 +116,7 @@ export default () => {
      *            items:
      *              $ref: '#/definitions/User'
      */
-    .get(verifyToken, isBlacklist, isAdmin, UserControllers.findAllUsers)
+    .get(auth, isAdmin, findAll)
     /**
      * @swagger
      * /api/v1/users:
@@ -133,12 +142,7 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/User'
      */
-    .post(signup, UserControllers.createUser);
-
-  router.get('/api/v1/users/active',
-    verifyToken,
-    isBlacklist,
-    UserControllers.getActiveUser);
+    .post(signup, create);
 
   router.route('/api/v1/users/:id')
     .all()
@@ -165,7 +169,7 @@ export default () => {
    *            items:
    *              $ref: '#/definitions/User'
    */
-    .get(verifyToken, isBlacklist, isAdmin, UserControllers.findOneUser)
+    .get(auth, isAdmin, findOne)
     /**
      * @swagger
      * /api/v1/users/1:
@@ -196,7 +200,7 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/User'
      */
-    .put(verifyToken, isBlacklist, isAdmin, targetIsAdmin, UserControllers.updateUser)
+    .put(auth, isAdmin, targetIsAdmin, updateUser)
 
     /**
      * @swagger
@@ -221,12 +225,7 @@ export default () => {
      *            items:
      *              $ref: '#/definitions/User'
      */
-    .delete(
-      verifyToken,
-      isBlacklist,
-      isAdmin,
-      targetIsAdmin,
-      UserControllers.deleteUser);
+    .delete(auth, isAdmin, targetIsAdmin, deleteUser);
 
   /**
    * @swagger
@@ -258,9 +257,7 @@ export default () => {
    *          items:
    *            $ref: '#/definitions/Login'
    */
-  router.post('/api/v1/users/login', UserControllers.login);
-
-  router.post('/api/v1/users/logout', UserControllers.logout);
+  router.post('/api/v1/users/login', login);
 
   /**
    * @swagger
@@ -283,14 +280,12 @@ export default () => {
    *          schema:
    *            type: array
    */
-  router.get('/api/v1/users/:id/documents',
-    verifyToken,
-    isBlacklist,
+  router.get(
+    '/api/v1/users/:id/documents',
+    auth,
     isAdmin,
     targetIsAdmin,
-    getRoles,
-    UserControllers.getAllUserDocuments
-  );
-
+    getRole,
+    getAllUserDocuments);
   return router;
 };

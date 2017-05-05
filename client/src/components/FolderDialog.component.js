@@ -31,10 +31,13 @@ class FolderDialog extends React.Component {
     this.renderFolders = this.renderFolders.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.state = { open: false };
+    this.state = { open: false, folderName: '' };
   }
 
   handleOpen() {
+    if (!this.props.folders) {
+      this.props.onGetFolders();
+    }
     this.setState({ open: true });
   };
 
@@ -58,11 +61,12 @@ class FolderDialog extends React.Component {
   renderFolders() {
     const self = this;
     return this.props.folders.map((folder, index) => (
-        <div key={`div-${folder.title} ${index}`}
-          onClick={() => self.props.onAddDoc(folder.id)}>
+        <div key={ `div-${folder.title} ${index}` }
+          onClick={ () => self.props.onAddDoc(folder.id) }>
           <ListItem
             leftIcon={<img src="/images/folder.png" />}
-            primaryText={folder.title}
+            primaryText={ folder.title }
+            key={ `${folder.title} ${index}` }
           />
         </div>
       ));
@@ -75,33 +79,40 @@ class FolderDialog extends React.Component {
     const actions = [
       <FlatButton
         label="Cancel"
-        primary
-        keyboardFocused
-        onTouchTap={this.handleClose}
+        primary={ true }
+        keyboardFocused={ true }
+        onTouchTap={ this.handleClose }
       />
     ];
 
     return (
       <div className="col s3 m3 l1">
-        <FloatingActionButton mini onTouchTap={this.handleOpen}>
+        <FloatingActionButton
+          mini={true}
+          onTouchTap={
+            this.handleOpen
+          }
+        >
           <FolderAdd />
         </FloatingActionButton>
         <Dialog
           title="Add to folder"
-          contentStyle={customContentStyle}
-          actions={actions}
-          style={{ paddingTop: 0 }}
+          contentStyle={ customContentStyle }
+          actions={
+            actions
+          }
+          style={ { paddingTop: 0 } }
           modal={false}
           open={this.state.open}
-          autoScrollBodyContent
-          onRequestClose={this.handleClose}
+          autoScrollBodyContent={ true }
+          onRequestClose={ this.handleClose }
         >
           {
             (!this.props.folders) ?
               <CircularProgress />
               :
               <List>
-                {this.renderFolders()}
+                { this.renderFolders() }
               </List>
           }
         </Dialog>

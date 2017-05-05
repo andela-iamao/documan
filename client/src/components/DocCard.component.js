@@ -9,94 +9,80 @@ import { browserHistory } from 'react-router';
 class DocCard extends React.Component {
 
   /**
-   * render
-   * @return {object} react components to render
+   * @return {object} jf
    */
   render() {
     return (
       <div className="doc-card-root">
         <div className="doc-icon-action-wrapper">
-          <div className="doc-card-icon" onClick={() =>
-            browserHistory.push(`/app/document/${this.props.id}`)
-          }>
-            <img src={this.props.icon} />
+          <div className="doc-card-icon">
+            <img src={ this.props.icon } />
           </div>
-            {(this.props.showActions) ?
-              <div className="doc-card-action-container">
-                <div
-                  onClick={() =>
-                    browserHistory.push(`/app/document/${this.props.id}`)
-                  }
-                  className="doc-card-action-helper">
-                </div>
-                <div className="doc-card-actions">
-                  <span
-                    className="fa fa-trash card-actions tooltipped"
-                    data-position="bottom"
-                    data-delay="20"
-                    data-tooltip="Delete document"
-                    onClick={() => this.props.onDelete({
+          <div className="doc-card-action-container">
+            <div onClick={ () => {
+              browserHistory.push(`/app/document/${this.props.id}`);
+            } } className="doc-card-action-helper">
+
+            </div>
+            <div className="doc-card-actions">
+              <span
+                className="fa fa-trash card-actions tooltipped"
+                data-position="bottom"
+                data-delay="20"
+                data-tooltip="Delete document"
+                onClick={
+                  () =>
+                    this.props.onDelete({
                       id: this.props.id,
                       title: this.props.title,
                       type: 'document'
-                    })}>
-                  </span>
-                  <span
-                    className="fa fa-pencil card-actions tooltipped"
-                    data-position="bottom"
-                    data-delay="20"
-                    data-tooltip="Edit document"
-                    onClick={
-                      () =>
-                        this.props.onEdit({
-                          id: this.props.id,
-                          title: this.props.title,
-                          content: this.props.content,
-                          accessId: this.props.accessId
-                        })
-                    }
-                  >
-                  </span>
-                  <span
-                    className="fa fa-eye card-actions tooltipped"
-                    data-position="bottom"
-                    data-delay="20"
-                    data-tooltip="View document"
-                    onClick={() =>
-                      browserHistory.push(`/app/document/${this.props.id}`)
-                    }
-                  >
-                  </span>
-                  <span
-                    className="fa fa-download card-actions tooltipped"
-                    data-position="bottom"
-                    data-delay="20"
-                    data-tooltip="Download document"
-                    onClick={this.props.onDownload}
-                  >
-                  </span>
-                  {(this.props.remove) ?
-                    <span
-                      className="fa fa-close card-actions tooltipped"
-                      data-position="bottom"
-                      data-delay="20"
-                      data-tooltip="Remove from folder"
-                      onClick={() => this.props.remove(this.props.id)}
-                    >
-                    </span>
-                    :''
-                  }
-                </div>
-              </div>
-                : ''
-            }
+                    })
+                }
+              >
+              </span>
+              <span
+                className="fa fa-pencil card-actions tooltipped"
+                data-position="bottom"
+                data-delay="20"
+                data-tooltip="Edit document"
+                onClick={
+                  () =>
+                    this.props.onEdit({
+                      id: this.props.id,
+                      title: this.props.title,
+                      content: this.props.content,
+                      accessId: this.props.accessId
+                    })
+                }
+              >
+              </span>
+              <span
+                className="fa fa-eye card-actions tooltipped"
+                data-position="bottom"
+                data-delay="20"
+                data-tooltip="View document"
+                onClick={ () => {
+                  browserHistory.push(`/app/document/${this.props.id}`);
+                } }
+              >
+              </span>
+              <span
+                className="fa fa-download card-actions tooltipped"
+                data-position="bottom"
+                data-delay="20"
+                data-tooltip="Download document"
+                onClick={ this.props.onDownload }
+              >
+              </span>
+            </div>
+          </div>
         </div>
         <div className="truncate doc-card-info chip tooltipped"
           data-position="bottom"
           data-delay="20"
-          data-tooltip={this.props.title}
+          data-tooltip={ this.props.title }
           >
-          <span>{this.props.title}</span>
+          <span>{ this.props.title }</span>
         </div>
       </div>
     );
@@ -105,7 +91,6 @@ class DocCard extends React.Component {
 
 DocCard.defaultProps = {
   title: 'Lorem Ipsum Dolor',
-  showActions: true,
   icon: '/images/file.png',
   onDownload() {
     return null;

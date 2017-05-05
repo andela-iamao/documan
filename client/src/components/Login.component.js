@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import loginUser from '../actions/login.action';
 import { login } from '../util/validate-form';
+import Navbar from './reusable/Navbar.component';
 import PageCenter from './reusable/PageCenter.component';
 import ReduxFormLogin from './reusable/ReduxFormLogin.component';
 import { clearError, validationError } from '../actions/error.action';
@@ -37,7 +38,7 @@ class Login extends React.Component {
     this.clearError();
     if (window.localStorage.getItem('token')
     || this.props.auth.isAuthenticated) {
-      browserHistory.push('/app/');
+      browserHistory.push('/app/dashboard');
     }
   }
 
@@ -51,7 +52,9 @@ class Login extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated === true
         && !this.props.auth.isAuthenticated) {
-      browserHistory.push('/app/dashboard');
+      setTimeout(() => {
+        browserHistory.push('/app/dashboard');
+      }, 1000);
     }
   }
 
@@ -86,13 +89,19 @@ class Login extends React.Component {
   render() {
     return (
       <div id="login-wrapper">
+        <Navbar
+          type="dark"
+          title="iAmDocuman"
+          showLogin={ false }
+          signupLink="/app/signup"
+        />
         <PageCenter>
           <div>
             <ReduxFormLogin
               bg-color="#FFFFFF"
-              onSubmit={this.handleSubmit}
-              failed={this.props.error}
-              onCloseAlert={this.clearError}
+              onSubmit={ this.handleSubmit }
+              failed={ this.props.error }
+              onCloseAlert={ this.clearError }
             />
           </div>
         </PageCenter>

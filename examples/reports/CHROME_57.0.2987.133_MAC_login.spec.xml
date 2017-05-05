@@ -5,9 +5,9 @@
 
   <testsuite name="login.spec"
     errors="0" failures="0" hostname="" id="" package="login.spec" skipped="0"
-    tests="2" time="11.03" timestamp="Wed, 26 Apr 2017 14:19:28 GMT">
+    tests="2" time="7.330" timestamp="Sun, 23 Apr 2017 01:03:27 GMT">
   
-    <testcase name="Invalid user" time="6.124" assertions="4">
+    <testcase name="Invalid user" time="5.057" assertions="4">
 
     
 
@@ -18,7 +18,7 @@
     
     </testcase>
   
-    <testcase name="Login Users" time="4.907" assertions="3">
+    <testcase name="Login Users" time="2.273" assertions="3">
 
     
 

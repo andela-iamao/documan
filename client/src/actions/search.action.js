@@ -5,10 +5,9 @@ import axios from 'axios';
 * @param {string} query - string to search for
 * @return {object} action to send to reducers
 */
-export function searchUser(limit = 9, offset = 0, query) {
+export function searchUser(query) {
   return (dispatch) => {
-    axios.get(
-      `/api/v1/search/users/?q=${query}&limit=${limit}&offset=${offset}`)
+    axios.get(`/api/v1/search/users/?q=${query}`)
       .then((response) => {
         dispatch({
           type: 'USERS_SEARCH_RESULT',
@@ -30,10 +29,9 @@ export function searchUser(limit = 9, offset = 0, query) {
 * @param {string} query - string to search for
 * @return {object} action to send to reducers
 */
-export function searchDocs(limit = 9, offset = 0, query) {
+export function searchDocs(query) {
   return (dispatch) => {
-    axios.get(
-      `/api/v1/search/documents/?q=${query}&limit=${limit}&offset=${offset}`)
+    axios.get(`/api/v1/search/documents/?q=${query}`)
       .then((response) => {
         dispatch({
           type: 'DOCUMENTS_SEARCH_RESULT',
@@ -56,17 +54,5 @@ export function searchDocs(limit = 9, offset = 0, query) {
 export function clearSearch() {
   return {
     type: 'CLEAR_SEARCH'
-  };
-}
-
-
-/**
- * changeSearchPage
- * @return {object} action to send to all reducers
- */
-export function changeSearchPage(pageNum) {
-  return {
-    type: 'CHANGE_SEARCH_PAGE',
-    payload: pageNum
   };
 }

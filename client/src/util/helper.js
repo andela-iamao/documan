@@ -1,27 +1,21 @@
-export function renderFromProp(prop, field) {
+export default (prop, field) => {
   if (prop) {
     return prop[field] || '';
   }
   return '';
-}
+};
 
-export function getCurrentPath() {
-  const pathname = window.location.pathname;
-  if (pathname.match(/folder/)) {
-    return '/app/folder';
-  } else if(pathname.match(/document/)) {
-    return '/app/document'
+function paginate (handlePageChange, paginationMeta) {
+  const paginated = [];
+  for (let count = 0; count < paginationMeta.page_count; count += 1) {
+    paginated.push(
+      <span className={
+        paginationMeta.page === (count + 1) ? 'active' : 'link'
+      } onClick={
+        paginationMeta.page === (count + 1) ? null : handlePageChange
+      }>
+        Page { count + 1 }
+      </span>
+    );
   }
-  return pathname;
-}
-
-export function setLocalstorage(key, value) {
-  let storedValue;
-  return new Promise((resolve) => {
-    window.localStorage.setItem(key, value);
-    storedValue = window.localStorage.getItem(key);
-    if (storedValue) {
-      resolve(storedValue);
-    }
-  });
 }

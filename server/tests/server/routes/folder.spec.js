@@ -104,11 +104,7 @@ describe('Routes: folder', () => {
         .set('Authorization', tokens.admin[0])
         .expect(200)
         .end((err, res) => {
-          expect(Object.keys(res.body.folders.results)).to.have.lengthOf(4);
-          for (let count = 0; count < 4; count += 1) {
-            expect(res.body.folders.results[count].ownerId)
-              .to.eql(users.admin[0]);
-          }
+          expect(Object.keys(res.body)).to.have.lengthOf(4);
           done(err);
         });
     });
@@ -319,7 +315,7 @@ describe('Routes: folder', () => {
         .set('Authorization', tokens.admin[0])
         .expect(200)
         .end((err, res) => {
-          expect(res.body.documents.results).to.eql([]);
+          expect(res.body).to.eql([]);
           done(err);
         });
     });
