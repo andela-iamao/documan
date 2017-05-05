@@ -9,6 +9,8 @@ import EditFolder from './EditFolder.component';
 import FolderDialog from './FolderDialog.component';
 import DeleteDialog from './DeleteDialog.component';
 import DocCard from './DocCard.component';
+import Search from './Search.component';
+import Paginate from './reusable/Paginate.component';
 import {
   getDoc,
   createDoc,
@@ -19,6 +21,7 @@ import {
 } from '../actions/document.action';
 import {
   getFolder,
+  removeFromFolder,
   getFolderDocs,
   getUserFolders,
   editFolder,
@@ -28,9 +31,8 @@ import {
   clearConfirmDeleteFolder,
   deleteFolder
 } from '../actions/folder.action';
-import {
-  getUser
-} from '../actions/users.action';
+import { getActiveUser } from '../actions/users.action';
+import { changeSearchPage, clearSearch } from '../actions/search.action';
 
 @connect((store) => {
   return {
@@ -39,7 +41,8 @@ import {
     error: store.error.error,
     auth: store.auth,
     docs: store.documents,
-    folders: store.folder
+    folders: store.folder,
+    search: store.search
   };
 })
 /**
@@ -59,11 +62,13 @@ class Folder extends React.Component {
     this.handleUpdateFolder = this.handleUpdateFolder.bind(this);
     this.handleDeleteFolder = this.handleDeleteFolder.bind(this);
     this.handleEditDoc = this.handleEditDoc.bind(this);
-    this.handleGetUsersFolders = this.handleGetUsersFolders.bind(this);
     this.handleDeleteDoc = this.handleDeleteDoc.bind(this);
     this.handleConfirmDeleteDoc = this.handleConfirmDeleteDoc.bind(this);
     this.clearDeleteConfirmation = this.clearDeleteConfirmation.bind(this);
     this.handleConfirmDeleteFolder = this.handleConfirmDeleteFolder.bind(this);
+    this.removeFromFolder = this.removeFromFolder.bind(this);
+    this.clearSearch = this.clearSearch.bind(this);
+    this.state = { page: 1 };
   }
   /**
    * componentDidMount
@@ -73,20 +78,14 @@ class Folder extends React.Component {
     if (!window.localStorage.getItem('token')) {
       browserHistory.push('/app/login');
     } else {
-      this.props.dispatch(getUser());
+      this.props.dispatch(getActiveUser());
       this.props.dispatch(getFolder(this.props.params.id));
       this.props.dispatch(getFolderDocs(this.props.params.id));
     }
   }
 
-  /**
-   * handleGetUsersFolders
-   * @return {void}
-   */
-  handleGetUsersFolders() {
-    setTimeout(() => {
-      this.props.dispatch(getUserFolders());
-    }, 2000);
+  clearSearch() {
+    this.props.dispatch(clearSearch());
   }
 
   /**
@@ -98,12 +97,11 @@ class Folder extends React.Component {
   }
 
   /**
-   * handleCreateDoc
-   * @param {object} values - values to create document with
+   * removeFromFolder
    * @return {void}
    */
-  handleCreateDoc(values) {
-    this.props.dispatch(createDoc(values));
+  removeFromFolder(docId) {
+    this.props.dispatch(removeFromFolder(docId, this.props.params.id));
   }
 
   /**
@@ -158,18 +156,18 @@ class Folder extends React.Component {
    */
   getFolderDocs(documents) {
     const self = this;
-    return documents.map((doc, index) => (
+    return documents.map(doc => (
         <div
           className="col s4 m3 l2"
-          key={`folder-root-div-${doc.title} ${index}`}>
+          key={`folder-root-div-${doc.title} ${doc.id}`}>
           <DocCard
-            title={ doc.title }
-            key={ doc.title + index }
-            id={ doc.id }
-            accessId={ doc.accessId }
-            content={ doc.content }
-            onDelete={ self.handleConfirmDeleteDoc }
-            onEdit={ self.handleEditDoc }
+            title={doc.title}
+            id={doc.id}
+            accessId={doc.accessId}
+            content={doc.content}
+            onDelete={self.handleConfirmDeleteDoc}
+            onEdit={self.handleEditDoc}
+            remove={self.removeFromFolder}
           />
       </div>));
   }
@@ -201,9 +199,7 @@ class Folder extends React.Component {
   handleEditFolder() {
     const values = {
       id: this.props.folders.folder.id,
-      title: this.props.folders.folder.title,
-      content: this.props.folders.folder.content,
-      accessId: this.props.folders.folder.accessId
+      title: this.props.folders.folder.title
     };
     this.props.dispatch(editFolder(values));
   }
@@ -214,89 +210,92 @@ class Folder extends React.Component {
    * @return {void}
    */
   handleUpdateFolder(values) {
-    this.props.dispatch(updateFolder(values, {
-      action: getFolder,
-      payload: this.props.params.id
-    }));
+    this.props.dispatch(updateFolder(values, 'single'));
+  }
+
+  /**
+   * handlePageChange - set the state of the component to the
+   * current value of the selected option and dispatch a page change
+   * action
+   * @param {object} event - properties of the select fields
+   * @param {number} index - index number of selected option
+   * @param {string} value - value of the selected option
+   * @return {void}
+   */
+  handlePageChange(event, index, value) {
+    this.props.dispatch(changeSearchPage(value));
+    const offset = 18 * (value - 1);
   }
 
   /**
    * @return {object} react element to render
    */
   render() {
+    const folders = this.props.folders;
     return (
       <div>
-        <Navbar
-         type="dark"
-         title="iAmDocuman"
-         isAuthenticated={ {
-           username: 'asheAmao',
-           userPage: '/app/dashboard'
-         } }
-         showSignout={ false }
-        />
-        <div className="close-drawer">
-        </div>
-        <CustomDrawer
-          title="iAmDocuman"
-          username={ this.props.user.users.details.username }
-          userRole={ this.props.user.users.details.roleId }
-          fullname={
-            `${this.props.user.users.details.firstname}
-             ${this.props.user.users.details.lastname}`}
-        />
-        <div className="content-display">
-          <div className="row">
-            {
-              (this.props.folders.folder
-                && this.props.folders.documents) ?
-              <div>
-                <EditFolder
-                  openDialog={ this.handleEditFolder }
-                  editButton={ this.props.folders.folder }
-                  onEdit={ this.handleUpdateFolder }
-                  edit={ this.props.folders.editFolder }
-                  open={ (this.props.folders.editFolder) ? true : false }
-                  onClose={ this.handleClearEditFolder }
-                />
-                <DeleteDialog
-                  openDialog={ this.handleConfirmDeleteFolder }
-                  deleteButton={ this.props.folders.folder }
-                  onDelete={ this.handleDeleteFolder }
-                  onDeleteConfirmation={ this.props.folders.confirmDelete }
-                  clearDeleteConfirmation={ this.clearDeleteConfirmation }
-                />
-                <DeleteDialog
-                  onDelete={ this.handleDeleteDoc }
-                  onDeleteConfirmation={ this.props.docs.confirmDelete }
-                  clearDeleteConfirmation={ this.clearDeleteConfirmation }
-                />
-                <hr />
-                <div>
-                  <div id="document-title">
-                    <Link to="/app/dashboard">
-                      <b>Dashboard </b>
-                    </Link>
-                    >
-                    <b>
-                      <i> { this.props.folders.folder.title }</i>
-                    </b>
-                  </div>
+        {(this.props.search.results.users
+          || this.props.search.results.docs) ?
+            <Search
+              data={this.props.search.results}
+              searchPage={this.props.search.searchPage}
+              clearSearch={this.clearSearch}
+            />
+          :
+          <div className="content-display">
+            <div className="row">
+              {(folders.folder && folders.documents) ?
                   <div>
-                  {
-                    this.getFolderDocs(this.props.folders.documents)
-                  }
-                </div>
-                </div>
-              </div>
-              :
-              <div className="circular-loading">
-                <CircularProgress />
-                <h6>Loading folder</h6>
-              </div>
-            }
+                    <EditFolder
+                      openDialog={this.handleEditFolder}
+                      editButton={folders.folder}
+                      onEdit={this.handleUpdateFolder}
+                      edit={folders.editFolder}
+                      open={!!folders.editFolder}
+                      onClose={this.handleClearEditFolder}
+                    />
+                    <DeleteDialog
+                      openDialog={this.handleConfirmDeleteFolder}
+                      deleteButton={folders.folder}
+                      onDelete={this.handleDeleteFolder}
+                      onDeleteConfirmation={folders.confirmDelete}
+                      clearDeleteConfirmation={this.clearDeleteConfirmation}
+                    />
+                    <DeleteDialog
+                      onDelete={this.handleDeleteDoc}
+                      onDeleteConfirmation={this.props.docs.confirmDelete}
+                      clearDeleteConfirmation={this.clearDeleteConfirmation}
+                    />
+                    <hr />
+                    <div>
+                      <div id="document-title">
+                        <Link to="/app/dashboard">
+                          <b>Dashboard </b>
+                        </Link>
+                        >
+                        <b>
+                          <i>{folders.folder.title}</i>
+                        </b>
+                      </div>
+                      <div>
+                        {this.getFolderDocs(folders.documents.results)}
+                      </div>
+                    </div>
+                    <Paginate
+                      pageCount={folders.documents.paginationMeta.page_count}
+                      page={this.state.page}
+                      handlePageChange={this.handlePageChange}
+                    />
+                  </div>
+                :
+                  <div className="circular-loading">
+                    <CircularProgress />
+                    <h6>Loading folder</h6>
+                  </div>
+                }
+            </div>
           </div>
-        </div>
+        }
       </div>
     );
   }

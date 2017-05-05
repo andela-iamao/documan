@@ -2,11 +2,11 @@ const initialState = {
   fetching: false,
   fetched: false,
   error: null,
-  data: null,
+  documents: null,
+  allDocuments: null,
   confirmDelete: null,
   doc: null,
-  editDoc: false,
-  documents: null
+  editDoc: false
 };
 
 export default (state = initialState, action) => {
@@ -14,7 +14,7 @@ export default (state = initialState, action) => {
     case 'FETCHED_CURRENT_USER_DOCS': {
       return {
         ...state,
-        data: action.payload,
+        documents: action.payload,
         doc: null
       };
     }
@@ -31,7 +31,12 @@ export default (state = initialState, action) => {
       };
     }
     case 'UPDATED_DOCUMENT': {
-      return { ...state };
+      return Object.assign({}, state, {
+        documents: {
+          ...state.documents,
+          results: [...state.documents.results].map((document) =>
+          (document.id === action.payload.id) ?
+            { title: action.payload.title } : document)}});
     }
     case 'GOT_DOCUMENT': {
       return {
@@ -46,15 +51,19 @@ export default (state = initialState, action) => {
       };
     }
     case 'DELETED_DOCUMENT': {
-      const cloneState = { ...state };
-      cloneState.data = [...state.data]
-        .filter(data => (data.id !== action.payload));
-      return cloneState;
+      return Object.assign({}, state, {
+        documents: {
+          ...state.documents,
+          results: [...state.documents.results].filter((document) =>
+            (document.id !== action.payload)) } });
     }
     case 'CREATED_DOC': {
-      const cloneState = { ...state };
-      cloneState.data.push(action.payload);
-      return cloneState;
+      return Object.assign({}, state, {
+        documents: {
+          ...state.documents,
+          results: [...state.documents.results, action.payload]
+        }
+      });
     }
     case 'CLEAR_CONFIRM_DELETE_DOCUMENT': {
       return {
@@ -65,7 +74,7 @@ export default (state = initialState, action) => {
     case 'GOT_ALL_DOCUMENTS': {
       return {
         ...state,
-        documents: action.payload
+        allDocuments: action.payload.documents
       };
     }
     default: {

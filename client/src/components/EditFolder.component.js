@@ -1,9 +1,8 @@
 import React from 'react';
-import _ from 'underscore';
 import Dialog from 'material-ui/Dialog';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Edit from 'material-ui/svg-icons/image/edit';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const customContentStyle = {
   width: '30%',
@@ -26,6 +25,7 @@ class EditFolder extends React.Component {
     this.handleOpen = this.handleOpen.bind(this);
     this.handleClose = this.handleClose.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.state = { open: false, folderName: '' };
   }
 
@@ -39,8 +39,6 @@ class EditFolder extends React.Component {
     if (nextProps.open !== this.props.open) {
       if (nextProps.open) {
         this.handleOpen(nextProps.edit.title);
-      } else {
-        this.handleClose();
       }
     }
   }
@@ -83,8 +81,8 @@ class EditFolder extends React.Component {
    * @param {object} target - properties of target element
    * @return {void}
    */
-  handleChange(target) {
-    const value = target.value;
+  handleChange(event) {
+    const value = event.target.value;
     this.setState({ folderName: value });
   }
 
@@ -94,60 +92,44 @@ class EditFolder extends React.Component {
    */
   render() {
     const actions = [
-      <FlatButton
-        label="Cancel"
-        primary={ true }
-        onTouchTap={ this.handleClose }
-      />,
-      <FlatButton
-        label="Update Folder"
-        primary={ true }
-        keyboardFocused={ true }
-        onTouchTap={ this.handleSubmit }
+      <RaisedButton className="dialog-actions" label="Cancel" secondary onTouchTap={this.handleClose} />,
+      <RaisedButton
+        className="dialog-actions"
+        label="Rename Folder"
+        primary
+        keyboardFocused
+        onTouchTap={this.handleSubmit}
       />,
     ];
 
-    const changeHandler = _.compose(
-      _.debounce(this.handleChange.bind(this), 100),
-      _.property('target')
-    );
+    const props = this.props;
 
     return (
       <div className="col s3 m3 l1">
-        {
-          (this.props.editButton) ?
-            <FloatingActionButton
-              mini={true}
-              onTouchTap={
-                this.props.openDialog
-              }
-            >
+        {(this.props.editButton) ?
+            <FloatingActionButton mini onTouchTap={
+              () => props.openDialog(props.edit.title)}>
               <Edit />
             </FloatingActionButton>
             :
             ''
         }
         <Dialog
-          title="Update Folder"
-          contentStyle={ customContentStyle }
-          actions={
-            actions
-          }
+          title="Rename Folder"
+          contentStyle={customContentStyle}
+          actions={actions}
           modal={false}
           open={this.state.open}
-          onRequestClose={ this.handleClose }
+          onRequestClose={this.handleClose}
         >
-          <img src="/images/folder.png" style={ { width: '35%' } } />
-          <h6>{ this.props.edit.title }</h6>
-          <form
-            onSubmit={
-              event => this.handleSubmit(event)
-            }>
+          <img src="/images/folder.png" style={{ width: '35%' }} />
+          <h6>{this.props.edit.title}</h6>
+          <form onSubmit={event => this.handleSubmit(event)}>
             <input
               type="text"
               name="title"
-              placeholder={ this.state.folderName }
-              onChange={ changeHandler }
+              placeholder={this.state.folderName}
+              onChange={this.handleChange}
             />
             <label>Enter folder name</label>
           </form>

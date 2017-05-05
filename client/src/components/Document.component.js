@@ -17,22 +17,13 @@ import {
   confirmDeleteDoc,
   clearConfirmDeleteDoc
 } from '../actions/document.action';
-import {
-  addDoc,
-  getUserFolders,
-} from '../actions/folder.action';
-import {
-  getUser
-} from '../actions/users.action';
+import { addDoc, getUserFolders } from '../actions/folder.action';
+import { getActiveUser } from '../actions/users.action';
 
 @connect(store =>
   ({
-    user: store,
-    form: store.form,
-    error: store.error.error,
-    auth: store.auth,
     docs: store.documents,
-    folder: store.folder
+    folders: store.folder
   }))
 /**
  * React component for
@@ -61,8 +52,9 @@ class Document extends React.Component {
     if (!window.localStorage.getItem('token')) {
       browserHistory.push('/app/login');
     } else {
-      this.props.dispatch(getUser());
+      this.props.dispatch(getActiveUser());
       this.props.dispatch(getDoc(this.props.params.id));
+      this.props.dispatch(getUserFolders(100, 0));
     }
   }
 
@@ -71,9 +63,7 @@ class Document extends React.Component {
    * @return {void}
    */
   handleGetUsersFolders() {
-    setTimeout(() => {
-      this.props.dispatch(getUserFolders());
-    }, 2000);
+    this.props.dispatch(getUserFolders());
   }
 
   /**
@@ -136,8 +126,7 @@ class Document extends React.Component {
    * @return {void}
    */
   handleAddDoc(folderId) {
-    this.props.dispatch(addDoc(folderId,
-      { id: this.props.docs.doc.id }));
+    this.props.dispatch(addDoc(folderId, { id: this.props.docs.doc.id }));
     browserHistory.push(`/app/folder/${folderId}`);
   }
 
@@ -145,72 +134,44 @@ class Document extends React.Component {
    * @return {object} react element to render
    */
   render() {
+    const documents = this.props.docs;
     return (
-      <div>
-        <Navbar
-         type="dark"
-         title="iAmDocuman"
-         isAuthenticated={ {
-           username: 'asheAmao',
-           userPage: '/app/dashboard'
-         } }
-         showSignout={ false }
-        />
-        <div className="close-drawer">
-        </div>
-        <CustomDrawer
-          title="iAmDocuman"
-          username={ this.props.user.users.details.username }
-          id={ this.props.user.users.details.id }
-          userRole={ this.props.user.users.details.roleId }
-          fullname={
-            `${this.props.user.users.details.firstname}
-             ${this.props.user.users.details.lastname}`}
-        />
+      <div className="grey-bg document">
           <div className="content-display">
             <div className="row">
-              {
-                (this.props.docs.doc) ?
-                <div className="col s12 m12 l12">
+              {(documents.doc && this.props.folders.folders) ?
+                <div className="view-documents">
                   <FolderDialog
-                    folders={ this.props.folder.data }
-                    onAddDoc={ this.handleAddDoc }
-                    onGetFolders={ this.handleGetUsersFolders }
+                    folders={this.props.folders.folders.results}
+                    onAddDoc={this.handleAddDoc}
                   />
                   <div className="col s3 m3 l1">
-                      <FloatingActionButton
-                        mini={true}
-                        onTouchTap={
-                          () => this.handleEditDoc()
-                        }
-                      >
-                        <Edit />
-                      </FloatingActionButton>
+                    <FloatingActionButton
+                      mini
+                      onTouchTap={() => this.handleEditDoc()}
+                    >
+                      <Edit />
+                    </FloatingActionButton>
                   </div>
                   <DeleteDialog
-                    deleteButton={ this.props.docs.doc }
-                    onDelete={ this.handleDeleteDoc }
-                    openDialog={ this.handleConfirmDeleteDoc }
-                    onDeleteConfirmation={ this.props.docs.confirmDelete }
-                    clearDeleteConfirmation={ this.clearDeleteConfirmation }
+                    deleteButton={documents.doc}
+                    onDelete={this.handleDeleteDoc}
+                    openDialog={this.handleConfirmDeleteDoc}
+                    onDeleteConfirmation={documents.confirmDelete}
+                    clearDeleteConfirmation={this.clearDeleteConfirmation}
                   />
-
                   <hr />
-                  <div>
-                    <div id="document-title">
-                      <h5>{ this.props.docs.doc.title}</h5>
+                  <div className="document-page z-depth-2">
+                    <div className="document-title">
+                      <h5>{documents.doc.title}</h5>
                     </div>
-                    <div id="document-content">
-                      <FroalaEditorView
-                        model={ this.props.docs.doc.content } />
+                    <div className="document-content">
+                      <FroalaEditorView model={documents.doc.content} />
                     </div>
                   </div>
                 </div>
                 :
-                <div className="circular-loading">
-                  <CircularProgress />
-                  <h6>Loading document</h6>
-                </div>
+                ''
               }
             </div>
           </div>

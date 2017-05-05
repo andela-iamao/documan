@@ -7,7 +7,7 @@ import FileFolder from 'material-ui/svg-icons/file/folder';
 import { List, ListItem } from 'material-ui/List';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
-import Dashboard from 'material-ui/svg-icons/action/dashboard';
+import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import { blue500 } from 'material-ui/styles/colors';
 import PageCenter from './reusable/PageCenter.component';
 
@@ -35,46 +35,43 @@ class CustomDrawer extends React.Component {
   }
 
   /**
-   * @return {Object}return react element to render
+   * @return {Object} return react element to render
    */
   render() {
     return (
       <Drawer
-        open={ this.state.open }
+        open={this.state.open}
         containerClassName="dark-drawer"
-        containerStyle={ {
-          backgroundColor: this.props.bgColor
-        } }
+        containerStyle={{ backgroundColor: this.props.bgColor }}
       >
         <PageCenter>
-          <h5 className="white-text">
-            { this.props.title }
+          <h5 className="white-text" onClick={() => browserHistory.push('/app/')}>
+            {this.props.title}
           </h5>
           <br /><br />
           <div id="user-basic-info">
-            <Avatar size={ 40 }>
-              { this.props.username[0].toUpperCase()}
+            <Avatar
+              size={60}
+              onTouchTap={() => browserHistory.push('/app/dashboard')}>
+              {this.props.username[0].toUpperCase()}
             </Avatar>
-            <h5>{ this.props.fullname }</h5>
-            <h6>{ this.props.username }</h6>
-            <div id="user-options-list">
+            <h5>{this.props.fullname}</h5>
+            <h6>{this.props.username}</h6>
+            <div id="user-options-list" className="white-text">
               <List>
-                <div onClick={ () => {
-                  this.props.showAll();
-                  browserHistory.push('/app/dashboard');
-                } }>
+                <div
+                  className="white-text"
+                  onClick={() => {
+                    this.props.showAll();
+                    browserHistory.push('/app/dashboard');
+                }}>
                   <ListItem
-                    leftAvatar={
-                      <Avatar icon={
-                        <Dashboard />
-                      }
-                      />
-                    }
+                    leftAvatar={ <Avatar icon={<DashboardIcon />}/>}
                     primaryText="Dashboard"
                   />
                 </div>
-                <Divider inset={ true } />
-                <div onClick={ this.props.showOnlyFolder }>
+                <Divider inset />
+                <div onClick={this.props.showOnlyFolder}>
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
@@ -85,46 +82,58 @@ class CustomDrawer extends React.Component {
                     primaryText="Folders"
                   />
                 </div>
-                <Divider inset={ true } />
-                <div onClick={ this.props.showOnlyDoc }>
+                <Divider inset />
+                <div onClick={this.props.showOnlyDoc}>
                   <ListItem
                     leftAvatar={
-                      <Avatar icon={
-                        <ActionAssignment />
-                        }
-                        backgroundColor={ blue500 }
+                      <Avatar
+                        icon={<ActionAssignment />}
+                        backgroundColor={blue500}
                       />
                     }
                     primaryText="Documents"
                   />
                 </div>
-                <div onClick={
-                    () => browserHistory.push(`/app/user/${this.props.id}/edit`)
-                  }>
-                  <Divider inset={ true } />
+                <div onClick={() => browserHistory.push('/app/public')}>
+                  <Divider inset />
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
                         <span className="fa fa-user"></span>
                         }
-                        backgroundColor={ blue500 }
+                        backgroundColor={blue500}
+                      />
+                    }
+                    primaryText="Public Documents"
+                  />
+                </div>
+                <div onClick={() =>
+                    browserHistory.push(`/app/user/${this.props.id}/edit`)
+                  }>
+                  <Divider inset />
+                  <ListItem
+                    leftAvatar={
+                      <Avatar icon={
+                        <span className="fa fa-user"></span>
+                        }
+                        backgroundColor={blue500}
                       />
                     }
                     primaryText="Edit Info"
                   />
                 </div>
                 {
-                  (this.props.userRole === 1) ?
-                    <div onClick={
-                        () => browserHistory.push('/app/manage/users')
+                  (this.props.userRole === 'admin') ?
+                    <div onClick={() =>
+                        browserHistory.push('/app/manage/users')
                       }>
-                      <Divider inset={ true } />
+                      <Divider inset />
                       <ListItem
                         leftAvatar={
                           <Avatar icon={
                             <span className="fa fa-users"></span>
                             }
-                            backgroundColor={ blue500 }
+                            backgroundColor={blue500}
                           />
                         }
                         primaryText="Manage Users"
@@ -134,14 +143,6 @@ class CustomDrawer extends React.Component {
                     ''
                 }
               </List>
-            </div>
-            <div className="fix-bottom">
-              <FloatingActionButton
-                secondary={ true }
-                onTouchTap={ () => browserHistory.push('/app/logout')}
-              >
-                <span className="fa fa-power-off"></span>
-              </FloatingActionButton>
             </div>
           </div>
         </PageCenter>

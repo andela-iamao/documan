@@ -1,61 +1,34 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Router, browserHistory } from 'react-router';
+import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import Template from './Template.component';
 import Index from './Index.component';
 import Login from './Login.component';
 import Signup from './Signup.component';
 import Logout from './reusable/Logout.component';
 import User from './User.component';
-import Document from './Document.component';
+import ViewDocument from './Document.component';
 import Folder from './Folder.component';
 import ManageUsers from './ManageUsers.component';
 import EditDocument from './EditDocument.component';
 import EditProfile from './EditProfile.component';
+import PublicDocuments from './public-doc/PublicDocuments.component';
 
-const routes = [
-  {
-    path: '/app/',
-    component: Index
-  },
-  {
-    path: '/app/login',
-    component: Login
-  },
-  {
-    path: '/app/signup',
-    component: Signup
-  },
-  {
-    path: '/app/logout',
-    component: Logout
-  },
-  {
-    path: '/app/dashboard',
-    component: User
-  },
-  {
-    path: '/app/document/:id',
-    component: Document
-  },
-  {
-    path: '/app/folder/:id',
-    component: Folder
-  },
-  {
-    path: '/app/edit/:id',
-    component: EditDocument
-  },
-  {
-    path: '/app/manage/users',
-    component: ManageUsers
-  },
-  {
-    path: '/app/user/:id/edit',
-    component: EditProfile
-  }
-];
+const routes = (
+  <Route exact path="/app/" component={Template}>
+    <IndexRoute component={Index} />
+    <Route path='/app/login' component={Login} />
+    <Route path="/app/signup" component={Signup} />
+    <Route path='/app/logout' compoent={Logout} />
+    <Route path="/app/dashboard" component={User} />
+    <Route path="/app/document/:id" component={ViewDocument} />
+    <Route path="/app/folder/:id" component={Folder} />
+    <Route path="/app/edit/:id" component={EditDocument} />
+    <Route path="/app/public" component={PublicDocuments} />
+  </Route>
+);
 
 @connect(store => ({
   user: store,
@@ -73,7 +46,7 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider>
-        <Router history={ this.props.history } routes={ routes } />
+        <Router history={ this.props.history } routes={routes} />
       </MuiThemeProvider>
     );
   }

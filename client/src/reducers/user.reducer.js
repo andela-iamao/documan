@@ -3,14 +3,15 @@ const defaultState = {
   fetched: false,
   creating: false,
   created: false,
-  details: {},
+  details: null,
   error: null,
   users: null
 };
 
 export default (state = defaultState, action) => {
   switch (action.type) {
-    case 'GOT_USER': {
+    case 'GOT_USER':
+    case 'ACTIVE_USER': {
       return {
         ...state,
         details: action.payload

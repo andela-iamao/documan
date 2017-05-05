@@ -1,9 +1,9 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
-import FlatButton from 'material-ui/FlatButton';
+import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import returnFromProp from '../util/helper';
+import { renderFromProp } from '../util/helper';
 
 
 const customContentStyle = {
@@ -30,12 +30,19 @@ class DeleteDialog extends React.Component {
     this.state = { open: false };
   }
 
+  /**
+   * handleOpen - changes the state open of the Dialog from
+   * false to true
+   * @return {void}
+   */
   handleOpen() {
     this.setState({ open: true });
   }
 
   /**
-   * componentWillReceiveProps
+   * componentWillReceiveProps - before the next set of props is passed
+   * to the component, it checks the delete confirmation action is calculated
+   * and the current state is not open. It then opens the dialog
    * @param {object} nextProps
    * @return {void}
    */
@@ -47,11 +54,22 @@ class DeleteDialog extends React.Component {
     }
   }
 
+  /**
+   * handleClose - changes the state open of the dialog from true to
+   * false. Then it calls the clearDeleteConfirmation props
+   * @return {void}
+   */
   handleClose() {
     this.setState({ open: false });
     this.props.clearDeleteConfirmation();
   }
 
+  /**
+   * handleSubmit - happens when the submit action is clicked
+   * it checks if the deleteButton props is passed in or not,
+   * then sends it with the neccessary argument
+   * @return {void}
+   */
   handleSubmit() {
     if (this.props.deleteButton) {
       this.props
@@ -69,16 +87,18 @@ class DeleteDialog extends React.Component {
    */
   render() {
     const actions = [
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="NO"
-        primary={ true }
-        onTouchTap={ this.handleClose }
+        primary
+        onTouchTap={this.handleClose}
       />,
-      <FlatButton
+      <RaisedButton
+        className="dialog-actions"
         label="YES"
-        primary={ true }
-        keyboardFocused={ true }
-        onTouchTap={ this.handleSubmit }
+        secondary
+        keyboardFocused
+        onTouchTap={this.handleSubmit}
       />,
     ];
 
@@ -97,7 +117,7 @@ class DeleteDialog extends React.Component {
         }
         <Dialog
           title={ `Delete ${
-            returnFromProp(this.props.onDeleteConfirmation, 'type')
+            renderFromProp(this.props.onDeleteConfirmation, 'type')
           }` }
           contentStyle={ customContentStyle }
           actions={
@@ -109,18 +129,18 @@ class DeleteDialog extends React.Component {
         >
           <img
             src={ (
-              returnFromProp(
+              renderFromProp(
                 this.props.onDeleteConfirmation,
                 'type') === 'folder') ?
               '/images/folder.png' : '/images/file.png'
           } style={ { width: '35%' } } />
           <p>
             <b>
-              { returnFromProp(this.props.onDeleteConfirmation, 'title') }
+              { renderFromProp(this.props.onDeleteConfirmation, 'title') }
             </b>
           </p>
           <h5>Are you sure you want to delete this {
-            returnFromProp(this.props.onDeleteConfirmation, 'type')
+            renderFromProp(this.props.onDeleteConfirmation, 'type')
           }?</h5>
         </Dialog>
       </div>

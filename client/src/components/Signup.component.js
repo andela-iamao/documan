@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import signupUser from '../actions/signup.action';
 import { signup } from '../util/validate-form';
-import Navbar from './reusable/Navbar.component';
 import PageCenter from './reusable/PageCenter.component';
 import ReduxFormSignup from './reusable/ReduxFormSignup.component';
 import { clearError, validationError } from '../actions/error.action';
@@ -52,7 +51,7 @@ class Signup extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.auth.isAuthenticated === true
         && !this.props.auth.isAuthenticated) {
-      browserHistory.push('/app/');
+      browserHistory.push('/app/dashboard');
     }
   }
 
@@ -81,25 +80,18 @@ class Signup extends React.Component {
 
   /**
    * render - description
-   *
-   * @return {object}  description
+   * @return {object} returns react element to be rendered
    */
   render() {
     return (
       <div id="login-wrapper">
-        <Navbar
-          type="dark"
-          title="iAmDocuman"
-          showSignup={ false }
-          loginLink="/app/login"
-        />
         <PageCenter>
           <div>
             <ReduxFormSignup
               bg-color="#FFFFFF"
-              onSubmit={ this.handleSubmit }
-              failed={ this.props.error }
-              onCloseAlert={ this.clearError }
+              onSubmit={this.handleSubmit}
+              failed={this.props.error}
+              onCloseAlert={this.clearError}
             />
           </div>
         </PageCenter>

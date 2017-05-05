@@ -38,6 +38,9 @@ body {
 .white-text {
   color: #FFFFFF;
 }
+.white-text > div > div > div > span > div > div > div {
+  color: #FFFFFF;
+}
 
 #user-basic-info {
   @extend .white-text;
@@ -72,4 +75,10 @@ body {
 }
 #edit-form {
   padding: 40px;
+}
+.dialog-actions {
+  margin: 15px;
+}
+.grey-bg {
+  background-color: #EFEFEF;
 }

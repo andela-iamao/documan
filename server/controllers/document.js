@@ -4,112 +4,130 @@ import { paginate } from '../helpers/helper';
 
 const Document = db.Document;
 
-const createDocument = (req, res) => {
-  const id = req.decoded.id;
-  const body = req.body;
-  body.ownerId = id;
-  Document.create(body)
-    .then((result) => {
-      res.status(200).json(result);
-    }).catch((errors) => {
-      const error = errorRender(errors);
-      res.status(error.status)
-        .json({
-          error_code: error.error_code,
-          message: error.message
-        });
-    });
-};
+ /**
+  * @class DocumentControllers
+  */
+class DocumentControllers {
 
-const findAllDocument = (req, res) => {
-  let query, limit, offset;
-  if (req.admin) {
-    query = { where: {} };
-  } else {
-    query = { where: { accessId: 1 } };
+  /**
+   * createDocument - create a document
+   * @param {Object} req - all properties of the request made to the server
+   * @param {Object} res - server response object
+   * @return {Object} - status of the processed request and a json object
+   * to pass further information of the response
+   */
+  static createDocument(req, res) {
+    const body = req.body;
+    body.ownerId = req.decoded.id;
+    Document.create(body)
+      .then(result => res.status(200).json(result))
+      .catch((errors) => {
+        const error = errorRender(errors);
+        res.status(error.status)
+          .json({ error_code: error.error_code, message: error.message });
+      });
   }
-  if (req.query) {
-    limit = req.query.limit || 100;
-    offset = req.query.offset || 0;
-  }
-  Document.findAll(query)
-    .then(documents => res.status(200).json(
-      paginate(limit, offset, documents, 'documents')));
-};
 
-const findOneDocument = (req, res) => {
-  const id = req.decoded.id;
-  Document.findById(req.params.id)
-    .then((document) => {
-      if (id === document.ownerId
-          || req.admin
-          || document.accessId === 1) {
-        res.status(200).json(document);
-      } else {
-        res.status(401).json({
-          error_code: 'Unauthorized',
+  /**
+   * findAllDocument - find and retireve all documents on the platform
+   * @param {Object} req - all properties of the request made to the server
+   * @param {Object} res - server response object
+   * @return {Object} - status of the processed request and a json object
+   * to pass further information of the response
+   */
+  static findAllDocument(req, res) {
+    let query;
+    const limit = req.query.limit || 10;
+    const offset = req.query.offset || 0;
+    if (req.isAdmin) {
+      query = { where: {} };
+    } else {
+      query = { where: { accessId: 1 } };
+    }
+    Document.findAll(query)
+      .then(documents => res.status(200).json(
+        paginate(limit, offset, documents, 'documents')));
+  }
+
+  /**
+   * findOneDocument - get and retur a single document belonging to the id
+   * in the param
+   * @param {Object} req - all properties of the request made to the server
+   * @param {Object} res - server response object
+   * @return {Object} - status of the processed request and a json object
+   * to pass further information of the response
+   */
+  static findOneDocument(req, res) {
+    Document.findById(req.params.id)
+      .then((document) => {
+        if (!document) {
+          return res.status(404).json({ message: 'document not found' });
+        } else if (req.decoded.id === document.ownerId
+            || req.isAdmin
+            || document.accessId === 1) {
+          return res.status(200).json(document);
+        }
+        return res.status(401).json({
           message: 'You don\'t have permission to view this document'
         });
-      }
-    }).catch((errors) => {
-      const error = errorRender(errors);
-      res.status(error.status)
-        .json({
-          error_code: error.error_code,
-          message: error.message
-        });
-    });
-};
+      }).catch((errors) => {
+        const error = errorRender(errors);
+        return res.status(error.status)
+          .json({ error_code: error.error_code, message: error.message });
+      });
+  }
 
-const updateDocument = (req, res) => {
-  const id = req.decoded.id;
-  Document.findById(req.params.id)
-    .then((document) => {
-      if (!document) {
-        return res.status(404).json({
-          message: 'document not found'
-        });
-      }
-      if (document.ownerId === id) {
-        document.update(req.body)
-          .then(() => {
-            res.sendStatus(204);
-          }).catch(() => {
-            res.sendStatus(400);
+  /**
+   * updateDocument - update a document
+   * @param {Object} req - all properties of the request made to the server
+   * @param {Object} res - server response object
+   * @return {Object} - status of the processed request and a json object
+   * to pass further information of the response
+   */
+  static updateDocument(req, res) {
+    const message = 'An error occured';
+    Document.findById(req.params.id)
+      .then((document) => {
+        if (!document) {
+          return res.status(404).json({ message: 'document not found' });
+        }
+        if (document.ownerId === req.decoded.id) {
+          document.update(req.body)
+            .then(() => res.sendStatus(204))
+            .catch(() => res.status(400).json({ message }));
+        } else {
+          res.status(401).json({
+            message: 'You don\'t have permission to update this document'
           });
-      } else {
-        res.status(401).json({
-          error_code: 'Unauthorized',
-          message: 'You don\'t have permission to update this document'
-        });
-      }
-    });
-};
+        }
+      }).catch(() => res.status(400).json({ message }));
+  }
 
-const deleteDocument = (req, res) => {
-  const id = req.body.ownerId || req.decoded.id;
-  Document.findById(req.params.id)
-    .then((document) => {
-      if (document.ownerId === id || req.admin) {
-        document.destroy()
-          .then(() => {
-            res.sendStatus(204);
-          }).catch(() => {
-            res.sendStatus(400);
+  /**
+   * deleteDocument - delete a document
+   * @param {Object} req - all properties of the request made to the server
+   * @param {Object} res - server response object
+   * @return {Object} - status of the processed request and a json object
+   * to pass further information of the response
+   */
+  static deleteDocument(req, res) {
+    const message = 'An error occured';
+    Document.findById(req.params.id)
+      .then((document) => {
+        if (!document) {
+          return res.status(404).json({ message: 'document not found' });
+        }
+        if (document.ownerId === req.decoded.id || req.isAdmin) {
+          document.destroy()
+            .then(() => res.sendStatus(204))
+            .catch(() => res.status(400).json({ message }));
+        } else {
+          return res.status(401).json({
+            message: 'You don\'t have permission to delete this document'
           });
-      } else {
-        res.status(401).json({
-          error_code: 'Unauthorized',
-          message: 'You don\'t have permission to delete this document'
-        });
-      }
-    });
-};
+        }
+      }).catch(() => res.status(400).json({ message }));
+  }
+}
 
-export {
-  createDocument,
-  findAllDocument,
-  findOneDocument,
-  updateDocument,
-  deleteDocument
-};
+export default DocumentControllers;
