@@ -1,6 +1,13 @@
-import db from '../models/index';
+import jwt from 'jsonwebtoken';
 
-const cutList = (list, start, end) => {
+ /**
+  * cutList - cut an array from a given start index to an end index
+  * @param {Array} list - array to cutList
+  * @param {number} start - index to start from
+  * @param {number} end - index to end sliced
+  * @return {Array} sliced array
+  */
+function cutList(list, start, end) {
   let limit = 0;
   const sliced = [];
   list.forEach((item, index) => {
@@ -10,9 +17,18 @@ const cutList = (list, start, end) => {
     }
   });
   return sliced;
-};
+}
 
-const paginate = (limit, offset, response, field) => {
+ /**
+  * paginate - convert an plain array to a paginated object one given
+  * the limit and offset of the array
+  * @param {number} limit - number of items to include
+  * @param {number} offset - array index to start from
+  * @param {Array} response - plain array to paginate
+  * @param {String} field - name to give the main object key
+  * @return {Object} paginated object
+  */
+function paginate(limit, offset, response, field) {
   const pageCount = Math.ceil(response.length / limit);
   const paginated = { [field]: {
     paginationMeta: {
@@ -26,55 +42,36 @@ const paginate = (limit, offset, response, field) => {
   } };
   paginated[field].results = cutList(response, offset, limit);
   return paginated;
-};
+}
 
-const isAdmin = (req, res, next) => {
-  const id = req.decoded.id || req.decoded;
-  db.Users.findById(id)
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({
-          error_code: 'Not found',
-          message: 'User not found'
-        });
-      } else if (req.decoded.roleId === 1) {
-        req.admin = user;
-        next();
-      } else {
-        next();
-      }
-    }).catch(() => res.status(400).json({
-      message: 'Ooops! An error occured'
-    }));
-};
+ /**
+  * encrypt - sign a new token based on the payload passed to it
+  * @param {Object} payload - contains information to sign
+  * token with
+  * @return {Object} signed jwt token
+  *
+  */
+function encrypt(payload) {
+  return jwt.sign({
+    exp: Math.floor(Date.now() / 1000) + (60 * 60 * 3),
+    data: payload
+  }, process.env.JWT_SECRET);
+}
 
-const hasAccess = (userId, docAccess) => {
+ /**
+  * hasAccess - checks if the user has access to the document
+  * @param {number} userId - id of the user to check for
+  * @param {String} docAccess - list of user ids that have access to
+  * the document
+  * @return {Boolean} - true if the user has access and false otherwise
+  */
+function hasAccess(userId, docAccess) {
   const authorizedUsers = docAccess.split(';');
   if (authorizedUsers.includes(userId)) {
     return true;
   }
   return false;
-};
-
-const targetIsAdmin = (req, res, next) => {
-  const id = req.params.id;
-  db.Users.findById(id)
-    .then((user) => {
-      if (!user) {
-        return res.status(404).json({
-          error_code: 'Not found',
-          message: 'User not found'
-        });
-      } else if (user.roleId === 1) {
-        req.adminTarget = user;
-        next();
-      } else {
-        next();
-      }
-    }).catch(() => res.status(400).json({
-      message: 'Ooops! An error occured'
-    }));
-};
+}
 
 /**
  * @param {Array} fields - contains list of required fields
@@ -107,9 +104,8 @@ function errorRender(status, error, res) {
 }
 
 export {
+  encrypt,
   paginate,
   requiredField,
-  isAdmin,
   hasAccess,
-  targetIsAdmin,
   errorRender };

@@ -488,7 +488,6 @@ describe('Routes: user', () => {
         .end((err, res) => {
           expect(res.body).to.be.a('object');
           expect(res.body.firstname).to.eql(faker.bulkCreateUser[0].firstname);
-          expect(res.body.password).to.not.be.a('undefined');
           done(err);
         });
     });
@@ -576,7 +575,6 @@ describe('Routes: user', () => {
         })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized Access');
           expect(res.body.message).to.eql('email/password do not match');
           done(err);
         });
@@ -588,7 +586,6 @@ describe('Routes: user', () => {
         })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized Access');
           expect(res.body.message).to.eql('email/password do not match');
           done(err);
         });
@@ -601,7 +598,6 @@ describe('Routes: user', () => {
         })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized Access');
           expect(res.body.message).to.eql('email/password do not match');
           done(err);
         });
@@ -614,7 +610,6 @@ describe('Routes: user', () => {
         })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized Access');
           expect(res.body.message).to.eql('email/password do not match');
           done(err);
         });
@@ -625,9 +620,7 @@ describe('Routes: user', () => {
     it('should update a user with given id', (done) => {
       request.put(`/api/v1/users/${fakeUID.id}`)
         .set('Authorization', token)
-        .send({
-          password: 'a new password'
-        })
+        .send({ password: 'a new password' })
         .expect(204)
         .end((err, res) => {
           expect(res.text).to.eql('');
@@ -694,7 +687,6 @@ describe('Routes: user', () => {
         })
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized');
           expect(res.body.message)
             .to.eql('Cannot update properties of another admin');
           done(err);
@@ -750,7 +742,6 @@ describe('Routes: user', () => {
         .set('Authorization', fifthRegUserToken)
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized');
           expect(res.body.message).to.eql('you cannot delete another user');
           done(err);
         });
@@ -770,7 +761,6 @@ describe('Routes: user', () => {
         .set('Authorization', `${fifthRegUserToken}1`)
         .expect(401)
         .end((err, res) => {
-          // expect(res.body.error_code).to.eql('Unauthorized');
           expect(res.body.message)
             .to.eql('Sorry you don\'t have permission to perform this operation');
           done(err);
@@ -781,7 +771,6 @@ describe('Routes: user', () => {
         .set('Authorization', adminToken)
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized');
           expect(res.body.message).to.eql('you cannot delete an admin');
           done(err);
         });
@@ -796,6 +785,9 @@ describe('Routes: user', () => {
         .expect(200)
         .end((err, res) => {
           expect(res.body.documents.results).to.have.lengthOf(5);
+          for (let count = 0; count < 5; count += 1) {
+            expect(res.body.documents.results[count].accessId).to.eql(1);
+          }
           done(err);
         });
     });
@@ -806,6 +798,9 @@ describe('Routes: user', () => {
         .expect(200)
         .end((err, res) => {
           expect(res.body.documents.results).to.have.lengthOf(7);
+          for (let count = 0; count < 7; count += 1) {
+            expect(res.body.documents.results[count].ownerId).to.eql(fakeUID.id);
+          }
           done(err);
         });
     });
@@ -815,7 +810,12 @@ describe('Routes: user', () => {
           .set('Authorization', customRolesToken[1])
           .expect(200)
           .end((err, res) => {
+            const access = [1, 3];
             expect(res.body.documents.results).to.have.lengthOf(6);
+            for (let count = 0; count < 6; count += 1) {
+              expect([1, 3])
+                .to.include(res.body.documents.results[count].accessId);
+            }
             done(err);
           });
       });
@@ -834,7 +834,8 @@ describe('Routes: user', () => {
         .set('Authorization', `q${customRolesToken[1]}`)
         .expect(401)
         .end((err, res) => {
-          expect(res.body.error_code).to.eql('Unauthorized');
+          expect(res.body.message)
+          .to.eql('Sorry you don\'t have permission to perform this operation');
           done(err);
         });
     });

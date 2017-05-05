@@ -1,12 +1,20 @@
 import express from 'express';
-import { searchDoc, searchUser } from '../controllers/search';
-import auth from '../config/auth';
-import { isAdmin } from '../helpers/helper';
+import SearchControllers from '../controllers/search';
+import { isAdmin } from '../middlewares/checkRoles';
+import { verifyToken, isBlacklist } from '../middlewares/authenticate';
 
 const router = express.Router();
 
 export default () => {
-  router.get('/api/v1/search/documents', auth, isAdmin, searchDoc);
-  router.get('/api/v1/search/users', auth, isAdmin, searchUser);
+  router.get('/api/v1/search/documents',
+    verifyToken,
+    isBlacklist,
+    isAdmin,
+    SearchControllers.searchDoc);
+  router.get('/api/v1/search/users',
+    verifyToken,
+    isBlacklist,
+    isAdmin,
+    SearchControllers.searchUser);
   return router;
 };
