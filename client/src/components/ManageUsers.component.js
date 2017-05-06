@@ -83,7 +83,6 @@ class ManageUser extends React.Component {
    * @return {void}
    */
   componentWillReceiveProps(nextProps) {
-    console.log(nextProps);
     if (nextProps.user.details) {
       if (nextProps.user.details.roleId
         && nextProps.user.details.roleId !== 1) {
@@ -109,7 +108,6 @@ class ManageUser extends React.Component {
     * @param {Object} values - information to pass to the delete dialog
     */
    handleConfirmDeleteUser(values) {
-     console.log(values);
      this.props.dispatch(confirmDeleteUser(values));
    }
 

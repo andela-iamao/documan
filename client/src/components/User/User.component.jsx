@@ -80,7 +80,6 @@ class User extends React.Component {
   render() {
     const users = this.props.user;
     const documents = this.props.document;
-    console.log(documents);
     return (
       <div className="content-display">
         <div className="row">

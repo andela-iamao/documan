@@ -71,9 +71,9 @@ class DocumentControllers {
       .then((document) => {
         if (!document) {
           return res.status(404).json({ message: 'document not found' });
-        } else if (req.decoded.id === document.ownerId
-          || req.isAdmin
-          || document.accessId === 1) {
+        } else if (req.decoded.id === document.ownerId || req.isAdmin) {
+          return res.status(200).json(document);
+        } else if (document.accessId === 1) {
           return res.status(200).json(document);
         }
         return res.status(401).json({

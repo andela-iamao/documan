@@ -212,7 +212,7 @@ describe('Routes: documents', () => {
         });
     });
     it('should return error if document does not exist', (done) => {
-      request.get('/api/v1/documents/083383')
+      request.get('/api/v1/documents/83383')
         .set('Authorization', tokens.regular[0])
         .expect(404)
         .end((err, res) => {
