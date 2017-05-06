@@ -214,7 +214,7 @@ class ManageUser extends React.Component {
           {user.username}
         </TableRowColumn>
         <TableRowColumn>{
-          (user.roleId === 1) ?
+          (parseInt(user.roleId, 10) === 1) ?
             'Admin' :
             <FlatButton
               label="Promote"
@@ -230,7 +230,7 @@ class ManageUser extends React.Component {
         <TableRowColumn key={index + user.id + user.firstname}>
           {user.email}</TableRowColumn>
         <TableRowColumn key={index + user.id + user.firstname}>{
-          (user.roleId === 1) ?
+          (parseInt(user.roleId, 10) === 1) ?
             '' :
             <FlatButton
               key={`${index}flat${user.id}`}
@@ -278,7 +278,7 @@ class ManageUser extends React.Component {
           {doc.User.username}
         </TableRowColumn>
         <TableRowColumn>
-          {(doc.User.roleId === 1
+          {(parseInt(doc.User.roleId, 10) === 1
               && doc.ownerId !== doc.User.id) ?
             ''
             :
