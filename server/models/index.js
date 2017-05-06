@@ -9,13 +9,6 @@ const basename = path.basename(module.filename);
 const db = {};
 const sequelize = new Sequelize(config.url, config);
 
-// let sequelize = null;
-// if (config.use_env_variable) {
-//   sequelize = new Sequelize(process.env.NODE_ENV[config.use_env_variable], config);
-// } else {
-//   sequelize = new Sequelize(config.database, config.username, config.password, config);
-// }
-
 sequelize
   .authenticate()
   .then(() => {

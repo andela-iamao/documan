@@ -138,15 +138,15 @@ module.exports = (sequelize, DataTypes) => {
           foreignKey: {
             name: 'ownerId',
             allowNull: false,
-          },
-          onDelete: 'CASCADE'
+            onDelete: 'CASCADE'
+          }
         });
         Users.hasMany(models.Folders, {
           foreignKey: {
             name: 'ownerId',
             allowNull: false,
-          },
-          onDelete: 'CASCADE'
+            onDelete: 'CASCADE'
+          }
         });
       }
     },
