@@ -10,7 +10,7 @@
   "test": {
     "username": "postgres",
     "password": null,
-    "port": "1356",
+    "port": "5432",
     "database": "documan_test",
     "host": "127.0.0.1",
     "logging": false,
