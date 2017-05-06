@@ -58,9 +58,6 @@ class Index extends React.Component {
            <li>
              <img src="/images/carousel_image_3.jpeg" />
            </li>
-           <li>
-             <img src="http://lorempixel.com/580/250/nature/4" />
-           </li>
          </FullPageSlider>
          <IntroText
           color={'#EFEFEF'}

@@ -58,7 +58,6 @@ export function getActiveUser(callback = false) {
       })
       .catch((error) => {
         window.localStorage.clear();
-        console.log(error);
         dispatch({
           type: 'ERROR_GETTING_ACTIVE',
           payload: error.response.data
