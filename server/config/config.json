@@ -2,6 +2,7 @@
   "development": {
     "username": "postgres",
     "password": null,
+    "port": "1356",
     "database": "documan_dev",
     "host": "127.0.0.1",
     "dialect": "postgres"
@@ -9,6 +10,7 @@
   "test": {
     "username": "postgres",
     "password": null,
+    "port": "1356",
     "database": "documan_test",
     "host": "127.0.0.1",
     "logging": false,

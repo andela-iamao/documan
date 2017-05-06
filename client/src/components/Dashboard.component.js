@@ -41,9 +41,9 @@ import { getActiveUser } from '../actions/users.action';
 }))
 /**
  * React component for
- * @class User
+ * @class Dashboard
  */
-class User extends React.Component {
+class Dashboard extends React.Component {
 
   /**
    * constructor
@@ -228,16 +228,14 @@ class User extends React.Component {
   render() {
     return (
       <div>
-        <div className="close-drawer">
-        </div>
         {
           (this.props.user.details) ?
             <div>
               {(this.props.search.results.users
-                  || this.props.search.results.docs) ?
-                  <Search
-                    data={this.props.search.results}
-                    clearSearch={this.clearSearch}/>
+                || this.props.search.results.docs) ?
+                <Search
+                  data={this.props.search.results}
+                  clearSearch={this.clearSearch}/>
                 :
                 <DocumentsGrid
                   views={this.props.views}
@@ -277,4 +275,4 @@ class User extends React.Component {
   }
 }
 
-export default User;
+export default Dashboard;

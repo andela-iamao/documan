@@ -80,13 +80,15 @@ export default (state = initialState, action) => {
       };
     }
     case 'REMOVED_DOCUMENT_FROM_FOLDER': {
-      return Object.assign({}, state, {
-        documents: {
-          ...state.documents,
-          results: [...state.documents.results]
-            .filter((document => (document.id !== action.payload)))
-        }});
+      if(state.documents) {
+        return Object.assign({}, state, {
+          documents: {
+            ...state.documents,
+            results: [...state.documents.results]
+              .filter((document => (document.id !== action.payload)))
+          }});
       }
+    }
     case 'ERROR_ADDING_DOCUMENT_TO_FOLDER':
     case 'ERROR_CREATING_FOLDER':
     case 'ERROR_UPDATING_FOLDER': {

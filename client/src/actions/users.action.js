@@ -6,9 +6,9 @@ import axios from 'axios';
  * from server
  * @return {object} object to be sent to all reducers
  */
-export function getAllUsers() {
+export function getAllUsers(limit = 10, offset = 0) {
   return (dispatch) => {
-    axios.get('/api/v1/users')
+    axios.get(`/api/v1/users/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
           type: 'GOT_ALL_USERS',
@@ -57,6 +57,8 @@ export function getActiveUser(callback = false) {
         }
       })
       .catch((error) => {
+        window.localStorage.clear();
+        console.log(error);
         dispatch({
           type: 'ERROR_GETTING_ACTIVE',
           payload: error.response.data
@@ -93,7 +95,7 @@ export function deleteUser(id) {
   return (dispatch) => {
     axios.delete(`/api/v1/users/${id}`)
       .then((response) => {
-        dispatch(getUser());
+        dispatch(getActiveUser());
         dispatch(getAllUsers());
         dispatch({
           type: 'DELETE_USER',
@@ -120,6 +122,67 @@ export function updateUser(id, values) {
           type: 'UPDATE_USER_INFO',
           payload: response.data
         });
+      }).catch((error) => {
+        dispatch({
+          type: 'ERROR_UPDATING_USER',
+          payload: error.response.data.message
+        });
       });
+  };
+}
+
+/**
+* confirmDeleteDoc - send an action to confirm deletion of document
+* @param {object} values - content to render confirmation box with
+* @return {object} - action to send to reducers
+*/
+export function confirmDeleteUser(values) {
+  return {
+    type: 'CONFIRM_DELETE_USER',
+    payload: values
+  };
+}
+
+/**
+* clearConfirmDeleteDoc - send an action to notify that delete confirmation
+* is no longer needed
+* @return {object} - action to send to reducers
+*/
+export function clearConfirmDeleteUser() {
+  return {
+    type: 'CLEAR_CONFIRM_DELETE_USER'
+  };
+}
+
+/**
+* confirmPromotion - send an action to confirm deletion of document
+* @param {object} values - content to render confirmation box with
+* @return {object} - action to send to reducers
+*/
+export function confirmPromotion(values) {
+  return {
+    type: 'CONFIRM_USER_PROMOTION',
+    payload: values
+  };
+}
+
+/**
+* clearConfirmPromotion - send an action to notify that delete confirmation
+* is no longer needed
+* @return {object} - action to send to reducers
+*/
+export function clearConfirmPromotion() {
+  return {
+    type: 'CLEAR_CONFIRM_USER_PROMOTION'
+  };
+}
+
+/**
+* clearError - clears the current error message
+* @return {object} - action to send to reducers
+*/
+export function clearError() {
+  return {
+    type: 'CLEAR_USER_ERROR'
   };
 }

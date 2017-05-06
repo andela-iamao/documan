@@ -121,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
         }
       },
       beforeBulkUpdate(users) {
-        if (users.sttributes && users.attributes.password) {
+        if (users.attributes && users.attributes.password) {
           const salt = bcrypt.genSaltSync();
           const password = users.attributes.password;
           users.attributes.password = bcrypt.hashSync(password, salt);

@@ -40,9 +40,18 @@ class DocumentControllers {
     const limit = req.query.limit || 10;
     const offset = req.query.offset || 0;
     if (req.isAdmin) {
-      query = { where: {} };
+      query = { where: {},
+        include: [{
+          model: db.Users,
+          attributes: ['id', 'username', 'roleId']
+        }] };
     } else {
-      query = { where: { accessId: 1 } };
+      query = {
+        where: { accessId: 1 },
+        include: [{
+          model: db.Users,
+          attributes: ['id', 'username', 'roleId']
+        }] };
     }
     Document.findAll(query)
       .then(documents => res.status(200).json(
@@ -63,8 +72,8 @@ class DocumentControllers {
         if (!document) {
           return res.status(404).json({ message: 'document not found' });
         } else if (req.decoded.id === document.ownerId
-            || req.isAdmin
-            || document.accessId === 1) {
+          || req.isAdmin
+          || document.accessId === 1) {
           return res.status(200).json(document);
         }
         return res.status(401).json({

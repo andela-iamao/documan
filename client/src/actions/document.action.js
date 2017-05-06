@@ -115,9 +115,11 @@ export function updateDoc(values, refresh = true) {
 * @return {object} action to send to reducers
 */
 export function getAllDocs(limit = 10, offset = 0) {
+  console.log('limit', limit)
   return (dispatch) => {
     axios.get(`/api/v1/documents/?limit=${limit}&offset=${offset}`)
       .then((response) => {
+        console.log('resp', response, `/api/v1/documents/?limit=${limit}&offset=${offset}`);
         dispatch({
           type: 'GOT_ALL_DOCUMENTS',
           payload: response.data
@@ -149,6 +151,7 @@ export function deleteDoc(id, refresh = false) {
           dispatch(refresh.action(refresh.id));
         }
       }).catch((error) => {
+        console.log(error);
         dispatch({
           type: 'ERROR_DELETING_DOCUMENT',
           payload: error.response.data

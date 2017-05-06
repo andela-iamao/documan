@@ -76,7 +76,7 @@ export function isAdmin(req, res, next) {
     .then((user) => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
-      } else if (req.decoded.roleId === 1) {
+      } else if (user.roleId === 1) {
         req.isAdmin = true;
         next();
       } else {
