@@ -85,7 +85,7 @@ class ManageUser extends React.Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.details) {
       if (nextProps.user.details.roleId
-        && nextProps.user.details.roleId !== 1) {
+        && nextProps.user.details['Role.title'] !== 'admin') {
         browserHistory.push('/app/dashboard');
       }
     }
