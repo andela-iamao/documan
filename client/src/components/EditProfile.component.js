@@ -1,21 +1,13 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import FlatButton from 'material-ui/FlatButton';
-import Navbar from './reusable/Navbar.component';
+import RaisedButton from 'material-ui/RaisedButton';
 import Alert from './reusable/Alert.component';
-import CustomDrawer from './CustomDrawer.component';
-import {
-  getDoc,
-} from '../actions/document.action';
 
-import {
-  getUser,
-  updateUser
-} from '../actions/users.action';
+import { getActiveUser, updateUser, clearError } from '../actions/users.action';
 
 @connect(store => ({
-  user: store,
+  user: store.users,
   form: store.form,
   error: store.error.error,
   auth: store.auth,
@@ -29,6 +21,8 @@ class EditProfile extends React.Component {
     this.handleUpdate = this.handleUpdate.bind(this);
     this.onCloseAlert = this.onCloseAlert.bind(this);
     this.state = {
+      firstname: '',
+      lastname: '',
       username: '',
       password: '',
       confirm_password: '',
@@ -44,10 +38,8 @@ class EditProfile extends React.Component {
     if (!window.localStorage.getItem('token')) {
       browserHistory.push('/app/login');
     } else {
-      this.props.dispatch(getUser());
-      this.props.dispatch(getDoc(this.props.params.id));
+      this.props.dispatch(getActiveUser());
     }
-    this.props.dispatch(getUser());
   }
 
   /**
@@ -57,29 +49,17 @@ class EditProfile extends React.Component {
    * @return {void}
    */
   componentWillReceiveProps(nextProps) {
-    if (nextProps.user.users.details) {
+    if (nextProps.user.details) {
       this.setState({
-        username: nextProps.user.users.details.username,
+        username: nextProps.user.details.username,
+        firstname: nextProps.user.details.firstname,
+        lastname: nextProps.user.details.lastname
       });
     }
   }
 
-  handlePasswordChange(event) {
-    this.setState({
-      password: event.target.value
-    });
-  }
-
-  handleConfirmChange(event) {
-    this.setState({
-      confirm_password: event.target.value
-    });
-  }
-
-  handleUsernameChange(event) {
-    this.setState({
-      username: event.target.value
-    });
+  handleInputChange(event) {
+    this.setState({ [event.target.name]: event.target.value });
   }
 
   validate(values) {
@@ -99,6 +79,8 @@ class EditProfile extends React.Component {
 
   handleUpdate() {
     const values = {
+      firstname: this.state.firstname,
+      lastname: this.state.lastname,
       username: this.state.username,
       password: this.state.password,
       confirm_password: this.confirm_password
@@ -109,115 +91,105 @@ class EditProfile extends React.Component {
         delete values.password;
       }
       this.props.dispatch(updateUser(
-        this.props.user.users.details.id, values));
+        this.props.user.details.id, values));
+      this.props.dispatch(clearError());
       browserHistory.push('/app/dashboard');
     }
   }
 
   onCloseAlert() {
     this.setState({ error: null });
+    this.props.dispatch(clearError());
   }
   render() {
     return (
       <div>
-        <Navbar
-         type="dark"
-         title="iAmDocuman"
-         isAuthenticated={ {
-           username: 'asheAmao',
-           userPage: '/app/dashboard'
-         } }
-         showSignout={ false }
-        />
-        <div className="close-drawer">
-        </div>
-        <CustomDrawer
-          title="iAmDocuman"
-          username={ this.props.user.users.details.username }
-          userRole={ this.props.user.users.details.roleId }
-          id={ this.props.user.users.details.id }
-          fullname={
-            `${this.props.user.users.details.firstname}
-             ${this.props.user.users.details.lastname}`}
-        />
         <div className="content-display">
             <div className="z-depth-2" id="edit-form-title">
-              {
-                (this.state.error) ?
+              {(this.state.error || this.props.user.error) ?
                 <Alert
-                  info={ { error: this.state.error } }
-                  onClose={ this.onCloseAlert }
+                  info={{ error: this.state.error || this.props.user.error }}
+                  onClose={this.onCloseAlert}
                 />
                 :
                 ''
               }
               <h5>EDIT INFORMATION</h5>
-              <div id="edit-form">
-                <div className="row">
-                  <div className="input-field col s12 m6 l6">
-                    <input
-                      className="validate"
-                      name="firstname"
-                      type="text"
-                      value={this.props.user.users.details.firstname}
-                    />
+              {(this.props.user.details) ?
+                <div id="edit-form">
+                  <div className="row">
+                    <div className="input-field col s12 m6 l6">
+                      <input
+                        className="validate"
+                        name="firstname"
+                        type="text"
+                        value={this.state.firstname}
+                        onChange={event => this.handleInputChange(event)}
+                      />
+                      <label>Firstname</label>
+                    </div>
+                    <div className="input-field col s12 m6 l6">
+                      <input
+                        className="validate"
+                        name="lastname"
+                        type="text"
+                        value={this.state.lastname}
+                        onChange={event => this.handleInputChange(event)}
+                      />
+                      <label>Lastname</label>
+                    </div>
                   </div>
-                  <div className="input-field col s12 m6 l6">
-                    <input
-                      className="validate"
-                      name="lastname"
-                      type="text"
-                      value={ this.props.user.users.details.lastname }
-                    />
+                  <div className="row">
+                    <div className="input-field col s12 m6 l6">
+                      <input
+                        className="validate"
+                        name="email"
+                        type="text"
+                        value={this.props.user.details.email}
+                        disabled
+                      />
+                    </div>
+                    <div className="input-field col s12 m6 l6">
+                      <input
+                        className="validate"
+                        name="username"
+                        type="text"
+                        value={this.state.username}
+                        onChange={event => this.handleInputChange(event)}
+                      />
+                    </div>
+                  </div>
+                  <div className="row">
+                    <div className="input-field col s12 m6 l6">
+                      <input
+                        className="validate"
+                        name="password"
+                        type="password"
+                        value={this.state.password}
+                        onChange={event => this.handleInputChange(event)}
+                      />
+                      <label>Change your password</label>
+                    </div>
+                    <div className="input-field col s12 m6 l6">
+                      <input
+                        className="validate"
+                        name="confirm_password"
+                        type="password"
+                        value={this.state.confirm_password}
+                        onChange={event => this.handleInputChange(event)}
+                      />
+                      <label>Confirm password</label>
+                    </div>
                   </div>
                 </div>
-                <div className="row">
-                  <div className="input-field col s12 m6 l6">
-                    <input
-                      className="validate"
-                      name="email"
-                      type="text"
-                      value={ this.props.user.users.details.email }
-                    />
-                  </div>
-                  <div className="input-field col s12 m6 l6">
-                    <input
-                      className="validate"
-                      name="username"
-                      type="text"
-                      value={ this.state.username }
-                      onChange={ event => this.handleUsernameChange(event) }
-                    />
-                  </div>
-                </div>
-                <div className="row">
-                  <div className="input-field col s12 m6 l6">
-                    <input
-                      className="validate"
-                      name="password"
-                      type="password"
-                      value={ this.state.password }
-                      onChange={ event => this.handlePasswordChange(event) }
-                    />
-                    <label>Change your password</label>
-                  </div>
-                  <div className="input-field col s12 m6 l6">
-                    <input
-                      className="validate"
-                      name="confirm_password"
-                      type="password"
-                      value={ this.state.confirm_password }
-                      onChange={ event => this.handleConfirmChange(event) }
-                    />
-                    <label>Confirm password</label>
-                  </div>
-                </div>
-              </div>
-              <FlatButton
+                :
+                ''
+              }
+              <RaisedButton
                 label="Update Info"
-                primary={ true }
-                keyboardFocused={ true }
-                onTouchTap={ this.handleUpdate }
+                primary
+                keyboardFocused
+                onTouchTap={this.handleUpdate}
               />
             </div>
         </div>

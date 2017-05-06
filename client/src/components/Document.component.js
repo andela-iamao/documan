@@ -23,7 +23,8 @@ import { getActiveUser } from '../actions/users.action';
 @connect(store =>
   ({
     docs: store.documents,
-    folders: store.folder
+    folders: store.folder,
+    user: store.users
   }))
 /**
  * React component for
@@ -141,26 +142,32 @@ class Document extends React.Component {
             <div className="row">
               {(documents.doc && this.props.folders.folders) ?
                 <div className="view-documents">
-                  <FolderDialog
-                    folders={this.props.folders.folders.results}
-                    onAddDoc={this.handleAddDoc}
-                  />
-                  <div className="col s3 m3 l1">
-                    <FloatingActionButton
-                      mini
-                      onTouchTap={() => this.handleEditDoc()}
-                    >
-                      <Edit />
-                    </FloatingActionButton>
-                  </div>
-                  <DeleteDialog
-                    deleteButton={documents.doc}
-                    onDelete={this.handleDeleteDoc}
-                    openDialog={this.handleConfirmDeleteDoc}
-                    onDeleteConfirmation={documents.confirmDelete}
-                    clearDeleteConfirmation={this.clearDeleteConfirmation}
-                  />
-                  <hr />
+                  {(documents.doc.ownerId === this.props.user.details.id) ?
+                    <div className="toolbar">
+                      <FolderDialog
+                        folders={this.props.folders.folders.results}
+                        onAddDoc={this.handleAddDoc}
+                      />
+                      <div className="col s3 m3 l1">
+                        <FloatingActionButton
+                          mini
+                          onTouchTap={() => this.handleEditDoc()}
+                        >
+                          <Edit />
+                        </FloatingActionButton>
+                      </div>
+                      <DeleteDialog
+                        deleteButton={documents.doc}
+                        onDelete={this.handleDeleteDoc}
+                        openDialog={this.handleConfirmDeleteDoc}
+                        onDeleteConfirmation={documents.confirmDelete}
+                        clearDeleteConfirmation={this.clearDeleteConfirmation}
+                      />
+                      <hr />
+                    </div>
+                    :
+                    ''
+                  }
                   <div className="document-page z-depth-2">
                     <div className="document-title">
                       <h5>{documents.doc.title}</h5>

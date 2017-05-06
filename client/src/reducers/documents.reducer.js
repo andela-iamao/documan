@@ -51,10 +51,17 @@ export default (state = initialState, action) => {
       };
     }
     case 'DELETED_DOCUMENT': {
+      if (state.documents) {
+        return Object.assign({}, state, {
+          documents: {
+            ...state.documents,
+            results: [...state.documents.results].filter((document) =>
+              (document.id !== action.payload)) } });
+      }
       return Object.assign({}, state, {
-        documents: {
-          ...state.documents,
-          results: [...state.documents.results].filter((document) =>
+        allDocuments: {
+          ...state.allDocuments,
+          results: [...state.allDocuments.results].filter((document) =>
             (document.id !== action.payload)) } });
     }
     case 'CREATED_DOC': {

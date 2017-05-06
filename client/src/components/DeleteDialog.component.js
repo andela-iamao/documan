@@ -72,11 +72,9 @@ class DeleteDialog extends React.Component {
    */
   handleSubmit() {
     if (this.props.deleteButton) {
-      this.props
-        .onDelete(this.props.deleteButton.id);
+      this.props.onDelete(this.props.deleteButton.id);
     } else {
-      this.props
-        .onDelete(this.props.onDeleteConfirmation.id);
+      this.props.onDelete(this.props.onDeleteConfirmation.id);
     }
     this.handleClose();
   }
@@ -101,47 +99,46 @@ class DeleteDialog extends React.Component {
         onTouchTap={this.handleSubmit}
       />,
     ];
-
+    const icons = {
+      folder: '/images/folder.png',
+      document: '/images/file.png',
+      user: '/images/person.png',
+      admin: '/images/admin.png'
+    }
+    const icon = icons[renderFromProp(this.props.onDeleteConfirmation, 'type')];
     return (
       <div>
-        {
-          (this.props.deleteButton) ?
-          <FloatingActionButton
-            mini={true}
-            onTouchTap={ this.props.openDialog }
-          >
+        {(this.props.deleteButton) ?
+          <FloatingActionButton mini onTouchTap={this.props.openDialog}>
             <DeleteIcon />
           </FloatingActionButton>
           :
           ''
         }
         <Dialog
-          title={ `Delete ${
+          title={this.props.title || `Delete ${
             renderFromProp(this.props.onDeleteConfirmation, 'type')
-          }` }
-          contentStyle={ customContentStyle }
-          actions={
-            actions
-          }
-          modal={ false }
-          open={ this.state.open }
-          onRequestClose={ this.handleClose }
+          }`}
+          contentStyle={customContentStyle}
+          actions={actions}
+          modal={false}
+          open={this.state.open}
+          onRequestClose={this.handleClose}
         >
-          <img
-            src={ (
-              renderFromProp(
-                this.props.onDeleteConfirmation,
-                'type') === 'folder') ?
-              '/images/folder.png' : '/images/file.png'
-          } style={ { width: '35%' } } />
+          <img src={icon} style={{ width: '35%' }} />
           <p>
             <b>
-              { renderFromProp(this.props.onDeleteConfirmation, 'title') }
+              {renderFromProp(this.props.onDeleteConfirmation, 'title')}
             </b>
           </p>
-          <h5>Are you sure you want to delete this {
-            renderFromProp(this.props.onDeleteConfirmation, 'type')
-          }?</h5>
+          <h5>
+            {this.props.message ||
+              <span>
+                Are you sure you want to delete this
+                {` ${renderFromProp(this.props.onDeleteConfirmation, 'type')}`}?
+              </span>
+            }
+        </h5>
         </Dialog>
       </div>
     );

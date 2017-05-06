@@ -146,6 +146,7 @@ class CreateDoc extends React.Component {
               >
                 <MenuItem value={1} primaryText="PUBLIC" />
                 <MenuItem value={2} primaryText="PRIVATE" />
+                <MenuItem value={3} primaryText="ROLE" />
               </SelectField>
             </div>
           </div>

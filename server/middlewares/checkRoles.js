@@ -49,7 +49,7 @@ export function targetIsAdmin(req, res, next) {
           error_code: 'Not found',
           message: 'User not found'
         });
-      } else if (user.roleId === 1) {
+      } else if (parseInt(user.roleId, 10) === 1) {
         req.targetIsAdmin = true;
         next();
       } else {
@@ -76,7 +76,7 @@ export function isAdmin(req, res, next) {
     .then((user) => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
-      } else if (req.decoded.roleId === 1) {
+      } else if (parseInt(user.roleId, 10) === 1) {
         req.isAdmin = true;
         next();
       } else {

@@ -60,7 +60,7 @@ const isAuthenticated = props => (
             primaryText="Dashboard"
             leftIcon={<DashboardIcon />}
             onTouchTap={() =>
-              browserHistory.push(props.isAuthenticated.userPage)}
+              browserHistory.push(props.isAuthenticated.dashboardPage)}
           />
           <MenuItem
             focusState="none"
@@ -84,26 +84,25 @@ const isAuthenticated = props => (
 const notAuthenticated = props => (
   <div className="nav-auth-buttons">
     {(props.showLogin) ?
-        <Link to={props.loginLink} className="navbar-login-btn">
-          <RaisedButton
-            label="Login"
-            primary
-            style={{ marginRight: '15px' }}
-          />
-        </Link>
-        :
-        ''
+      <Link to={props.loginLink} className="navbar-login-btn">
+        <RaisedButton
+          label="Login"
+          primary
+          style={{ marginRight: '15px' }}
+        />
+      </Link>
+      :
+      ''
     }
-    {
-      (props.showSignup) ?
-        <Link to={props.signupLink} className="navbar-signup-btn" >
-          <RaisedButton
-            label="Sign Up"
-            primary
-          />
-        </Link>
-        :
-        ''
+    {(props.showSignup) ?
+      <Link to={props.signupLink} className="navbar-signup-btn" >
+        <RaisedButton
+          label="Sign Up"
+          primary
+        />
+      </Link>
+      :
+      ''
     }
   </div>
 );
@@ -127,10 +126,8 @@ class Navbar extends React.Component {
         iconStyleRight={{ width: '60%', maxWidth: 600, marginTop: 0 }}
         titleStyle={{ width: '25%', maxWidth: 320 }}
         onTitleTouchTap={() => browserHistory.push('/app/')}
-        iconElementRight={
-          (this.props.isAuthenticated) ?
-            isAuthenticated(this.props) : notAuthenticated(this.props)
-        }
+        iconElementRight={(this.props.isAuthenticated) ?
+          isAuthenticated(this.props) : notAuthenticated(this.props)}
       />
     );
   }
@@ -160,17 +157,3 @@ Navbar.propTypes = {
 };
 
 export default Navbar;
-
-// <Link to={ props.isAuthenticated.userPage } >
-//   <h6>
-//     Hello { props.isAuthenticated.username }!
-//   </h6>
-// </Link>
-// {
-//   (props.showSignout) ?
-//   <Link to={ '/app/logout' } >
-//     <RaisedButton
-//       label="Sign Out"
-//       primary={ true }
-//     />
-//   </Link>

@@ -1,11 +1,11 @@
 import db from '../models/index';
 import { paginate } from '../helpers/helper';
 
-const searchQuery = (table, field, query, as) => {
+const searchQuery = (table, field, query, permission, as) => {
   const sequelizeQuery = (as) ?
     `SELECT * FROM "${table}" AS "${as}" WHERE ${field} LIKE '%${query}%'`
     :
-    `SELECT * FROM "${table}" WHERE ${field} LIKE '%${query}%'`;
+    `SELECT * FROM "${table}" WHERE ${field} LIKE '%${query}%' ${(!permission.isAdmin) ? `AND ("accessId"=1 OR "ownerId"=${permission.userId})` : ''}`;
   return sequelizeQuery;
 };
 
@@ -24,8 +24,12 @@ class SearchControllers {
   static searchDoc(req, res) {
     const offset = req.query.offset || 0;
     const limit = req.query.limit || 10;
+    const hasPermission = {
+      isAdmin: req.isAdmin || false,
+      userId: req.decoded.id
+    };
     if (req.query.q) {
-      db.sequelize.query(searchQuery('Documents', 'title', req.query.q))
+      db.sequelize.query(searchQuery('Documents', 'title', req.query.q, hasPermission))
         .then((result) => {
           if (result[0].length < 1) {
             return res.status(404).json({ message: 'document not found' });
@@ -52,7 +56,8 @@ class SearchControllers {
     const offset = req.query.offset || 0;
     const limit = req.query.limit || 10;
     if (req.query.q) {
-      db.sequelize.query(searchQuery('Users', 'username', req.query.q, 'Users'))
+      db.sequelize.query(searchQuery(
+        'Users', 'username', req.query.q, true, 'Users'))
         .then((result) => {
           if (result[0].length < 1) {
             return res.status(404).json({ message: 'user not found' });

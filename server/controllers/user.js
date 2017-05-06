@@ -72,13 +72,17 @@ class UserControllers {
    * to pass further information of the response
    */
   static findOneUser(req, res) {
-    const attr = {
-      attributes: ['id', 'firstname', 'lastname', 'username', 'email', 'roleId']
-    };
+    const attributes = ['id', 'firstname', 'lastname', 'username', 'email', 'roleId'];
     if (req.isAdmin) {
-      attr.attributes.push('createdAt', 'updatedAt');
+      attributes.push('createdAt', 'updatedAt');
     }
-    db.Users.findById(req.params.id, attr)
+    db.Users.findOne({
+      where: { id: req.params.id },
+      attributes,
+      include: [{
+        model: db.Roles,
+        attributes: ['title']
+      }] })
       .then(user => res.status(200).json(user))
       .catch((errors) => {
         const error = errorRender(errors);

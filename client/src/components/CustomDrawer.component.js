@@ -125,7 +125,7 @@ class CustomDrawer extends React.Component {
                 {
                   (this.props.userRole === 'admin') ?
                     <div onClick={() =>
-                        browserHistory.push('/app/manage/users')
+                        browserHistory.push('/app/manage')
                       }>
                       <Divider inset />
                       <ListItem

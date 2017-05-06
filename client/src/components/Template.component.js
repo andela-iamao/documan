@@ -91,8 +91,7 @@ class Template extends React.Component {
   render() {
     const pathsForSearch = [
     '/app/dashboard',
-    '/app/manage',
-    '/app/folder'
+    '/app/folder',
   ];
     const pathsForNoDrawers = ['/app/login', '/app/signup', '/app/'];
     return (
@@ -112,7 +111,8 @@ class Template extends React.Component {
              && this.props.auth.loggedInUser.username) ?
            {
              username: this.props.auth.loggedInUser.username,
-             userPage: '/app/dashboard'
+             userPage: `/app/user/${this.props.auth.loggedInUser.id}/edit`,
+             dashboardPage: '/app/dashboard'
            } : null
          }
         />
