@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import CircularProgress from 'material-ui/CircularProgress';
 import PageCenter from '../reusable/PageCenter.component';
-import DocCard from '../DocCard.component';
+import DocCard from '../Document/DocCard.component';
 import Paginate from '../reusable/Paginate.component';
 import { getActiveUser, getUser } from '../../actions/users.action';
 import { getUserDocs } from '../../actions/document.action';

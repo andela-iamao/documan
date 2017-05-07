@@ -1,12 +1,10 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
-import CircularProgress from 'material-ui/CircularProgress';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Edit from 'material-ui/svg-icons/image/edit';
-import Navbar from './reusable/Navbar.component';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import { FroalaEditorView } from './reusable/Fraola.component';
-import CustomDrawer from './CustomDrawer.component';
 import FolderDialog from './FolderDialog.component';
 import DeleteDialog from './DeleteDialog.component';
 import {
@@ -82,7 +80,7 @@ class Document extends React.Component {
    * @return {void}
    */
   handleDeleteDoc(id) {
-    this.props.dispatch(deleteDoc(id));
+    this.props.dispatch(deleteDoc(id, false, true));
     browserHistory.push('/app/dashboard');
   }
 
@@ -148,7 +146,7 @@ class Document extends React.Component {
                         folders={this.props.folders.folders.results}
                         onAddDoc={this.handleAddDoc}
                       />
-                      <div className="col s3 m3 l1">
+                      <div className="col s3 m3 l1 edit-document">
                         <FloatingActionButton
                           mini
                           onTouchTap={() => this.handleEditDoc()}
@@ -156,13 +154,21 @@ class Document extends React.Component {
                           <Edit />
                         </FloatingActionButton>
                       </div>
-                      <DeleteDialog
-                        deleteButton={documents.doc}
-                        onDelete={this.handleDeleteDoc}
-                        openDialog={this.handleConfirmDeleteDoc}
-                        onDeleteConfirmation={documents.confirmDelete}
-                        clearDeleteConfirmation={this.clearDeleteConfirmation}
-                      />
+                      <div className="col s3 m3 l1 del-document">
+                        <FloatingActionButton
+                          mini
+                          onTouchTap={this.handleConfirmDeleteDoc}>
+                          <DeleteIcon />
+                        </FloatingActionButton>
+                      </div>
+                      <div className="clear">
+                        <DeleteDialog
+                          onDelete={this.handleDeleteDoc}
+                          openDialog={this.handleConfirmDeleteDoc}
+                          onDeleteConfirmation={documents.confirmDelete}
+                          clearDeleteConfirmation={this.clearDeleteConfirmation}
+                        />
+                      </div>
                       <hr />
                     </div>
                     :

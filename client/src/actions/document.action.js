@@ -120,7 +120,7 @@ export function getAllDocs(limit = 10, offset = 0) {
       .then((response) => {
         dispatch({
           type: 'GOT_ALL_DOCUMENTS',
-          payload: response.data
+          payload: response.data.documents
         });
       });
   };
@@ -133,13 +133,13 @@ export function getAllDocs(limit = 10, offset = 0) {
 * after successful call and payload to pass to action. Set to false by default
 * @return {object} action to send to reducers
 */
-export function deleteDoc(id, refresh = false) {
+export function deleteDoc(id, refresh = false, type = null) {
   return (dispatch) => {
     axios.delete(`/api/v1/documents/${id}`)
       .then(() => {
         dispatch({
           type: 'DELETED_DOCUMENT',
-          payload: id
+          payload: { id, userDoc: type }
         });
         dispatch({
           type: 'REMOVED_DOCUMENT_FROM_FOLDER',

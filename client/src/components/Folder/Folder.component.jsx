@@ -2,49 +2,40 @@ import React from 'react';
 import { browserHistory, Link } from 'react-router';
 import { connect } from 'react-redux';
 import CircularProgress from 'material-ui/CircularProgress';
-import Navbar from './reusable/Navbar.component';
-import { FroalaEditorView, FroalaEditor } from './reusable/Fraola.component';
-import CustomDrawer from './CustomDrawer.component';
-import EditFolder from './EditFolder.component';
-import FolderDialog from './FolderDialog.component';
-import DeleteDialog from './DeleteDialog.component';
-import DocCard from './DocCard.component';
-import Search from './Search.component';
-import Paginate from './reusable/Paginate.component';
+import EditFolder from '../EditFolder.component';
+import DeleteDialog from '../DeleteDialog.component';
+import DocCard from '../Document/DocCard.component.jsx';
+import Search from '../Search/Search.component.jsx';
+import Paginate from '../reusable/Paginate.component.jsx';
 import {
-  getDoc,
-  createDoc,
   deleteDoc,
   editDoc,
   confirmDeleteDoc,
   clearConfirmDeleteDoc
-} from '../actions/document.action';
+} from '../../actions/document.action';
 import {
   getFolder,
   removeFromFolder,
   getFolderDocs,
-  getUserFolders,
   editFolder,
   clearEditFolder,
   updateFolder,
   confirmDeleteFolder,
   clearConfirmDeleteFolder,
   deleteFolder
-} from '../actions/folder.action';
-import { getActiveUser } from '../actions/users.action';
-import { changeSearchPage, clearSearch } from '../actions/search.action';
+} from '../../actions/folder.action';
+import { getActiveUser } from '../../actions/users.action';
+import { changeSearchPage, clearSearch } from '../../actions/search.action';
 
-@connect((store) => {
-  return {
-    user: store,
-    form: store.form,
-    error: store.error.error,
-    auth: store.auth,
-    docs: store.documents,
-    folders: store.folder,
-    search: store.search
-  };
-})
+@connect(store => ({
+  user: store,
+  form: store.form,
+  error: store.error.error,
+  auth: store.auth,
+  docs: store.documents,
+  folders: store.folder,
+  search: store.search
+}))
 /**
  * React component for
  * @class Folder
@@ -84,6 +75,10 @@ class Folder extends React.Component {
     }
   }
 
+  /**
+   * clearSearch
+   * @return {void}
+   */
   clearSearch() {
     this.props.dispatch(clearSearch());
   }
@@ -98,6 +93,7 @@ class Folder extends React.Component {
 
   /**
    * removeFromFolder
+   * @param {number} docId - id of document to remove
    * @return {void}
    */
   removeFromFolder(docId) {
@@ -113,7 +109,7 @@ class Folder extends React.Component {
     this.props.dispatch(deleteDoc(id, {
       action: getFolderDocs,
       id: this.props.params.id
-    }));
+    }, true));
   }
 
   /**
@@ -224,7 +220,6 @@ class Folder extends React.Component {
    */
   handlePageChange(event, index, value) {
     this.props.dispatch(changeSearchPage(value));
-    const offset = 18 * (value - 1);
   }
 
   /**

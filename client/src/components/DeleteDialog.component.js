@@ -92,7 +92,7 @@ class DeleteDialog extends React.Component {
         onTouchTap={this.handleClose}
       />,
       <RaisedButton
-        className="dialog-actions"
+        className="dialog-actions delete-btn"
         label="YES"
         secondary
         keyboardFocused
@@ -104,14 +104,16 @@ class DeleteDialog extends React.Component {
       document: '/images/file.png',
       user: '/images/person.png',
       admin: '/images/admin.png'
-    }
+    };
     const icon = icons[renderFromProp(this.props.onDeleteConfirmation, 'type')];
     return (
       <div>
         {(this.props.deleteButton) ?
-          <FloatingActionButton mini onTouchTap={this.props.openDialog}>
-            <DeleteIcon />
-          </FloatingActionButton>
+          <div className="delete-btn">
+            <FloatingActionButton mini onTouchTap={this.props.openDialog}>
+              <DeleteIcon />
+            </FloatingActionButton>
+          </div>
           :
           ''
         }

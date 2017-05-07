@@ -4,7 +4,7 @@ import CircularProgress from 'material-ui/CircularProgress';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import PageCenter from '../reusable/PageCenter.component';
-import DocCard from '../DocCard.component';
+import DocCard from '../Document/DocCard.component';
 import { getAllDocs } from '../../actions/document.action';
 import { clearSearch } from '../../actions/search.action';
 

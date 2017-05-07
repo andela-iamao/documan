@@ -5,7 +5,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import DocumentAdd from 'material-ui/svg-icons/action/note-add';
-import { FroalaEditor } from './reusable/Fraola.component';
+import { FroalaEditor } from '../reusable/Fraola.component';
 
 const customContentStyle = {
   width: '70%',
@@ -105,7 +105,7 @@ class CreateDoc extends React.Component {
         onTouchTap={this.handleClose}
       />,
       <RaisedButton
-        className="dialog-actions"
+        className="dialog-actions create-doc-btn"
         label="Create Document"
         primary
         keyboardFocused
@@ -115,9 +115,13 @@ class CreateDoc extends React.Component {
 
     return (
       <div className="col s3 m3 l1">
-        <FloatingActionButton mini onTouchTap={this.handleOpen}>
-          <DocumentAdd />
-        </FloatingActionButton>
+        <div className="create-document">
+          <FloatingActionButton
+            mini
+            onTouchTap={this.handleOpen}>
+            <DocumentAdd />
+          </FloatingActionButton>
+        </div>
         <Dialog
           title="Create Document"
           contentStyle={customContentStyle}

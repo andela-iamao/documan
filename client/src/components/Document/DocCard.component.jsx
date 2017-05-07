@@ -31,7 +31,7 @@ class DocCard extends React.Component {
                 </div>
                 <div className="doc-card-actions">
                   <span
-                    className="fa fa-trash card-actions tooltipped"
+                    className="del-doc-btn fa fa-trash card-actions tooltipped"
                     data-position="bottom"
                     data-delay="20"
                     data-tooltip="Delete document"
@@ -42,7 +42,7 @@ class DocCard extends React.Component {
                     })}>
                   </span>
                   <span
-                    className="fa fa-pencil card-actions tooltipped"
+                    className="edit-doc-btn fa fa-pencil card-actions tooltipped"
                     data-position="bottom"
                     data-delay="20"
                     data-tooltip="Edit document"
@@ -58,7 +58,7 @@ class DocCard extends React.Component {
                   >
                   </span>
                   <span
-                    className="fa fa-eye card-actions tooltipped"
+                    className="see-doc-btn fa fa-eye card-actions tooltipped"
                     data-position="bottom"
                     data-delay="20"
                     data-tooltip="View document"
@@ -68,7 +68,7 @@ class DocCard extends React.Component {
                   >
                   </span>
                   <span
-                    className="fa fa-download card-actions tooltipped"
+                    className="download-doc-btn fa fa-download card-actions tooltipped"
                     data-position="bottom"
                     data-delay="20"
                     data-tooltip="Download document"
@@ -77,21 +77,21 @@ class DocCard extends React.Component {
                   </span>
                   {(this.props.remove) ?
                     <span
-                      className="fa fa-close card-actions tooltipped"
+                      className="rm-doc-btn fa fa-close card-actions tooltipped"
                       data-position="bottom"
                       data-delay="20"
                       data-tooltip="Remove from folder"
                       onClick={() => this.props.remove(this.props.id)}
                     >
                     </span>
-                    :''
+                    : ''
                   }
                 </div>
               </div>
                 : ''
             }
         </div>
-        <div className="truncate doc-card-info chip tooltipped"
+        <div className="document-name truncate doc-card-info chip tooltipped"
           data-position="bottom"
           data-delay="20"
           data-tooltip={this.props.title}

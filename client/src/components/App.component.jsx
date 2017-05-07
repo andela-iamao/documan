@@ -10,12 +10,12 @@ import Signup from './Signup.component';
 import Logout from './reusable/Logout.component';
 import Dashboard from './Dashboard.component';
 import ViewDocument from './Document.component';
-import Folder from './Folder.component';
+import Folder from './Folder/Folder.component.jsx';
 import ManageUsers from './ManageUsers.component';
 import EditDocument from './EditDocument.component';
 import EditProfile from './EditProfile.component';
-import PublicDocuments from './public-doc/PublicDocuments.component';
-import User from './User/User.component';
+import PublicDocuments from './public-doc/PublicDocuments.component.jsx';
+import User from './User/User.component.jsx';
 
 const routes = (
   <Route exact path="/app/" component={Template}>

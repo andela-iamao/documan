@@ -1,15 +1,12 @@
 import React from 'react';
 import { browserHistory } from 'react-router';
-import _ from 'underscore';
 import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
-import Navbar from './reusable/Navbar.component';
 import { FroalaEditor } from './reusable/Fraola.component';
 import PageCenter from './reusable/PageCenter.component';
-import CustomDrawer from './CustomDrawer.component';
 import { getDoc, updateDoc, clearEditDoc } from '../actions/document.action';
 import { getActiveUser } from '../actions/users.action';
 
@@ -151,6 +148,7 @@ class EditDocument extends React.Component {
                         <div className="input-field col s8 m8">
                           <input
                             id="edit-title"
+                            name="title"
                             type="text"
                             value={state.title}
                             onChange={event => this.handleChange(event)}
@@ -172,6 +170,7 @@ class EditDocument extends React.Component {
                   </div>
                   <div className="editor-view">
                     <FroalaEditor
+                      tag='textarea'
                       onModelChange={this.handleModelChange}
                       model={state.content} />
                   </div>
@@ -183,7 +182,7 @@ class EditDocument extends React.Component {
                       onTouchTap={this.handleClose}
                     />
                     <RaisedButton
-                      className="dialog-actions"
+                      className="dialog-actions update-document"
                       label="Update Document"
                       primary
                       keyboardFocused

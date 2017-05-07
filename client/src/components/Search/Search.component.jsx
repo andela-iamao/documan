@@ -1,13 +1,20 @@
 import React from 'react';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
-import Paginate from './reusable/Paginate.component';
-import DocCard from './DocCard.component';
-import UserCard from './UserCard.component';
-import { changeSearchPage } from '../actions/search.action';
+import DocCard from '../Document/DocCard.component.jsx';
+import UserCard from '../UserCard.component.jsx';
+import { changeSearchPage } from '../../actions/search.action';
 
+ /**
+  * @class Search
+  *
+  */
 class Search extends React.Component {
 
+  /**
+   * constructor
+   * @param {object} props - properties of the component
+   */
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -15,6 +22,12 @@ class Search extends React.Component {
     this.state = { show: 'all' };
   }
 
+  /**
+   * renderUserSearch
+   * @param {Object} users - object containing information about users
+   * for rendering
+   * @return {Array} mapped
+   */
   renderUserSearch(users) {
     return users.users.results.map(user => (
       <div className="col s4 m3 l2" key={`${user.username}${user.id}`}>

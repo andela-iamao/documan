@@ -2,9 +2,8 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import Snackbar from 'material-ui/Snackbar';
-import Navbar from './reusable/Navbar.component';
 import DocumentsGrid from './DocumentsGrid.component';
-import Search from './Search.component';
+import Search from './Search/Search.component.jsx';
 import { clearSearch } from '../actions/search.action';
 import {
   getUserDocs,
@@ -82,12 +81,22 @@ class Dashboard extends React.Component {
     }
   }
 
+  /**
+   * componentWillReceiveProps
+   * @param {object} nextProps - next properties to be recieved by the
+   * component
+   * @return {void}
+   */
   componentWillReceiveProps(nextProps) {
     if (nextProps.user.details && !this.props.docs.documents) {
       this.props.dispatch(getUserDocs(nextProps.user.details.id));
     }
   }
 
+  /**
+   * clearSearch
+   * @return {void}
+   */
   clearSearch() {
     this.props.dispatch(clearSearch());
   }
@@ -157,6 +166,10 @@ class Dashboard extends React.Component {
     this.props.dispatch(updateFolder(values));
   }
 
+  /**
+   * handleClearFolderError
+   * @return {void}
+   */
   handleClearFolderError() {
     this.props.dispatch(clearFolderError());
   }
@@ -167,7 +180,7 @@ class Dashboard extends React.Component {
    * @return {void}
    */
   handleDeleteDoc(id) {
-    this.props.dispatch(deleteDoc(id));
+    this.props.dispatch(deleteDoc(id, false, true));
   }
 
   /**
@@ -217,6 +230,11 @@ class Dashboard extends React.Component {
     this.props.dispatch(deleteFolder(value));
   }
 
+  /**
+   * handleNextPage
+   * @param {number} page - page numbet to navigate to
+   * @return {void}
+   */
   handleNextPage(page) {
     this.props.dispatch(getUserFolders(8, 8 * (page - 1)));
     this.props.dispatch(getUserDocs(this.props.user.details.id, 10, 10 * (page - 1)));
