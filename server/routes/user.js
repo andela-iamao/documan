@@ -1,5 +1,5 @@
 import express from 'express';
-import UserControllers from '../controllers/user';
+import UserControllers from '../controllers/UserControllers';
 import { getRoles, isAdmin, targetIsAdmin } from '../middlewares/checkRoles';
 import { signup } from '../middlewares/validate';
 import { verifyToken, isBlacklist } from '../middlewares/authenticate';

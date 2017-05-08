@@ -1,6 +1,6 @@
 import express from 'express';
 import { folders } from '../middlewares/validate';
-import FolderControllers from '../controllers/folder';
+import FolderControllers from '../controllers/FolderControllers';
 import { isAdmin } from '../middlewares/checkRoles';
 import { verifyToken, isBlacklist } from '../middlewares/authenticate';
 

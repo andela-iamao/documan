@@ -1,5 +1,5 @@
 import express from 'express';
-import DocumentControllers from '../controllers/document';
+import DocumentControllers from '../controllers/DocumentControllers';
 import integerQuery from '../middlewares/cleanParam';
 import { isAdmin } from '../middlewares/checkRoles';
 import { verifyToken, isBlacklist } from '../middlewares/authenticate';
