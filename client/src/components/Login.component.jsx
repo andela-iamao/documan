@@ -1,10 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import signupUser from '../actions/signup.action';
-import { signup } from '../util/validate-form';
-import PageCenter from './reusable/PageCenter.component';
-import ReduxFormSignup from './reusable/ReduxFormSignup.component';
+import loginUser from '../actions/login.action';
+import { login } from '../util/validate-form';
+import PageCenter from './reusable/PageCenter.component.jsx';
+import ReduxFormLogin from './reusable/ReduxFormLogin.component.jsx';
 import { clearError, validationError } from '../actions/error.action';
 
 @connect(store => ({
@@ -14,10 +14,10 @@ import { clearError, validationError } from '../actions/error.action';
   auth: store.auth
 }))
 /**
- * React component for Signup.
- * @class Signup
+ * React component for Login.
+ * @class Login
  */
-class Signup extends React.Component {
+class Login extends React.Component {
 
   /**
     * constructor
@@ -70,24 +70,25 @@ class Signup extends React.Component {
    * @return {void}
    */
   handleSubmit(values) {
-    const validation = signup(values) || null;
+    const validation = login(values) || null;
     if (validation) {
       this.props.dispatch(validationError(validation));
     } else {
-      this.props.dispatch(signupUser(values));
+      this.props.dispatch(loginUser(values));
     }
   }
 
   /**
    * render - description
-   * @return {object} returns react element to be rendered
+   *
+   * @return {object}  description
    */
   render() {
     return (
       <div id="login-wrapper">
         <PageCenter>
           <div>
-            <ReduxFormSignup
+            <ReduxFormLogin
               bg-color="#FFFFFF"
               onSubmit={this.handleSubmit}
               failed={this.props.error}
@@ -100,4 +101,4 @@ class Signup extends React.Component {
   }
 }
 
-export default Signup;
+export default Login;

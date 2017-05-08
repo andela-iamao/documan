@@ -5,7 +5,7 @@ import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import DocumentAdd from 'material-ui/svg-icons/action/note-add';
-import { FroalaEditor } from '../reusable/Fraola.component';
+import { FroalaEditor } from '../reusable/Fraola.component.jsx';
 
 const customContentStyle = {
   width: '70%',

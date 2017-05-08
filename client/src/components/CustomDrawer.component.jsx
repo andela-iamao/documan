@@ -5,11 +5,10 @@ import Avatar from 'material-ui/Avatar';
 import Divider from 'material-ui/Divider';
 import FileFolder from 'material-ui/svg-icons/file/folder';
 import { List, ListItem } from 'material-ui/List';
-import FloatingActionButton from 'material-ui/FloatingActionButton';
 import ActionAssignment from 'material-ui/svg-icons/action/assignment';
 import DashboardIcon from 'material-ui/svg-icons/action/dashboard';
 import { blue500 } from 'material-ui/styles/colors';
-import PageCenter from './reusable/PageCenter.component';
+import PageCenter from './reusable/PageCenter.component.jsx';
 
 /**
  * React component for
@@ -64,7 +63,7 @@ class CustomDrawer extends React.Component {
                   onClick={() => {
                     this.props.showAll();
                     browserHistory.push('/app/dashboard');
-                }}>
+                  }}>
                   <ListItem
                     leftAvatar={ <Avatar icon={<DashboardIcon />}/>}
                     primaryText="Dashboard"

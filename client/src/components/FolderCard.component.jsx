@@ -16,12 +16,12 @@ class FolderCard extends React.Component {
       <div className="doc-card-root">
         <div className="doc-icon-action-wrapper">
           <div className="doc-card-icon">
-            <img src={ this.props.icon } />
+            <img src={this.props.icon} />
           </div>
           <div className="doc-card-action-container">
-            <div onClick={ () => {
+            <div onClick={() => {
               browserHistory.push(`/app/folder/${this.props.id}`);
-            } } className="doc-card-action-helper">
+            }} className="doc-card-action-helper">
 
             </div>
             <div className="doc-card-actions">
@@ -30,14 +30,12 @@ class FolderCard extends React.Component {
                 data-position="bottom"
                 data-delay="20"
                 data-tooltip="Delete document"
-                onClick={
-                  () =>
+                onClick={() =>
                     this.props.onDelete({
                       id: this.props.id,
                       title: this.props.title,
                       type: 'folder'
-                    })
-                  }
+                    })}
               >
               </span>
               <span
@@ -45,11 +43,11 @@ class FolderCard extends React.Component {
                 data-position="bottom"
                 data-delay="20"
                 data-tooltip="Edit document"
-                onClick={ () =>
+                onClick={() =>
                   this.props.onEdit({
                     id: this.props.id,
                     title: this.props.title
-                  }) }
+                  })}
               >
               </span>
               <span
@@ -57,9 +55,9 @@ class FolderCard extends React.Component {
                 data-position="bottom"
                 data-delay="20"
                 data-tooltip="View document"
-                onClick={ () => {
+                onClick={() => {
                   browserHistory.push(`/app/folder/${this.props.id}`);
-                } }
+                }}
               >
               </span>
             </div>
@@ -68,9 +66,9 @@ class FolderCard extends React.Component {
         <div className="truncate doc-card-info chip tooltipped"
           data-position="bottom"
           data-delay="20"
-          data-tooltip={ this.props.title }
+          data-tooltip={this.props.title}
           >
-          <span>{ this.props.title }</span>
+          <span>{this.props.title}</span>
         </div>
       </div>
     );

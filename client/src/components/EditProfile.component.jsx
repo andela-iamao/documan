@@ -2,7 +2,7 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import RaisedButton from 'material-ui/RaisedButton';
-import Alert from './reusable/Alert.component';
+import Alert from './reusable/Alert.component.jsx';
 
 import { getActiveUser, updateUser, clearError } from '../actions/users.action';
 
@@ -14,8 +14,16 @@ import { getActiveUser, updateUser, clearError } from '../actions/users.action';
   docs: store.documents,
   folder: store.folder
 }))
+ /**
+  * @class EditProfile
+  *
+  */
 class EditProfile extends React.Component {
 
+  /**
+   * constructor
+   * @param {object} props - object properties of component
+   */
   constructor(props) {
     super(props);
     this.handleUpdate = this.handleUpdate.bind(this);
@@ -58,10 +66,20 @@ class EditProfile extends React.Component {
     }
   }
 
+  /**
+   * handleInputChange
+   * @param {object} event - event properties of selected element
+   * @return {void}
+   */
   handleInputChange(event) {
     this.setState({ [event.target.name]: event.target.value });
   }
 
+  /**
+   * validate
+   * @param {object} values - object of fields to validate
+   * @return {void}
+   */
   validate(values) {
     if (values.username.length < 5) {
       this.setState({ error: 'Username cannot be less than 5' });
@@ -77,6 +95,10 @@ class EditProfile extends React.Component {
     return true;
   }
 
+  /**
+   * handleUpdate
+   * @return {void}
+   */
   handleUpdate() {
     const values = {
       firstname: this.state.firstname,
@@ -97,10 +119,19 @@ class EditProfile extends React.Component {
     }
   }
 
+  /**
+   * onCloseAlert
+   * @return {void}
+   */
   onCloseAlert() {
     this.setState({ error: null });
     this.props.dispatch(clearError());
   }
+
+  /**
+   * render
+   * @return {object} react element to render
+   */
   render() {
     return (
       <div>

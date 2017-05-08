@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
 import DocCard from './Document/DocCard.component.jsx';
-import FolderCard from './FolderCard.component';
+import FolderCard from './FolderCard.component.jsx';
 import CreateFolder from './Folder/CreateFolder.component.jsx';
 import CreateDoc from './Document/CreateDoc.component.jsx';
-import EditFolder from './EditFolder.component';
-import DeleteDialog from './DeleteDialog.component';
+import EditFolder from './EditFolder.component.jsx';
+import DeleteDialog from './DeleteDialog.component.jsx';
 import { renderFromProp } from '../util/helper';
 
 /**
@@ -28,12 +28,26 @@ class DocumentGrid extends React.Component {
     this.state = { page: 1 };
   }
 
+  /**
+   * handlePageChange - set the state of the component to the
+   * current value of the selected option and dispatch a page change
+   * action
+   * @param {object} event - properties of the select fields
+   * @param {number} index - index number of selected option
+   * @param {string} value - value of the selected option
+   * @return {void}
+   */
   handlePageChange(event, index, value) {
     this.setState({ page: value });
     this.props.handleNextPage(value);
   }
 
-  paginate(pageCount, handlePageChange) {
+  /**
+   * paginate
+   * @param {number} pageCount - number of pages
+   * @return {array} array of menu items
+   */
+  paginate(pageCount) {//eslint-disable-line
     const paginated = [];
     for (let count = 0; count < pageCount; count += 1) {
       paginated.push(

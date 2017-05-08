@@ -11,10 +11,8 @@ import {
 } from 'material-ui/Table';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import FlatButton from 'material-ui/FlatButton';
-import Navbar from './reusable/Navbar.component';
-import Paginate from './reusable/Paginate.component';
-import CustomDrawer from './CustomDrawer.component';
-import DeleteDialog from './DeleteDialog.component';
+import Paginate from './reusable/Paginate.component.jsx';
+import DeleteDialog from './DeleteDialog.component.jsx';
 import {
   getActiveUser,
   getAllUsers,
@@ -25,9 +23,11 @@ import {
   confirmPromotion,
   clearConfirmPromotion
 } from '../actions/users.action';
-import { getAllDocs, deleteDoc, clearConfirmDeleteDoc, confirmDeleteDoc } from '../actions/document.action';
-import getUserInfo from '../util/getUserInfo';
-import paginate from '../util/paginate';
+import {
+  getAllDocs,
+  deleteDoc,
+  clearConfirmDeleteDoc,
+  confirmDeleteDoc } from '../actions/document.action';
 
 @connect(store => ({
   user: store.users,
@@ -45,6 +45,10 @@ import paginate from '../util/paginate';
 */
 class ManageUser extends React.Component {
 
+  /**
+   * constructor
+   * @param {object} props - properties of component
+   */
   constructor(props) {
     super(props);
     this.handleChange = this.handleChange.bind(this);
@@ -55,7 +59,7 @@ class ManageUser extends React.Component {
     this.clearDeleteUserConfirmation = this.clearDeleteUserConfirmation.bind(this);
     this.handleDeleteUser = this.handleDeleteUser.bind(this);
     this.handleConfirmDeleteUser = this.handleConfirmDeleteUser.bind(this);
-    this.handleDocPageChange= this.handleDocPageChange.bind(this);
+    this.handleDocPageChange = this.handleDocPageChange.bind(this);
     this.confirmPromotion = this.confirmPromotion.bind(this);
     this.clearConfirmPromotion = this.clearConfirmPromotion.bind(this);
     this.handlePromoteUser = this.handlePromoteUser.bind(this);
@@ -82,7 +86,7 @@ class ManageUser extends React.Component {
    * before render
    * @return {void}
    */
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps) {//eslint-disable-line
     if (nextProps.user.details) {
       if (nextProps.user.details.roleId
         && nextProps.user.details['Role.title'] !== 'admin') {
@@ -91,14 +95,29 @@ class ManageUser extends React.Component {
     }
   }
 
+  /**
+   * handlePromoteUser
+   * @param {number} id - id of user to promote
+   * @return {void}
+   */
   handlePromoteUser(id) {
     this.props.dispatch(updateUser(id, { roleId: 1 }));
   }
 
+  /**
+   * handlePromoteUser
+   * @param {number} id - id of user to delete
+   * @return {void}
+   */
   handleDeleteUser(id) {
     this.props.dispatch(deleteUser(id));
   }
 
+  /**
+   * handleChange
+   * @param {number} value - value of tab to change to
+   * @return {void}
+   */
   handleChange(value) {
     this.setState({ value });
   }
@@ -106,18 +125,19 @@ class ManageUser extends React.Component {
    /**
     * handleConfirmDeleteUser - send an action to confirm user delete
     * @param {Object} values - information to pass to the delete dialog
+    * @return {void}
     */
-   handleConfirmDeleteUser(values) {
-     this.props.dispatch(confirmDeleteUser(values));
-   }
+  handleConfirmDeleteUser(values) {
+    this.props.dispatch(confirmDeleteUser(values));
+  }
 
    /**
     * clearDeleteUserConfirmation
     * @return {void}
     */
-   clearDeleteUserConfirmation() {
-     this.props.dispatch(clearConfirmDeleteUser());
-   }
+  clearDeleteUserConfirmation() {
+    this.props.dispatch(clearConfirmDeleteUser());
+  }
 
   /**
    * handleConfirmDeleteDoc
@@ -197,6 +217,11 @@ class ManageUser extends React.Component {
     this.props.dispatch(clearConfirmPromotion());
   }
 
+  /**
+   * renderTable
+   * @param {object} users - information of users to map to elements
+   * @return {void}
+   */
   renderTable(users) {
     const self = this;
     return users.users.results.map((user, index) => (
@@ -220,7 +245,7 @@ class ManageUser extends React.Component {
               label="Promote"
               primary
               onTouchTap={() => self.confirmPromotion({
-                id:user.id,
+                id: user.id,
                 title: user.username,
                 type: 'admin'
               })}
@@ -248,6 +273,11 @@ class ManageUser extends React.Component {
     ));
   }
 
+  /**
+   * renderDocuments
+   * @param {object} docs - information of documents to map to elements
+   * @return {void}
+   */
   renderDocuments(docs) {
     const self = this;
     const accessLevels = {
@@ -350,8 +380,8 @@ class ManageUser extends React.Component {
                     </Table>
                     <div style={{
                       display: (this.state.value === 'users') ?
-                          'block': 'none'
-                      }}>
+                        'block' : 'none'
+                    } }>
                       <Paginate
                         pageCount={users.users.paginationMeta.page_count}
                         page={this.state.user_page}
@@ -378,8 +408,8 @@ class ManageUser extends React.Component {
                   </Table>
                   <div style={{
                     display: (this.state.value === 'docs') ?
-                        'block': 'none'
-                    }}>
+                      'block' : 'none'
+                  }}>
                     <Paginate
                       pageCount={allDocuments.paginationMeta.page_count}
                       page={this.state.doc_page}

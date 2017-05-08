@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import Navbar from './reusable/Navbar.component';
-import CustomDrawer from './CustomDrawer.component';
+import Navbar from './reusable/Navbar.component.jsx';
+import CustomDrawer from './CustomDrawer.component.jsx';
 import { getActiveUser } from '../actions/users.action';
 import { getCurrentPath } from '../util/helper';
 import signout from '../actions/signout.action';

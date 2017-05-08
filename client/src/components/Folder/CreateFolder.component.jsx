@@ -1,5 +1,4 @@
 import React from 'react';
-import _ from 'underscore';
 import Dialog from 'material-ui/Dialog';
 import RaisedButton from 'material-ui/RaisedButton';
 import FloatingActionButton from 'material-ui/FloatingActionButton';

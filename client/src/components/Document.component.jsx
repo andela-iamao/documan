@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import Edit from 'material-ui/svg-icons/image/edit';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
-import { FroalaEditorView } from './reusable/Fraola.component';
-import FolderDialog from './FolderDialog.component';
-import DeleteDialog from './DeleteDialog.component';
+import { FroalaEditorView } from './reusable/Fraola.component.jsx';
+import FolderDialog from './FolderDialog.component.jsx';
+import DeleteDialog from './DeleteDialog.component.jsx';
 import {
   getDoc,
   createDoc,

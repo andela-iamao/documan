@@ -5,8 +5,8 @@ import RaisedButton from 'material-ui/RaisedButton';
 import SelectField from 'material-ui/SelectField';
 import MenuItem from 'material-ui/MenuItem';
 import CircularProgress from 'material-ui/CircularProgress';
-import { FroalaEditor } from './reusable/Fraola.component';
-import PageCenter from './reusable/PageCenter.component';
+import { FroalaEditor } from './reusable/Fraola.component.jsx';
+import PageCenter from './reusable/PageCenter.component.jsx';
 import { getDoc, updateDoc, clearEditDoc } from '../actions/document.action';
 import { getActiveUser } from '../actions/users.action';
 
@@ -126,7 +126,7 @@ class EditDocument extends React.Component {
    * handleClose
    * @return {void}
    */
-  handleClose() {
+  handleClose() { //eslint-disable-line
     browserHistory.goBack();
   }
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import Snackbar from 'material-ui/Snackbar';
-import DocumentsGrid from './DocumentsGrid.component';
+import DocumentsGrid from './DocumentsGrid.component.jsx';
 import Search from './Search/Search.component.jsx';
 import { clearSearch } from '../actions/search.action';
 import {

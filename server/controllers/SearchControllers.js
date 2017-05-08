@@ -1,13 +1,6 @@
 import db from '../models/index';
 import { paginate } from '../helpers/helper';
-
-const searchQuery = (table, field, query, permission, as) => {
-  const sequelizeQuery = (as) ?
-    `SELECT * FROM "${table}" AS "${as}" WHERE ${field} LIKE '%${query}%'`
-    :
-    `SELECT * FROM "${table}" WHERE ${field} LIKE '%${query}%' ${(!permission.isAdmin) ? `AND ("accessId"=1 OR "ownerId"=${permission.userId})` : ''}`;
-  return sequelizeQuery;
-};
+import { searchQuery } from '../config/sequelizeQueries';
 
  /**
   * @class SearchControllers

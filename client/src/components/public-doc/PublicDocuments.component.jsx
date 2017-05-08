@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import CircularProgress from 'material-ui/CircularProgress';
 import DropDownMenu from 'material-ui/DropDownMenu';
 import MenuItem from 'material-ui/MenuItem';
-import PageCenter from '../reusable/PageCenter.component';
-import DocCard from '../Document/DocCard.component';
+import PageCenter from '../reusable/PageCenter.component.jsx';
+import DocCard from '../Document/DocCard.component.jsx';
 import { getAllDocs } from '../../actions/document.action';
 import { clearSearch } from '../../actions/search.action';
 
@@ -85,7 +85,7 @@ class PublicDocuments extends React.Component {
    * @param {Array} documents - documents information to maps
    * @return {Array} mapped document
    */
-  renderDocuments(documents) {
+  renderDocuments(documents) { //eslint-disable-line
     return documents.map(document => (
       <div className="col s4 m3 l2" key={`${document.title} ${document.id}`}>
         <DocCard

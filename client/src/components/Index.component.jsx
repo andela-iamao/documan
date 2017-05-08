@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getActiveUser } from '../actions/users.action';
-import IntroText from './reusable/IntroText.component';
-import FullPageSlider from './reusable/FullPageSlider.component';
+import IntroText from './reusable/IntroText.component.jsx';
+import FullPageSlider from './reusable/FullPageSlider.component.jsx';
 
 const text = 'Store, share and manage all your business files on the cloud.';
 
@@ -45,7 +45,7 @@ class Index extends React.Component {
   /**
    * @return {Object} react element to be rendered to the DOM
    */
-  render() {
+  render() {//eslint-disable-line
     return (
       <div>
          <FullPageSlider>

@@ -1,7 +1,7 @@
 import React from 'react';
 import Dialog from 'material-ui/Dialog';
 import FlatButton from 'material-ui/FlatButton';
-import {List, ListItem} from 'material-ui/List';
+import { List, ListItem } from 'material-ui/List';
 import FloatingActionButton from 'material-ui/FloatingActionButton';
 import FolderAdd from 'material-ui/svg-icons/file/create-new-folder';
 import CircularProgress from 'material-ui/CircularProgress';
@@ -34,14 +34,27 @@ class FolderDialog extends React.Component {
     this.state = { open: false };
   }
 
+  /**
+   * handleOpen
+   * @return {void}
+   */
   handleOpen() {
     this.setState({ open: true });
-  };
+  }
 
+  /**
+   * handleClose
+   * @return {void}
+   */
   handleClose() {
     this.setState({ open: false });
-  };
+  }
 
+  /**
+   * handleSubmit
+   * @param {object} event - event properties belonging to selected element
+   * @return {void}
+   */
   handleSubmit(event) {
     event.persist();
     event.preventDefault();

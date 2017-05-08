@@ -78,7 +78,7 @@ class EditFolder extends React.Component {
 
   /**
    * handleChange
-   * @param {object} target - properties of target element
+   * @param {object} event - properties of target element
    * @return {void}
    */
   handleChange(event) {
