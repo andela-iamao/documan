@@ -24,6 +24,14 @@
     "management",
     "system"
   ],
+  "nyc": {
+    "exclude": [
+      "server.js",
+      "server/public",
+      "build",
+      "server/routes/swagger.js"
+    ]
+  },
   "author": "Inumidun Amao",
   "license": "MIT",
   "bugs": {

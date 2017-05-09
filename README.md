@@ -1,8 +1,8 @@
 # iAmDocuman
 ## Visit: [iAmDocuman](http://iamdocuman-staging.herokuapp.com)
 
-+[![Code Climate](https://codeclimate.com/github/andela-iamao/iamdocuman.png)](https://codeclimate.com/github/andela-iamao/iamdocuman) [![Build Status](https://travis-ci.org/andela-iamao/iamdocuman.svg?branch=demo-feedback)](https://travis-ci.org/andela-iamao/iamdocuman)
-[![Coverage Status](https://coveralls.io/repos/github/andela-iamao/iamdocuman/badge.svg?branch=development)](https://coveralls.io/github/andela-iamao/iamdocuman?branch=development)
++[![Code Climate](https://codeclimate.com/github/andela-iamao/iamdocuman.svg)](https://codeclimate.com/github/andela-iamao/iamdocuman) [![Build Status](https://travis-ci.org/andela-iamao/iamdocuman.svg?branch=demo-feedback)](https://travis-ci.org/andela-iamao/iamdocuman)
+[![Coverage Status](https://coveralls.io/repos/github/andela-iamao/iamdocuman/badge.svg?branch=demo-feedback)](https://coveralls.io/github/andela-iamao/iamdocuman?branch=demo-feedback)
 
 ---
 Document management system, complete with roles and privileges. Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published.
