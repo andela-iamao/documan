@@ -21,3 +21,6 @@ exclude_paths:
   - server/models/**
   - server/seeders/**
   - migrations/**
+  - node_modules/**
+  - materialize/**
+  - server/public/**
