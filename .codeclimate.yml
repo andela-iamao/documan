@@ -4,14 +4,8 @@ engines:
     config:
       languages:
       - javascript
-  eslint:
-    enabled: true
-    channel: "eslint-3"
   fixme:
     enabled: true
-checks:
-  import/extensions:
-    enabled: false
 ratings:
   paths:
   - "server/*.js"
@@ -22,9 +16,9 @@ exclude_paths:
   - "server/seeders/"
   - "migrations/"
   - "node_modules/"
-  - "client/materialize/"
+  - "client/src/materialize/"
   - "client/test/"
   - "server/public/"
   - "examples/"
-  - "client/sass/"
-  - "client/font-awesome/"
+  - "client/src/sass/"
+  - "client/src/font-awesome/"
