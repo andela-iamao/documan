@@ -17,10 +17,11 @@ ratings:
   - "server/*.js"
   - "server/**/*.js"
 exclude_paths:
-  - server/tests/**
-  - server/models/**
-  - server/seeders/**
-  - migrations/**
-  - node_modules/**
-  - materialize/**
-  - server/public/**
+  - "server/tests/"
+  - "server/models/"
+  - "server/seeders/"
+  - "migrations/"
+  - "node_modules/"
+  - "materialize/"
+  - "client/test"
+  - "server/public/"
