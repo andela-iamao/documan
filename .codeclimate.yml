@@ -11,6 +11,7 @@ ratings:
   - "server/*.js"
   - "server/**/*.js"
 exclude_paths:
+  - "client/src/components/"
   - "server/tests/"
   - "server/models/"
   - "server/seeders/"

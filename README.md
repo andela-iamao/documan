@@ -1,7 +1,7 @@
 # iAmDocuman
 ## Visit: [iAmDocuman](http://iamdocuman-staging.herokuapp.com)
 
-[![Code Climate](https://codeclimate.com/github/andela-iamao/documan/badges/gpa.svg)](https://codeclimate.com/github/andela-iamao/documan) [![Build Status](https://travis-ci.org/andela-iamao/iamdocuman.svg?branch=development)](https://travis-ci.org/andela-iamao/iamdocuman)
++[![Code Climate](https://codeclimate.com/github/andela-iamao/iamdocuman.png)](https://codeclimate.com/github/andela-iamao/iamdocuman) [![Build Status](https://travis-ci.org/andela-iamao/iamdocuman.svg?branch=demo-feedback)](https://travis-ci.org/andela-iamao/iamdocuman)
 [![Coverage Status](https://coveralls.io/repos/github/andela-iamao/iamdocuman/badge.svg?branch=development)](https://coveralls.io/github/andela-iamao/iamdocuman?branch=development)
 
 ---

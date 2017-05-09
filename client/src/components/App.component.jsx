@@ -3,17 +3,17 @@ import PropTypes from 'prop-types';
 import { Router, IndexRoute, Route, browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import Template from './Template.component';
-import Index from './Index.component';
-import Login from './Login.component';
-import Signup from './Signup.component';
-import Logout from './reusable/Logout.component';
-import Dashboard from './Dashboard.component';
-import ViewDocument from './Document.component';
+import Template from './Template.component.jsx';
+import Index from './Index.component.jsx';
+import Login from './Login.component.jsx';
+import Signup from './Signup.component.jsx';
+import Logout from './reusable/Logout.component.jsx';
+import Dashboard from './Dashboard.component.jsx';
+import ViewDocument from './Document.component.jsx';
 import Folder from './Folder/Folder.component.jsx';
-import ManageUsers from './ManageUsers.component';
-import EditDocument from './EditDocument.component';
-import EditProfile from './EditProfile.component';
+import ManageUsers from './ManageUsers.component.jsx';
+import EditDocument from './EditDocument.component.jsx';
+import EditProfile from './EditProfile.component.jsx';
 import PublicDocuments from './public-doc/PublicDocuments.component.jsx';
 import User from './User/User.component.jsx';
 
@@ -50,7 +50,7 @@ class App extends React.Component {
   render() {
     return (
       <MuiThemeProvider>
-        <Router history={ this.props.history } routes={routes} />
+        <Router history={this.props.history} routes={routes} />
       </MuiThemeProvider>
     );
   }
