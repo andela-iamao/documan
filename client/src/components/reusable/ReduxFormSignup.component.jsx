@@ -3,7 +3,7 @@ import { Link } from 'react-router';
 import { PropTypes } from 'prop-types';
 import { Field, reduxForm } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
-import Alert from './Alert.component';
+import Alert from './Alert.component.jsx';
 
 /**
  * React component for ReduxFormSignup.
@@ -24,19 +24,15 @@ class ReduxFormSignup extends React.Component {
         <center>
           <div
             className="z-depth-1 col s12 m6 l6 offset-m3 offset-l3"
-            style={ this.props.style }
+            style={this.props.style}
           >
             <div className="col s12 m12 l12"
-              style={ this.props.labelStyle }
+              style={this.props.labelStyle}
             >
-              <h5>
-                { this.props.label }
-              </h5>
+              <h5>{this.props.label}</h5>
             </div>
-            <div className="col s12 m12 l12"
-              style={ this.props.formStyle }
-            >
-              <form onSubmit={ handleSubmit }>
+            <div className="col s12 m12 l12" style={this.props.formStyle}>
+              <form onSubmit={handleSubmit}>
                 <div>
                   <div className="row">
                     <div className="input-field col s12 m6 l6">
@@ -105,11 +101,11 @@ class ReduxFormSignup extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div style={ { marginTop: 30 } }>
+                <div className="form-action">
                   <RaisedButton
                     label="Signup"
                     type="submit"
-                    primary={ true }
+                    primary
                   />
                   <p>
                     Already have an account? <Link to="/app/login">
@@ -118,11 +114,10 @@ class ReduxFormSignup extends React.Component {
                   </p>
                 </div>
               </form>
-              {
-                (this.props.failed) ?
+              {(this.props.failed) ?
                   <Alert
-                    info={ { error: this.props.failed.data } }
-                    onClose={ this.props.onCloseAlert }
+                    info={{ error: this.props.failed.data }}
+                    onClose={this.props.onCloseAlert}
                   />
                   :
                   ''

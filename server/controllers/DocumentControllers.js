@@ -39,18 +39,19 @@ class DocumentControllers {
     let query;
     const limit = req.query.limit || 10;
     const offset = req.query.offset || 0;
+    const attr = ['id', 'username', 'roleId'];
     if (req.isAdmin) {
       query = { where: {},
         include: [{
           model: db.Users,
-          attributes: ['id', 'username', 'roleId']
+          attributes: attr
         }] };
     } else {
       query = {
         where: { accessId: 1 },
         include: [{
           model: db.Users,
-          attributes: ['id', 'username', 'roleId']
+          attributes: attr
         }] };
     }
     Document.findAll(query)

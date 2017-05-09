@@ -103,7 +103,6 @@ class FolderDialog extends React.Component {
           title="Add to folder"
           contentStyle={customContentStyle}
           actions={actions}
-          style={{ paddingTop: 0 }}
           modal={false}
           open={this.state.open}
           autoScrollBodyContent

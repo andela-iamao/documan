@@ -380,8 +380,7 @@ class ManageUser extends React.Component {
                     </Table>
                     <div style={{
                       display: (this.state.value === 'users') ?
-                        'block' : 'none'
-                    } }>
+                        'block' : 'none' }}>
                       <Paginate
                         pageCount={users.users.paginationMeta.page_count}
                         page={this.state.user_page}

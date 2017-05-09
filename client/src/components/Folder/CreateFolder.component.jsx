@@ -88,7 +88,7 @@ class CreateFolder extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <img src="/images/folder.png" style={{ width: '35%' }} />
+          <img src="/images/folder.png" className="dialog-icon" />
           <form onSubmit={event => this.handleSubmit(event)}>
             <input
               type="text"

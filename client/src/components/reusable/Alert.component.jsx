@@ -1,14 +1,5 @@
 import React from 'react';
 
-const buttonStyle = {
-  background: 'none',
-  border: 'none',
-  position: 'absolute',
-  top: 15,
-  right: 10,
-  fontSize: 10
-};
-
 /**
  * React component for Alert.
  * Renders an error or success alert box depending on
@@ -29,14 +20,14 @@ class Alert extends React.Component {
           'card red' : 'card green'
         } >
         <div className="card-content white-text">
-          <p>{ this.props.info.error || this.props.info.success }</p>
+          <p>{this.props.info.error || this.props.info.successs}</p>
         </div>
         {
           (this.props.onClose) ?
-            <button style={ buttonStyle } type="button" className="close white-text"
+            <button type="button" className="close-alert"
                 data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true"
-                  onClick={ () => this.props.onClose() }>
+                  onClick={() => this.props.onClose()}>
                   X
                 </span>
             </button>

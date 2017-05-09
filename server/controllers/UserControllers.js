@@ -1,6 +1,8 @@
 import db from '../models/index';
 import errorRender from '../helpers/error-render';
-import { joinUsersRole } from '../config/sequelizeQueries';
+import {
+  joinUsersRole,
+  selectPublicRoleDocuments } from '../utils/sequelizeQueries';
 import { paginate, encrypt } from '../helpers/helper';
 
  /**
@@ -17,7 +19,7 @@ class UserControllers {
    * to pass further information of the response
    */
   static createUser(req, res) {
-    if (req.body.roleId) {
+    if (req.body.roleId === 1) {
       return res.status(400).json({
         message: 'sorry, you can\'t signup as an admin'
       });
@@ -49,7 +51,7 @@ class UserControllers {
       query = { where: { ownerId: req.params.id } };
     } else if ((id !== parseInt(req.params.id, 10))
       && (req.userRole === req.targetRole)) {
-      query = `SELECT * FROM "Documents" WHERE "ownerId"=${req.params.id} AND ("accessId"=1 OR "accessId"=3)`;
+      query = selectPublicRoleDocuments(req.params.id);
     } else {
       query = { where: { ownerId: req.params.id, accessId: 1 } };
     }

@@ -60,19 +60,10 @@ class DocCard extends React.Component {
                   <span
                     className="see-doc-btn fa fa-eye card-actions tooltipped"
                     data-position="bottom"
-                    data-delay="20"
                     data-tooltip="View document"
                     onClick={() =>
                       browserHistory.push(`/app/document/${this.props.id}`)
                     }
-                  >
-                  </span>
-                  <span
-                    className="download-doc-btn fa fa-download card-actions tooltipped"
-                    data-position="bottom"
-                    data-delay="20"
-                    data-tooltip="Download document"
-                    onClick={this.props.onDownload}
                   >
                   </span>
                   {(this.props.remove) ?

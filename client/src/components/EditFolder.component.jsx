@@ -122,7 +122,7 @@ class EditFolder extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <img src="/images/folder.png" style={{ width: '35%' }} />
+          <img src="/images/folder.png" className="dialog-icon" />
           <h6>{this.props.edit.title}</h6>
           <form onSubmit={event => this.handleSubmit(event)}>
             <input

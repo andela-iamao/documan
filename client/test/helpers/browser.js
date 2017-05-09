@@ -5,6 +5,7 @@ import nock from 'nock';
 import faker from 'faker';
 import * as chai from 'chai';
 import spies from 'chai-spies';
+import sinon from 'sinon';
 import { mount, shallow, render } from 'enzyme';
 
 const exposedProperties = ['window', 'navigator', 'document'];
@@ -20,6 +21,7 @@ Object.keys(document.defaultView).forEach((property) => {
 
 chai.use(spies);
 
+global.sinon = sinon;
 global.expect = chai.expect;
 global.thunk = thunk;
 global.configureMockStore = configureMockStore;

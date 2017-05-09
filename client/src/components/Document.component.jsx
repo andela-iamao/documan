@@ -43,6 +43,7 @@ class Document extends React.Component {
     this.handleConfirmDeleteDoc = this.handleConfirmDeleteDoc.bind(this);
     this.clearDeleteConfirmation = this.clearDeleteConfirmation.bind(this);
   }
+
   /**
    * componentDidMount
    * @return {void}

@@ -7,16 +7,17 @@ engines:
   eslint:
     enabled: true
     channel: "eslint-3"
-  checks:
-    import/extensions:
-      enabled: false
   fixme:
     enabled: true
+checks:
+  import/extensions:
+    enabled: false
 ratings:
   paths:
   - "server/*.js"
   - "server/**/*.js"
 exclude_paths:
   - server/tests/**
+  - server/models/**
   - server/seeders/**
   - migrations/**

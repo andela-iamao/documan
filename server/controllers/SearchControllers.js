@@ -1,6 +1,6 @@
 import db from '../models/index';
 import { paginate } from '../helpers/helper';
-import { searchQuery } from '../config/sequelizeQueries';
+import { searchQuery } from '../utils/sequelizeQueries';
 
  /**
   * @class SearchControllers

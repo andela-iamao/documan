@@ -170,5 +170,6 @@ export default () => {
      *              $ref: '#/definitions/Document'
      */
     .delete(DocumentControllers.deleteDocument);
+
   return router;
 };

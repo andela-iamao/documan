@@ -3,6 +3,7 @@ global expect:true
 global thunk:true
 global configureMockStore:true
 global nock:true
+global sinon:true
 */
 import login from '../../src/actions/login.action';
 
@@ -28,13 +29,13 @@ describe('async actions', () => {
     ];
 
     const store = mockStore();
+    const dispatch = sinon.spy(store, 'dispatch');
+    const fn = login({ email: 'efdee@gmail.com', password: 'password' });
 
-    store.dispatch(login({
-      email: 'efdee@gmail.com',
-      password: 'password'
-    }));
-    setTimeout(() => {
-      expect(store.getActions()).to.include(expectedActions);
-    }, 1500);
+    fn(dispatch, store.getState);
+    // setTimeout(() => {
+    //   expect(store.getActions()).to.include(expectedActions);
+    // }, 1500);
+    expect(dispatch.calledWith(expectedActions[1])).to.eql(true);
   });
 });

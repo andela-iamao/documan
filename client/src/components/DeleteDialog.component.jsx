@@ -127,7 +127,7 @@ class DeleteDialog extends React.Component {
           open={this.state.open}
           onRequestClose={this.handleClose}
         >
-          <img src={icon} style={{ width: '35%' }} />
+          <img src={icon} className="dialog-icon" />
           <p>
             <b>
               {renderFromProp(this.props.onDeleteConfirmation, 'title')}

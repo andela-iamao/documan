@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import RaisedButton from 'material-ui/RaisedButton';
-import Alert from './Alert.component';
+import Alert from './Alert.component.jsx';
 
 /**
  * React component for ReduxFormLogin.
@@ -23,30 +23,27 @@ class ReduxFormLogin extends React.Component {
         <center>
           <div
             className="z-depth-1 col s12 m6 l6 offset-m3 offset-l3"
-            style={ this.props.style }
+            style={this.props.style}
           >
             <div className="col s12 m12 l12"
-              style={ this.props.labelStyle }
+              style={this.props.labelStyle}
             >
               <h4>
-                { this.props.label }
+                {this.props.label}
               </h4>
             </div>
-            <div className="col s12 m12 l12"
-              style={ this.props.formStyle }
-            >
-              {
-                (this.props.failed) ?
+            <div className="col s12 m12 l12" style={this.props.formStyle}>
+              {(this.props.failed) ?
                   <Alert
-                    info={ { error: this.props.failed.data } }
-                    onClose={ this.props.onCloseAlert }
+                    info={{ error: this.props.failed.data }}
+                    onClose={this.props.onCloseAlert}
                   />
                   :
                   ''
               }
-              <form onSubmit={ handleSubmit }>
+              <form onSubmit={handleSubmit}>
                 <div>
-                  <div className="row" style={ { padding: 0 } }>
+                  <div className="row form-row">
                     <div className="input-field col s12">
                       <Field
                         className="validate"
@@ -72,11 +69,11 @@ class ReduxFormLogin extends React.Component {
                     </div>
                   </div>
                 </div>
-                <div style={ { marginTop: 30 } }>
+                <div className="form-action">
                   <RaisedButton
                     label="login"
                     type="submit"
-                    primary={ true }
+                    primary
                   />
                   <p>
                     No account yet? <Link to="/app/signup">
@@ -108,6 +105,4 @@ ReduxFormLogin.defaultProps = {
   label: 'Welcome back!'
 };
 
-export default reduxForm({
-  form: 'login'
-})(ReduxFormLogin);
+export default reduxForm({ form: 'login' })(ReduxFormLogin);
