@@ -5,7 +5,7 @@
 import React from 'react'; // eslint-disable-line no-unused-vars
 import { shallow } from 'enzyme';
 
-import Navbar from '../../src/components/reusable/Navbar.component';
+import Navbar from '../../src/components/reusable/Navbar.component.jsx';
 
 const defaultStyle = {
   backgroundColor: '#222222',

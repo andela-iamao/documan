@@ -2,7 +2,7 @@
 /* global shallow:true */
 /* global mount:true */
 
-import React from 'react';
+import React from 'react';//eslint-disable-line
 
 import Alert from '../../src/components/reusable/Alert.component.jsx';
 
