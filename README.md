@@ -1,7 +1,7 @@
 # iAmDocuman
 ## Visit: [iAmDocuman](http://iamdocuman-staging.herokuapp.com)
 
-+[![Code Climate](https://codeclimate.com/github/andela-iamao/iamdocuman.svg)](https://codeclimate.com/github/andela-iamao/iamdocuman) [![Build Status](https://travis-ci.org/andela-iamao/iamdocuman.svg?branch=demo-feedback)](https://travis-ci.org/andela-iamao/iamdocuman)
+[![Code Climate](https://codeclimate.com/github/andela-iamao/iamdocuman.svg)](https://codeclimate.com/github/andela-iamao/iamdocuman) [![Build Status](https://travis-ci.org/andela-iamao/iamdocuman.svg?branch=demo-feedback)](https://travis-ci.org/andela-iamao/iamdocuman)
 [![Coverage Status](https://coveralls.io/repos/github/andela-iamao/iamdocuman/badge.svg?branch=demo-feedback)](https://coveralls.io/github/andela-iamao/iamdocuman?branch=demo-feedback)
 
 ---
@@ -23,11 +23,26 @@ The document:
   iAmDocuman provides to you a platform to CREATE, MANAGE and EXTEND your documents. With us, you can create a document, choose one of three access levels i.e. public(visible to the entire platform), private(only visible to you) or even role(only visible to people who have the save role access as you). Organize your documents in folders for ease of reach. Have total administrative control over your documents i.e. delete and update at will. Get access to publicly shared documents by other members of the platform. So hurry now and sign up. #iAmDocuman.
 
 
+## Features
+---
+
+
 ## Pre-requisites
 ---
   * Postgresql
   * NodeJS
   * Postman
+
+## Technologies used
+  ---
+  * NodeJS
+  * Express
+  * Postgresql
+  * HTML/CSS
+  * Materialize
+  * ReactJs
+  * Redux Architecture
+  * Sequelize ORM
 
 ## Installation
 ---

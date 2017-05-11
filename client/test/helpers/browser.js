@@ -6,6 +6,7 @@ import faker from 'faker';
 import * as chai from 'chai';
 import spies from 'chai-spies';
 import sinon from 'sinon';
+import moxios from 'moxios';
 import { mount, shallow, render } from 'enzyme';
 
 const exposedProperties = ['window', 'navigator', 'document'];
@@ -31,6 +32,7 @@ global.shallow = shallow;
 global.render = render;
 global.spy = spies;
 global.faker = faker;
+global.moxios = moxios;
 global.navigator = {
   userAgent: 'node.js'
 };

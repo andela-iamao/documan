@@ -4,10 +4,12 @@ import axios from 'axios';
  * getAllUsers - makes a get request to the get all users endpoint
  * then sends a dispatch containg the type of action and response
  * from server
+ * @param {number} limit - max number of user to return
+ * @param {number} offset - index number to begin from
  * @return {object} object to be sent to all reducers
  */
 export function getAllUsers(limit = 10, offset = 0) {
-  return (dispatch) => {
+  return dispatch =>
     axios.get(`/api/v1/users/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
@@ -15,7 +17,6 @@ export function getAllUsers(limit = 10, offset = 0) {
           payload: response.data
         });
       });
-  };
 }
 
 /**
@@ -23,10 +24,12 @@ export function getAllUsers(limit = 10, offset = 0) {
  * to the user whose id is passed into the function call
  * then dispatches an action containing the response from the server
  * @param {string} id - id of user to make request for
+ * @param {number} limit - max number of user to return
+ * @param {number} offset - index number to begin from
  * @return {object} object to be sent to all reducers
  */
 export function getUserDocs(id, limit = 10, offset = 0) {
-  return (dispatch) => {
+  return dispatch =>
     axios.get(`/api/v1/users/${id}/documents/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
@@ -34,7 +37,6 @@ export function getUserDocs(id, limit = 10, offset = 0) {
           payload: response.data.documents
         });
       });
-  };
 }
 
 
@@ -42,10 +44,11 @@ export function getUserDocs(id, limit = 10, offset = 0) {
  * getActiveUser - makes a get request to the server to get the
  * information of the user who is currently active. On success, It then
  * dispatches an action containing the user's information
+ * @param {boolean} callback - initially set to false
  * @return {object} object to be sent to all reducers
  */
 export function getActiveUser(callback = false) {
-  return (dispatch) => {
+  return dispatch =>
     axios.get('/api/v1/users/active')
       .then((response) => {
         dispatch({
@@ -63,7 +66,6 @@ export function getActiveUser(callback = false) {
           payload: error.response.data
         });
       });
-  };
 }
 
 /**
@@ -73,7 +75,7 @@ export function getActiveUser(callback = false) {
  * @return {object} action object to be sent to all reducers
  */
 export function getUser(id) {
-  return (dispatch) => {
+  return dispatch =>
     axios.get(`/api/v1/users/${id}`)
       .then((response) => {
         dispatch({
@@ -81,7 +83,6 @@ export function getUser(id) {
           payload: response.data
         });
       });
-  };
 }
 
 /**
@@ -91,7 +92,7 @@ export function getUser(id) {
  * @return {object} action object to be sent to all reducers
  */
 export function deleteUser(id) {
-  return (dispatch) => {
+  return dispatch =>
     axios.delete(`/api/v1/users/${id}`)
       .then((response) => {
         dispatch(getActiveUser());
@@ -101,7 +102,6 @@ export function deleteUser(id) {
           payload: response.data
         });
       });
-  };
 }
 
 /**
@@ -112,7 +112,7 @@ export function deleteUser(id) {
  * @return {object} action object to be sent to all reducers
  */
 export function updateUser(id, values) {
-  return (dispatch) => {
+  return dispatch =>
     axios.put(`/api/v1/users/${id}`, values)
       .then((response) => {
         dispatch(getUser());
@@ -127,11 +127,10 @@ export function updateUser(id, values) {
           payload: error.response.data.message
         });
       });
-  };
 }
 
 /**
-* confirmDeleteDoc - send an action to confirm deletion of document
+* confirmDeleteUser - send an action to confirm deletion of document
 * @param {object} values - content to render confirmation box with
 * @return {object} - action to send to reducers
 */
@@ -143,7 +142,7 @@ export function confirmDeleteUser(values) {
 }
 
 /**
-* clearConfirmDeleteDoc - send an action to notify that delete confirmation
+* clearConfirmDeleteUser - send an action to notify that delete confirmation
 * is no longer needed
 * @return {object} - action to send to reducers
 */

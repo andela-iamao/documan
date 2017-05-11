@@ -18,5 +18,4 @@ const envs = {
 
 
 const env = process.env.NODE_ENV || 'development';
-
-export default envs[env];
+module.exports = envs[env];

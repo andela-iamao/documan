@@ -2,7 +2,7 @@
 /* global shallow:true */
 /* global mount:true */
 import React from 'react'; // eslint-disable-line no-unused-vars
-import PageCenter from '../../src/components/reusable/PageCenter.component';
+import PageCenter from '../../src/components/reusable/PageCenter.component.jsx';
 
 describe('<PageCenter />', () => {
   it('should use material css classes to align vertically', () => {

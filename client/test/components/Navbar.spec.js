@@ -10,6 +10,7 @@ import Navbar from '../../src/components/reusable/Navbar.component';
 const defaultStyle = {
   backgroundColor: '#222222',
   opacity: 0.7,
+  paddingRight: 40,
   position: 'fixed',
   top: 0,
   zIndex: 10
@@ -112,28 +113,6 @@ describe('<Navbar />', () => {
     expect(wrapper.props()
     .iconElementRight.props.children[1]
     .props.children.type.muiName).to.eql('RaisedButton');
-  });
-
-  it('should only show Hello {username}! and signout button if isAuthenticated',
-  () => {
-    const wrapper = shallow(
-      <Navbar
-        title="test"
-        isAuthenticated={ {
-          username: 'Freddy',
-          userPage: '/user'
-        } }
-      />
-    );
-    expect(wrapper.props()
-    .iconElementRight.props.children[0]
-    .props.to).to.eql('/user');
-    expect(wrapper.props()
-    .iconElementRight.props.children[0]
-    .props.children.join('')).to.eql('Hello Freddy!');
-    expect(wrapper.props()
-    .iconElementRight.props.children[1]
-    .props.children.props.label).to.eql('Sign Out');
   });
 
   it('should wrap every button in <Link /> component from react-router',

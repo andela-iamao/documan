@@ -236,7 +236,9 @@ class ManageUser extends React.Component {
           {user.lastname}
         </TableRowColumn>
         <TableRowColumn>
-          {user.username}
+          <span className="username">
+            {user.username}
+          </span>
         </TableRowColumn>
         <TableRowColumn>{
           (parseInt(user.roleId, 10) === 1) ?
@@ -260,6 +262,7 @@ class ManageUser extends React.Component {
             <FlatButton
               key={`${index}flat${user.id}`}
               label="Delete"
+              className="delete-user-row"
               secondary
               onTouchTap={() => self.handleConfirmDeleteUser({
                 id: user.id,
@@ -316,6 +319,7 @@ class ManageUser extends React.Component {
               key={`${index}flat${doc.id}`}
               label="Delete"
               secondary
+              className="delete-doc-row"
               onTouchTap={() => self.handleConfirmDeleteDoc({
                 id: doc.id,
                 title: doc.title
@@ -360,7 +364,7 @@ class ManageUser extends React.Component {
           <div>
             <div className="content-display users-table">
               <Tabs value={this.state.value} onChange={this.handleChange}>
-                <Tab label="Manage Users" value="users">
+                <Tab label="Manage Users" value="users" className="user-tab">
                   <div>
                     <Table selectable={false}>
                       <TableHeader displayRowCheckbox={false}>
@@ -389,7 +393,7 @@ class ManageUser extends React.Component {
                     </div>
                   </div>
                 </Tab>
-                <Tab label="Manage Documents" value="docs">
+                <Tab label="Manage Documents" value="docs" className="doc-tab">
                   <Table selectable={false}>
                     <TableHeader displayRowCheckbox={false}>
                       <TableRow>

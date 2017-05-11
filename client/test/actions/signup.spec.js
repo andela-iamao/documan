@@ -5,10 +5,18 @@ global configureMockStore:true
 global moxios:true
 global sinon:true
 */
-import login from '../../src/actions/login.action';
+import signup from '../../src/actions/signup.action';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
+
+const payload = {
+  username: 'username',
+  firstname: 'firstname',
+  lastname: 'lastname',
+  email: 'efdee@gmail.com',
+  password: 'password'
+};
 
 describe('async actions', () => {
   beforeEach(() => {
@@ -19,19 +27,18 @@ describe('async actions', () => {
     moxios.uninstall();
   });
 
-  it('creates LOGIN_USER and CLEAR_ERROR action when user has been validated',
+  it('creates CREATE_USER and CLEAR_ERROR action when user has been created',
   (done) => {
     const expectedActions = [
-      { type: 'LOGIN_USER', payload: { token: 'abc' } },
+      { type: 'CREATE_USER',
+        payload: Object.assign(
+          {}, payload, { token: 'abc', password: undefined }) },
       { type: 'CLEAR_ERROR' },
     ];
 
     const store = mockStore({ auth: { loggedInUser: null, isAuthenticated: false } });
 
-    store.dispatch(login({
-      email: 'efdee@gmail.com',
-      password: 'password'
-    })).then(() => {
+    store.dispatch(signup(payload)).then(() => {
       expect(store.getActions()).to.eql(expectedActions);
       done();
     });
@@ -40,7 +47,7 @@ describe('async actions', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 200,
-        response: { token: 'abc' }
+        response: Object.assign({}, payload, { token: 'abc', password: undefined })
       });
     });
   });
@@ -48,15 +55,12 @@ describe('async actions', () => {
   it('creates VALIDATION_ERROR action when user details are incorrect',
   (done) => {
     const expectedActions = [
-      { type: 'VALIDATION_ERROR', payload: 'email/passwords do not match' }
+      { type: 'VALIDATION_ERROR', payload: 'some error' }
     ];
 
     const store = mockStore({ auth: { loggedInUser: null, isAuthenticated: false } });
 
-    store.dispatch(login({
-      email: 'wromgemail@gmail.com',
-      password: 'password'
-    })).then(() => {
+    store.dispatch(signup(payload)).then(() => {
       expect(store.getActions()).to.eql(expectedActions);
       done();
     });
@@ -65,7 +69,7 @@ describe('async actions', () => {
       const request = moxios.requests.mostRecent();
       request.respondWith({
         status: 401,
-        response: { message: 'email/passwords do not match' }
+        response: { message: 'some error' }
       });
     });
   });

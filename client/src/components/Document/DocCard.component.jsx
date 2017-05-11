@@ -98,9 +98,6 @@ DocCard.defaultProps = {
   title: 'Lorem Ipsum Dolor',
   showActions: true,
   icon: '/images/file.png',
-  onDownload() {
-    return null;
-  },
   onEdit() {
     return null;
   },
@@ -116,7 +113,6 @@ DocCard.propTypes = {
   title: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   icon: PropTypes.string.isRequired,
-  onDownload: PropTypes.func.isRequired,
   onDelete: PropTypes.func.isRequired,
   onEdit: PropTypes.func.isRequired,
   onView: PropTypes.func.isRequired

@@ -6,7 +6,7 @@ module.exports = {
       .url(`${config.url}login`)
       .waitForElementVisible('body', 1000)
       .waitForElementVisible('#react-app', 3000)
-      .setValue('input[type=email]', 'efdee@g.com')
+      .setValue('input[type=email]', 'jane@doe.com')
       .setValue('input[type=password]', 'password')
       .click('button[type=submit]')
       .pause(1000)
@@ -15,7 +15,7 @@ module.exports = {
       .setValue('input[name=title]', 'e2e test')
       .setValue('textarea', 'yada yada random stuff')
       .click('div.create-doc-btn > button')
-      .waitForElementVisible('div.document-name > span');
+      .waitForElementVisible('div.document-name > span', 2000);
   },
   'Edit document': (browser) => {
     browser

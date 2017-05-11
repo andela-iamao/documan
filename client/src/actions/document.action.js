@@ -9,7 +9,7 @@ import axios from 'axios';
  */
 export function getUserDocs(id, limit = 10, offset = 0) {
   return (dispatch) => {
-    axios.get(`/api/v1/users/${id}/documents/?limit=${limit}&offset=${offset}`)
+    return axios.get(`/api/v1/users/${id}/documents/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
           type: 'FETCHED_CURRENT_USER_DOCS',
@@ -27,7 +27,7 @@ export function getUserDocs(id, limit = 10, offset = 0) {
 */
 export function createDoc(values, documentCount, pageNum, userId) {
   return (dispatch) => {
-    axios.post('/api/v1/documents', values)
+    return axios.post('/api/v1/documents', values)
       .then((response) => {
         dispatch({
           type: 'CREATED_DOC',
@@ -40,7 +40,7 @@ export function createDoc(values, documentCount, pageNum, userId) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_CREATING_DOCUMENT',
-          payload: error.response
+          payload: error.response.data
         });
       });
   };
@@ -53,7 +53,7 @@ export function createDoc(values, documentCount, pageNum, userId) {
 */
 export function getDoc(id) {
   return (dispatch) => {
-    axios.get(`/api/v1/documents/${id}`)
+    return axios.get(`/api/v1/documents/${id}`)
       .then((response) => {
         dispatch({
           type: 'GOT_DOCUMENT',
@@ -63,7 +63,7 @@ export function getDoc(id) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_GETTING_DOCUMENT',
-          payload: error.response
+          payload: error.response.data
         });
       });
   };
@@ -90,7 +90,7 @@ export function editDoc(values) {
 */
 export function updateDoc(values, refresh = true) {
   return (dispatch) => {
-    axios.put(`/api/v1/documents/${values.id}`, values)
+    return axios.put(`/api/v1/documents/${values.id}`, values)
       .then((response) => {
         if (refresh) {
           dispatch(getUserDocs());
@@ -103,7 +103,7 @@ export function updateDoc(values, refresh = true) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_UPDATING_DOCUMENT',
-          payload: error.response
+          payload: error.response.data
         });
       });
   };
@@ -135,7 +135,7 @@ export function getAllDocs(limit = 10, offset = 0) {
 */
 export function deleteDoc(id, refresh = false, type = null) {
   return (dispatch) => {
-    axios.delete(`/api/v1/documents/${id}`)
+    return axios.delete(`/api/v1/documents/${id}`)
       .then(() => {
         dispatch({
           type: 'DELETED_DOCUMENT',

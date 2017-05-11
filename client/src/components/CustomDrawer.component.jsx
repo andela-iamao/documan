@@ -128,6 +128,7 @@ class CustomDrawer extends React.Component {
                       }>
                       <Divider inset />
                       <ListItem
+                        className="manage"
                         leftAvatar={
                           <Avatar icon={
                             <span className="fa fa-users"></span>
@@ -135,7 +136,7 @@ class CustomDrawer extends React.Component {
                             backgroundColor={blue500}
                           />
                         }
-                        primaryText="Manage Users"
+                        primaryText="Manage"
                       />
                     </div>
                     :
