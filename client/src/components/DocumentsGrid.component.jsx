@@ -141,13 +141,11 @@ class DocumentGrid extends React.Component {
         />
         <hr />
         <div className="row ">
-          {
-            (this.props.folders && !this.props.views.showOnlyDoc) ?
+          {(this.props.folders && !this.props.views.showOnlyDoc) ?
               this.renderFolders(this.props.folders)
               : ''
           }
-          {
-            (this.props.docs && !this.props.views.showOnlyFolder) ?
+          {(this.props.docs && !this.props.views.showOnlyFolder) ?
               this.renderDocs(this.props.docs)
               : ''
           }
