@@ -248,7 +248,7 @@ class Dashboard extends React.Component {
       <div>
         {
           (this.props.user.details) ?
-            <div>
+            <div className="dashboard-container">
               {(this.props.search.results.users
                 || this.props.search.results.docs) ?
                 <Search

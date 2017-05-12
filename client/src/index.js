@@ -11,6 +11,8 @@ import store from './store';
 require('./materialize/sass/materialize.scss');
 require('./font-awesome/scss/font-awesome.scss');
 require('./sass/index.scss');
+require('froala-editor/css/froala_style.min.css');
+require('froala-editor/css/froala_editor.pkgd.min.css');
 
 
 injectTapEventPlugin();

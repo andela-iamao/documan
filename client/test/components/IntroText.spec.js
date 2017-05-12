@@ -3,7 +3,7 @@
 /* global mount:true */
 
 import React from 'react'; // eslint-disable-line no-unused-vars
-import IntroText from '../../src/components/reusable/IntroText.component';
+import IntroText from '../../src/components/reusable/IntroText.component.jsx';
 
 describe('<IntroText />', () => {
   it('should render a bold title and normal text', () => {
@@ -27,10 +27,7 @@ describe('<IntroText />', () => {
       <IntroText
         title="Tesing IntroText"
         text="testing IntroText with mocha and enzyme"
-        link={ {
-          label: 'External',
-          href: 'http://google.com'
-        } }
+        link={{ label: 'External', href: 'http://google.com' }}
       />
     );
     expect(wrapper.find('a')).to.have.length(1);
@@ -38,7 +35,6 @@ describe('<IntroText />', () => {
       .type.muiName).to.eql('RaisedButton');
     expect(wrapper.find('a').props().children.props.label)
       .to.eql('External');
-    expect(wrapper.find('a').props().href)
-      .to.eql('http://google.com');
+    expect(wrapper.find('a').props().href).to.eql('http://google.com');
   });
 });

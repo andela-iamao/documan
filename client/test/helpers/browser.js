@@ -22,6 +22,57 @@ Object.keys(document.defaultView).forEach((property) => {
 
 chai.use(spies);
 
+global.window.localStorage = {
+  getItem: () => {
+    return 'abc';
+  }
+}
+
+global.initialState = {
+  users: {
+    creating: false,
+    created: false,
+    details: null,
+    error: null,
+    user: null,
+    users: null,
+    confirmDelete: null,
+    promotion: null
+  },
+  form: {},
+  error: {},
+  auth: {
+    isAuthenticated: false,
+    loggedInUser: null
+  },
+  folder: {
+    error: null,
+    folders: null,
+    confirmDelete: null,
+    folder: null,
+    editFolder: false,
+    documents: null
+  },
+  documents: {
+    error: null,
+    documents: null,
+    allDocuments: null,
+    confirmDelete: null,
+    doc: null,
+    editDoc: false
+  },
+  views: {
+    showOnlyDoc: false,
+    showOnlyFolder: false
+  },
+  search: {
+    results: {
+      users: null,
+      docs: null,
+    },
+    searchPage: 1
+  }
+};
 global.sinon = sinon;
 global.expect = chai.expect;
 global.thunk = thunk;

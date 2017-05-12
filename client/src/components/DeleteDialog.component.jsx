@@ -109,7 +109,7 @@ class DeleteDialog extends React.Component {
     return (
       <div>
         {(this.props.deleteButton) ?
-          <div className="delete-btn">
+          <div className="delete-btn" onClick={this.props.openDialog}>
             <FloatingActionButton mini onTouchTap={this.props.openDialog}>
               <DeleteIcon />
             </FloatingActionButton>
@@ -129,7 +129,7 @@ class DeleteDialog extends React.Component {
         >
           <img src={icon} className="dialog-icon" />
           <p>
-            <b>
+            <b className="dialog-doc-title">
               {renderFromProp(this.props.onDeleteConfirmation, 'title')}
             </b>
           </p>

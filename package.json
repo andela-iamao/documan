@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --opts server/tests/mocha.opts server/tests/server/**/*.js --compilers js:babel-register",
-    "test:frontend": "NODE_ENV=test mocha -w client/test/helpers/browser.js client/test/**/*.spec.js --compilers js:babel-register",
+    "test:frontend": "NODE_ENV=test mocha -w client/test/helpers/browser.js client/test/**/*.spec.js --slow 5000 --compilers js:babel-register",
     "test:e2e": "",
     "start": "nodemon server.js --exec babel-node",
     "migrate": "sequelize db:migrate",
@@ -121,6 +121,7 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "expect": "^1.20.2",
+    "fbjs": "^0.8.12",
     "jsdom": "^9.12.0",
     "mocha": "^3.2.0",
     "moxios": "^0.4.0",

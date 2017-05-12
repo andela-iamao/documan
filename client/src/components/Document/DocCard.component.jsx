@@ -19,7 +19,7 @@ class DocCard extends React.Component {
           <div className="doc-card-icon" onClick={() =>
             browserHistory.push(`/app/document/${this.props.id}`)
           }>
-            <img src={this.props.icon} />
+            <img className="doc-card-img-icon" src={this.props.icon} />
           </div>
             {(this.props.showActions) ?
               <div className="doc-card-action-container">

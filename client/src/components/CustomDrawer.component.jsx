@@ -68,20 +68,14 @@ class CustomDrawer extends React.Component {
                     leftAvatar={ <Avatar icon={<DashboardIcon />}/>}
                     primaryText="Dashboard"
                   />
+                  <Divider inset />
                 </div>
-                <Divider inset />
                 <div onClick={this.props.showOnlyFolder}>
-                  <ListItem
-                    leftAvatar={
-                      <Avatar icon={
-                        <FileFolder />
-                      }
-                      />
-                    }
+                  <ListItem leftAvatar={<Avatar icon={<FileFolder />}/>}
                     primaryText="Folders"
                   />
+                  <Divider inset />
                 </div>
-                <Divider inset />
                 <div onClick={this.props.showOnlyDoc}>
                   <ListItem
                     leftAvatar={
@@ -92,9 +86,9 @@ class CustomDrawer extends React.Component {
                     }
                     primaryText="Documents"
                   />
+                  <Divider inset />
                 </div>
                 <div onClick={() => browserHistory.push('/app/public')}>
-                  <Divider inset />
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
@@ -105,11 +99,11 @@ class CustomDrawer extends React.Component {
                     }
                     primaryText="Public Documents"
                   />
+                  <Divider inset />
                 </div>
                 <div onClick={() =>
                     browserHistory.push(`/app/user/${this.props.id}/edit`)
                   }>
-                  <Divider inset />
                   <ListItem
                     leftAvatar={
                       <Avatar icon={
@@ -120,13 +114,13 @@ class CustomDrawer extends React.Component {
                     }
                     primaryText="Edit Info"
                   />
+                  <Divider inset />
                 </div>
-                {
-                  (this.props.userRole === 'admin') ?
+                {(this.props.userRole === 'admin') ?
                     <div onClick={() =>
                         browserHistory.push('/app/manage')
                       }>
-                      <Divider inset />
+
                       <ListItem
                         className="manage"
                         leftAvatar={
@@ -138,9 +132,10 @@ class CustomDrawer extends React.Component {
                         }
                         primaryText="Manage"
                       />
+                      <Divider inset />
                     </div>
                     :
-                    ''
+                    undefined
                 }
               </List>
             </div>

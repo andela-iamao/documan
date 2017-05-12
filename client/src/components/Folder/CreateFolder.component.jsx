@@ -64,7 +64,7 @@ class CreateFolder extends React.Component {
         onTouchTap={this.handleClose}
       />,
       <RaisedButton
-        className="dialog-actions"
+        className="dialog-actions btn-create-folder"
         label="Create Folder"
         primary
         keyboardFocused
@@ -74,12 +74,14 @@ class CreateFolder extends React.Component {
 
     return (
       <div className="col s3 m3 l1">
-        <FloatingActionButton
-          mini
-          onTouchTap={this.handleOpen}
-        >
-          <FolderAdd />
-        </FloatingActionButton>
+        <div className="open-folder-create-dialog">
+          <FloatingActionButton
+            mini
+            onTouchTap={this.handleOpen}
+          >
+            <FolderAdd />
+          </FloatingActionButton>
+        </div>
         <Dialog
           title="Create Folder"
           contentStyle={customContentStyle}
