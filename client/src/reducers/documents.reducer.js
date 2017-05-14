@@ -1,6 +1,4 @@
 const initialState = {
-  fetching: false,
-  fetched: false,
   error: null,
   documents: null,
   allDocuments: null,
@@ -14,8 +12,7 @@ export default (state = initialState, action) => {
     case 'FETCHED_CURRENT_USER_DOCS': {
       return {
         ...state,
-        documents: action.payload,
-        doc: null
+        documents: action.payload
       };
     }
     case 'EDIT_DOCUMENT': {
@@ -34,9 +31,9 @@ export default (state = initialState, action) => {
       return Object.assign({}, state, {
         documents: {
           ...state.documents,
-          results: [...state.documents.results].map((document) =>
+          results: [...state.documents.results].map(document =>
           (document.id === action.payload.id) ?
-            { title: action.payload.title } : document)}});
+            { title: action.payload.title } : document) } });
     }
     case 'GOT_DOCUMENT': {
       return {
@@ -51,18 +48,18 @@ export default (state = initialState, action) => {
       };
     }
     case 'DELETED_DOCUMENT': {
-      if (state.documents) {
+      if (action.payload.userDoc) {
         return Object.assign({}, state, {
           documents: {
             ...state.documents,
-            results: [...state.documents.results].filter((document) =>
-              (document.id !== action.payload)) } });
+            results: [...state.documents.results].filter(document =>
+            (parseInt(document.id, 10) !== parseInt(action.payload.id, 10))) } });
       }
       return Object.assign({}, state, {
         allDocuments: {
           ...state.allDocuments,
-          results: [...state.allDocuments.results].filter((document) =>
-            (document.id !== action.payload)) } });
+          results: [...state.allDocuments.results].filter(document =>
+          (parseInt(document.id, 10) !== parseInt(action.payload.id, 10))) } });
     }
     case 'CREATED_DOC': {
       return Object.assign({}, state, {
@@ -81,7 +78,7 @@ export default (state = initialState, action) => {
     case 'GOT_ALL_DOCUMENTS': {
       return {
         ...state,
-        allDocuments: action.payload.documents
+        allDocuments: action.payload
       };
     }
     default: {

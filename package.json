@@ -4,8 +4,8 @@
   "description": "Document management system, complete with roles and privileges. Each document defines access rights; the document defines which roles can access it. Also, each document specifies the date it was published.",
   "main": "server.js",
   "scripts": {
-    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --opts server/tests/mocha.opts server/tests/server/**/*.js",
-    "test:frontend": "NODE_ENV=test mocha -w client/test/helpers/browser.js client/test/**/*.spec.js --compilers js:babel-register",
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text mocha --opts server/tests/mocha.opts server/tests/server/**/*.js --compilers js:babel-register",
+    "test:frontend": "NODE_ENV=test mocha -w client/test/helpers/browser.js client/test/**/*.spec.js --slow 5000 --compilers js:babel-register",
     "test:e2e": "",
     "start": "nodemon server.js --exec babel-node",
     "migrate": "sequelize db:migrate",
@@ -24,6 +24,14 @@
     "management",
     "system"
   ],
+  "nyc": {
+    "exclude": [
+      "server.js",
+      "server/public",
+      "build",
+      "server/routes/swagger.js"
+    ]
+  },
   "author": "Inumidun Amao",
   "license": "MIT",
   "bugs": {
@@ -50,6 +58,7 @@
     "body-parser": "^1.17.1",
     "chai": "^3.5.0",
     "chai-spies": "^0.7.1",
+    "child-process": "^1.0.2",
     "consign": "^0.1.2",
     "css-loader": "^0.28.0",
     "dotenv": "^4.0.0",
@@ -61,6 +70,8 @@
     "faker": "^4.1.0",
     "file-loader": "^0.11.1",
     "froala-editor": "^2.5.1",
+    "fs": "0.0.1-security",
+    "html-to-pdf": "^0.1.11",
     "i": "^0.3.5",
     "jquery": "^3.2.1",
     "jsonwebtoken": "^7.3.0",
@@ -110,11 +121,15 @@
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
     "expect": "^1.20.2",
+    "fbjs": "^0.8.12",
     "jsdom": "^9.12.0",
     "mocha": "^3.2.0",
+    "moxios": "^0.4.0",
+    "nock": "^9.0.13",
     "node-mocks-http": "^1.6.1",
     "nyc": "^10.1.2",
     "react-addons-test-utils": "^15.5.1",
+    "redux-mock-store": "^1.2.3",
     "sinon": "^2.1.0"
   }
 }

@@ -12,21 +12,32 @@ module.exports = {
         isBetaMember: false
       }], {});
     */
+  //   return queryInterface.bulkInsert('Users', [{
+  //     firstname: 'Fyodor',
+  //     lastname: 'Dostoyevsky',
+  //     email: 'efdee@g.com',
+  //     roleId: 1,
+  //     username: 'fyodor',
+  //     password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
+  //     createdAt: '2017-03-31 13:51:40.653+01',
+  //     updatedAt: '2017-03-31 13:51:40.653+01'
+  //   }, {
+  //     firstname: 'Margarett',
+  //     lastname: 'Mitchell',
+  //     email: 'mag@me.com',
+  //     username: 'maggie',
+  //     roleId: 1,
+  //     password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
+  //     createdAt: '2017-03-31 13:51:40.653+01',
+  //     updatedAt: '2017-03-31 13:51:40.653+01'
+  //   }], {});
+  // },
     return queryInterface.bulkInsert('Users', [{
-      firstname: 'Fyodor',
-      lastname: 'Dostoyevsky',
-      email: 'efdee@g.com',
+      firstname: 'Test',
+      lastname: 'User',
+      email: 'testuser@gmail.com',
       roleId: 1,
-      username: 'fyodor',
-      password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
-      createdAt: '2017-03-31 13:51:40.653+01',
-      updatedAt: '2017-03-31 13:51:40.653+01'
-    }, {
-      firstname: 'Margarett',
-      lastname: 'Mitchell',
-      email: 'mag@me.com',
-      username: 'maggie',
-      roleId: 1,
+      username: 'testuser',
       password: bcrypt.hashSync('password', bcrypt.genSaltSync()),
       createdAt: '2017-03-31 13:51:40.653+01',
       updatedAt: '2017-03-31 13:51:40.653+01'

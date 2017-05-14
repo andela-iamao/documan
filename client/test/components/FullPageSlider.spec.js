@@ -2,7 +2,7 @@
 /* global shallow:true */
 /* global mount:true */
 import React from 'react'; // eslint-disable-line no-unused-vars
-import FullPageSlider from '../../src/components/reusable/FullPageSlider.component';
+import FullPageSlider from '../../src/components/reusable/FullPageSlider.component.jsx';
 
 describe('<FullPageSlider />', () => {
   it('should render images', () => {

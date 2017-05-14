@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="1">
+
+  <testsuite name="createDocument.spec"
+    errors="0" failures="0" hostname="" id="" package="createDocument.spec" skipped="0"
+    tests="1" time="10.90" timestamp="Sun, 07 May 2017 20:03:13 GMT">
+  
+    <testcase name="Create document" time="10.90" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+      <system-err>
+        ERROR: Unable to locate element: &quot;div[class=doc-card-icon]&quot; using: css selector
+    at Object.EditDocument [as Edit document] (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/editDocument.spec.js:16:8)
+    at Module.call (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/runner/module.js:62:34)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/runner/testcase.js:70:29
+    at _fulfilled (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:816:13)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:570:49
+    at runSingle (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:137:13)
+    at flush (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+      </system-err>
+  
+  
+  </testsuite>
+</testsuites>

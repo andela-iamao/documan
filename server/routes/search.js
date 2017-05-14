@@ -1,5 +1,5 @@
 import express from 'express';
-import SearchControllers from '../controllers/search';
+import SearchControllers from '../controllers/SearchControllers';
 import { isAdmin } from '../middlewares/checkRoles';
 import { verifyToken, isBlacklist } from '../middlewares/authenticate';
 

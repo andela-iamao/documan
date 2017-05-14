@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="2"
+            failures="1"
+            tests="1">
+
+  <testsuite name="viewDocument.spec"
+    errors="2" failures="1" hostname="" id="" package="viewDocument.spec" skipped="0"
+    tests="1" time="8.627" timestamp="Thu, 11 May 2017 10:33:14 GMT">
+  
+    <testcase name="View document" time="8.627" assertions="3">
+
+    
+
+      <failure message="Testing if element &lt;div.document-title &gt; h5&gt; is visible. Element could not be located.">    at Object.ViewDocument [as View document] (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/viewDocument.spec.js:18:15)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)</failure>
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>

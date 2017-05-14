@@ -9,7 +9,7 @@ import { setLocalstorage } from '../util/helper';
 */
 export default function (loginData) {
   return (dispatch) => {
-    axios.post('/api/v1/users/login', loginData)
+    return axios.post('/api/v1/users/login', loginData)
       .then((response) => {
         setLocalstorage('token', response.data.token)
           .then(() => {

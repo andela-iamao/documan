@@ -1,6 +1,10 @@
-import React from 'react';
+/* global expect:true */
+/* global shallow:true */
+/* global mount:true */
 
-import Alert from '../../src/components/reusable/Alert.component';
+import React from 'react';//eslint-disable-line
+
+import Alert from '../../src/components/reusable/Alert.component.jsx';
 
 describe('<Alert />', () => {
   it('should have a box', () => {
@@ -15,6 +19,6 @@ describe('<Alert />', () => {
       <Alert info={ { error: 'An error occured' } }/>
     );
     expect(wrapper.find('.card-content')
-      .props().children.props.children)
+      .props().children.props.children);
   });
 });

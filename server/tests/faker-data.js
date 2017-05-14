@@ -201,7 +201,7 @@ const fakeData = {
   long_username_user: {
     firstname: faker.name.firstName(),
     lastname: faker.name.lastName(),
-    username: 'username_053677n7mm8m5b_1',
+    username: 'username_username_username',
     email: faker.internet.email(),
     password: faker.internet.password()
   },

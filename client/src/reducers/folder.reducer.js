@@ -1,6 +1,4 @@
 const initialState = {
-  fetching: false,
-  fetched: false,
   error: null,
   folders: null,
   confirmDelete: null,
@@ -80,14 +78,15 @@ export default (state = initialState, action) => {
       };
     }
     case 'REMOVED_DOCUMENT_FROM_FOLDER': {
-      if(state.documents) {
+      if (state.documents) {
         return Object.assign({}, state, {
           documents: {
             ...state.documents,
             results: [...state.documents.results]
               .filter((document => (document.id !== action.payload)))
-          }});
+          } });
       }
+      return { ...state };
     }
     case 'ERROR_ADDING_DOCUMENT_TO_FOLDER':
     case 'ERROR_CREATING_FOLDER':
@@ -101,7 +100,7 @@ export default (state = initialState, action) => {
       return {
         ...state,
         error: null
-      }
+      };
     }
     default: {
       return { ...state };

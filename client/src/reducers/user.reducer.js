@@ -1,6 +1,4 @@
 const defaultState = {
-  fetching: false,
-  fetched: false,
   creating: false,
   created: false,
   details: null,
@@ -38,7 +36,7 @@ export default (state = defaultState, action) => {
       return { ...state, confirmDelete: null };
     }
     case 'CONFIRM_USER_PROMOTION': {
-      return { ...state, promotion: action.payload }
+      return { ...state, promotion: action.payload };
     }
     case 'CLEAR_CONFIRM_USER_PROMOTION': {
       return { ...state, promotion: null };
