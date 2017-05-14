@@ -1,0 +1,31 @@
+.react-navbar {
+  padding-right: 30px;
+  width: 100vw;
+}
+.navbar-right-element {
+  margin-bottom: 0;
+  width: 100%;
+  .search-navbar {
+    padding: 0;
+    width: 100%;
+    padding-right: 20px;
+  }
+  .navbar-right-buttons {
+    margin-top: 10px;
+    left: 90%;
+    right: 0;
+  }
+  .navbar-right-buttons > div > div {
+    display: inline;
+    float: right;
+  }
+}
+.nav-auth-buttons {
+  margin-top: 10px;
+  text-align: right;
+}
+@media only screen and (max-width: 600px) {
+  .search-navbar {
+    display: none;
+  }
+}

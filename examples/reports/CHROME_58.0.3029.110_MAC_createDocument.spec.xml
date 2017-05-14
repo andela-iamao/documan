@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="1"
+            tests="1">
+
+  <testsuite name="createDocument.spec"
+    errors="0" failures="1" hostname="" id="" package="createDocument.spec" skipped="0"
+    tests="1" time="8.239" timestamp="Thu, 11 May 2017 10:32:24 GMT">
+  
+    <testcase name="Create document" time="8.239" assertions="3">
+
+    
+
+      <failure message="Timed out while waiting for element &lt;.create-document&gt; to be present for 3000 milliseconds.">    at Object.beforeEach (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/createDocument.spec.js:13:8)</failure>
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>

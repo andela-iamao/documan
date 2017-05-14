@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="1"
+            tests="4">
+
+  <testsuite name="index.spec"
+    errors="0" failures="1" hostname="" id="" package="index.spec" skipped="1"
+    tests="4" time="70.57" timestamp="Wed, 26 Apr 2017 14:18:17 GMT">
+  
+    <testcase name="App Starts" time="23.86" assertions="4">
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Landing page" time="38.50" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Landing page elements" time="8.216" assertions="8">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+      <failure message="Expected element &lt;li.active &gt; img&gt; to have css property &quot;background-image&quot; which equals: &quot;url(&quot;http://localhost:5000/images/carousel_image_1.jpg&quot;)&quot; - element was not found">    at Object.LandingPageElements [as Landing page elements] (/Users/andeladeveloper/Projects/checkpoints/cp2/iamdocuman/client/test/e2e/index.spec.js:49:8)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)</failure>
+
+    
+    </testcase>
+  
+  
+    
+    <testcase
+      name="Change route on link click">
+      <skipped />
+    </testcase>
+    
+  
+  </testsuite>
+</testsuites>

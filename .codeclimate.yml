@@ -1,0 +1,28 @@
+engines:
+  duplication:
+    enabled: true
+    checks:
+      Similar code:
+        enabled: false
+    config:
+      languages:
+      - javascript
+  fixme:
+    enabled: true
+ratings:
+  paths:
+  - "server/*.js"
+  - "server/**/*.js"
+exclude_paths:
+  - "client/src/components/"
+  - "server/tests/"
+  - "server/models/"
+  - "server/seeders/"
+  - "migrations/"
+  - "node_modules/"
+  - "client/src/materialize/"
+  - "client/test/"
+  - "server/public/"
+  - "examples/"
+  - "client/src/sass/"
+  - "client/src/font-awesome/"

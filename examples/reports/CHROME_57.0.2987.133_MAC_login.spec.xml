@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="2">
+
+  <testsuite name="login.spec"
+    errors="0" failures="0" hostname="" id="" package="login.spec" skipped="0"
+    tests="2" time="11.03" timestamp="Wed, 26 Apr 2017 14:19:28 GMT">
+  
+    <testcase name="Invalid user" time="6.124" assertions="4">
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Login Users" time="4.907" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>
