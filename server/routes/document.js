@@ -1,14 +1,8 @@
 import express from 'express';
-import {
-  createDocument,
-  findAllDocument,
-  findOneDocument,
-  updateDocument,
-  deleteDocument
-} from '../controllers/document';
-import auth from '../config/auth';
-import cleanParam from '../middlewares/cleanParam';
-import { isAdmin } from '../helpers/helper';
+import DocumentControllers from '../controllers/DocumentControllers';
+import integerQuery from '../middlewares/cleanParam';
+import { isAdmin } from '../middlewares/checkRoles';
+import { verifyToken, isBlacklist } from '../middlewares/authenticate';
 
 const router = express.Router();
 
@@ -37,7 +31,7 @@ export default () => {
  *           format: int64
  */
   router.route('/api/v1/documents')
-    .all(auth)
+    .all(verifyToken, isBlacklist)
     /** @swagger
       *  /api/v1/documents/?limit=4&offset=2:
       *   get:
@@ -60,7 +54,7 @@ export default () => {
       *            items:
       *              $ref: '#/definitions/Document'
       */
-    .get(isAdmin, cleanParam, findAllDocument)
+    .get(isAdmin, integerQuery, DocumentControllers.findAllDocument)
 
     /**
      * @swagger
@@ -92,10 +86,10 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/Document'
      */
-    .post(createDocument);
+    .post(DocumentControllers.createDocument);
 
   router.route('/api/v1/documents/:id')
-    .all(auth, isAdmin)
+    .all(verifyToken, isBlacklist, isAdmin)
     /** @swagger
       *  /api/v1/documents/:id:
       *   get:
@@ -118,7 +112,7 @@ export default () => {
       *            items:
       *              $ref: '#/definitions/Document'
       */
-    .get(findOneDocument)
+    .get(DocumentControllers.findOneDocument)
 
     /**
      * @swagger
@@ -150,7 +144,7 @@ export default () => {
      *          items:
      *            $ref: '#/definitions/Document'
      */
-    .put(updateDocument)
+    .put(DocumentControllers.updateDocument)
 
     /**
      * @swagger
@@ -175,6 +169,7 @@ export default () => {
      *            items:
      *              $ref: '#/definitions/Document'
      */
-    .delete(deleteDocument);
+    .delete(DocumentControllers.deleteDocument);
+
   return router;
 };

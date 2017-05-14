@@ -1,21 +1,24 @@
-export default (state = { isAuthenticated: false }, action) => {
+const initialState = {
+  isAuthenticated: false,
+  loggedInUser: null
+};
+
+export default (state = initialState, action) => {
   switch (action.type) {
-    case 'LOGIN_USER': {
-      return {
-        ...state,
-        isAuthenticated: true
-      };
-    }
-    case 'LOGOUT_USER': {
-      return {
-        ...state,
-        isAuthenticated: false
-      };
-    }
+    case 'LOGIN_USER':
+    case 'ACTIVE_USER':
     case 'CREATE_USER': {
       return {
         ...state,
-        isAuthenticated: true
+        isAuthenticated: true,
+        loggedInUser: action.payload
+      };
+    }
+    case 'SIGN_OUT_USER': {
+      return {
+        ...state,
+        isAuthenticated: false,
+        loggedInUser: null
       };
     }
     default: {

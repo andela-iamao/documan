@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="4">
+
+  <testsuite name="index.spec"
+    errors="0" failures="0" hostname="" id="" package="index.spec" skipped="0"
+    tests="4" time="20.16" timestamp="Sun, 07 May 2017 20:03:49 GMT">
+  
+    <testcase name="App Starts" time="4.839" assertions="4">
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Landing page" time="2.384" assertions="3">
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Landing page elements" time="1.759" assertions="9">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+    <testcase name="Change route on link click" time="11.18" assertions="6">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="1"
+            tests="1">
+
+  <testsuite name="simpleTest"
+    errors="0" failures="1" hostname="" id="" package="simple" skipped="0"
+    tests="1" time="2.991" timestamp="Sun, 07 May 2017 20:04:41 GMT">
+  
+    <testcase name="App Starts" time="2.991" assertions="2">
+
+      <failure message="Timed out while waiting for element &lt;#react-app &gt; div&gt; to be present for 1000 milliseconds.">    at Object.beforeEach (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/simple/simpleTest.js:6:8)</failure>
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>

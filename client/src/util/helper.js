@@ -1,21 +1,32 @@
-export default (prop, field) => {
+export function renderFromProp(prop, field) {
   if (prop) {
     return prop[field] || '';
   }
   return '';
-};
+}
 
-function paginate (handlePageChange, paginationMeta) {
-  const paginated = [];
-  for (let count = 0; count < paginationMeta.page_count; count += 1) {
-    paginated.push(
-      <span className={
-        paginationMeta.page === (count + 1) ? 'active' : 'link'
-      } onClick={
-        paginationMeta.page === (count + 1) ? null : handlePageChange
-      }>
-        Page { count + 1 }
-      </span>
-    );
+export function getCurrentPath() {
+  const pathname = window.location.pathname;
+  if (pathname.match(/folder/)) {
+    return '/app/folder';
+  } else if (pathname.match(/document/)) {
+    return '/app/document'
   }
+  return pathname;
+}
+
+export function setLocalstorage(key, value) {
+  console.log('setting locastorage');
+  let storedValue;
+  return new Promise((resolve) => {
+    if (!window.localStorage) {
+      resolve('testtoken');
+    } else {
+      window.localStorage.setItem(key, value);
+      storedValue = window.localStorage.getItem(key);
+      if (storedValue) {
+        resolve(storedValue);
+      }
+    }
+  });
 }

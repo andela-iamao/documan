@@ -108,6 +108,17 @@ describe('Routes: search', () => {
             done(err);
           });
       });
+      it('should return a error for wrong query',
+        (done) => {
+          request.get(`/api/v1/search/users/?k=-65${usernames.regular[0]}`)
+            .set('Authorization', tokens.regular[1])
+            .expect(400)
+            .end((err, res) => {
+              expect(res.body.message)
+                .to.eql('Seems you sent a bad query request');
+              done(err);
+            });
+        });
   });
   describe('GET /api/v1/search/documents/?q={String}', () => {
     it('should fetch the document that was searched for', (done) => {
@@ -130,4 +141,14 @@ describe('Routes: search', () => {
           });
       });
   });
+  it('should return a error for wrong query',
+    (done) => {
+      request.get(`/api/v1/search/documents/?k=-65${usernames.regular[0]}`)
+        .set('Authorization', tokens.regular[1])
+        .expect(400)
+        .end((err, res) => {
+          expect(res.body.message).to.eql('Seems you sent a bad query request');
+          done(err);
+        });
+    });
 });

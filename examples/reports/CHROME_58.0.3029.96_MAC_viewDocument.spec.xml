@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="1"
+            tests="1">
+
+  <testsuite name="viewDocument.spec"
+    errors="0" failures="1" hostname="" id="" package="viewDocument.spec" skipped="0"
+    tests="1" time="4.968" timestamp="Sun, 07 May 2017 20:04:44 GMT">
+  
+    <testcase name="View document" time="4.968" assertions="2">
+
+      <failure message="Timed out while waiting for element &lt;#react-app&gt; to be present for 3000 milliseconds.">    at Object.beforeEach (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/viewDocument.spec.js:8:8)</failure>
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>

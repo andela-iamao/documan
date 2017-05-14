@@ -10,6 +10,15 @@ const fakeData = {
     email: 'same@email.com',
     password: faker.internet.password()
   },
+  admin_user: {
+    id: 22,
+    firstname: faker.name.firstName(),
+    lastname: faker.name.lastName(),
+    username: 'usernam_ew1',
+    email: 'sam@email.com',
+    roleId: 1,
+    password: faker.internet.password()
+  },
   create_valid_user: {
     firstname: faker.name.firstName(),
     lastname: faker.name.lastName(),
@@ -192,7 +201,7 @@ const fakeData = {
   long_username_user: {
     firstname: faker.name.firstName(),
     lastname: faker.name.lastName(),
-    username: 'username_053677n7mm8m5b_1',
+    username: 'username_username_username',
     email: faker.internet.email(),
     password: faker.internet.password()
   },

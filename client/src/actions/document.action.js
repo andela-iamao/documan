@@ -1,18 +1,19 @@
 import axios from 'axios';
 
 /**
-* getUserDocs - send a dispatch action to get all documents of current logged
-* in user
-* @return {object} - returns dispatch object based on response from server
-*/
-export function getUserDocs() {
+ * getUserDocs - makes a get reques to fetch all documents belonging
+ * to the user whose id is passed into the function call
+ * then dispatches an action containing the response from the server
+ * @param {string} id - id of user to make request for
+ * @return {object} object to be sent to all reducers
+ */
+export function getUserDocs(id, limit = 10, offset = 0) {
   return (dispatch) => {
-    const userId = JSON.parse(window.localStorage.getItem('user')).data.id;
-    axios.get(`/api/v1/users/${userId}/documents`)
+    return axios.get(`/api/v1/users/${id}/documents/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
           type: 'FETCHED_CURRENT_USER_DOCS',
-          payload: response.data
+          payload: response.data.documents
         });
       });
   };
@@ -24,19 +25,22 @@ export function getUserDocs() {
 * @param {object} values - object to create document with
 * @return {object} - returns dispatch object based on response from server
 */
-export function createDoc(values) {
+export function createDoc(values, documentCount, pageNum, userId) {
   return (dispatch) => {
-    axios.post('/api/v1/documents', values)
+    return axios.post('/api/v1/documents', values)
       .then((response) => {
         dispatch({
           type: 'CREATED_DOC',
           payload: response.data
         });
+        if (documentCount === 10) {
+          dispatch(getUserDocs(userId, 10, 10 * (pageNum - 1)));
+        }
       })
       .catch((error) => {
         dispatch({
           type: 'ERROR_CREATING_DOCUMENT',
-          payload: error.response
+          payload: error.response.data
         });
       });
   };
@@ -49,7 +53,7 @@ export function createDoc(values) {
 */
 export function getDoc(id) {
   return (dispatch) => {
-    axios.get(`/api/v1/documents/${id}`)
+    return axios.get(`/api/v1/documents/${id}`)
       .then((response) => {
         dispatch({
           type: 'GOT_DOCUMENT',
@@ -59,7 +63,7 @@ export function getDoc(id) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_GETTING_DOCUMENT',
-          payload: error.response
+          payload: error.response.data
         });
       });
   };
@@ -86,7 +90,7 @@ export function editDoc(values) {
 */
 export function updateDoc(values, refresh = true) {
   return (dispatch) => {
-    axios.put(`/api/v1/documents/${values.id}`, values)
+    return axios.put(`/api/v1/documents/${values.id}`, values)
       .then((response) => {
         if (refresh) {
           dispatch(getUserDocs());
@@ -99,7 +103,7 @@ export function updateDoc(values, refresh = true) {
       .catch((error) => {
         dispatch({
           type: 'ERROR_UPDATING_DOCUMENT',
-          payload: error.response
+          payload: error.response.data
         });
       });
   };
@@ -110,13 +114,13 @@ export function updateDoc(values, refresh = true) {
 * getAllDocs - sends an action to fetch all documents
 * @return {object} action to send to reducers
 */
-export function getAllDocs() {
+export function getAllDocs(limit = 10, offset = 0) {
   return (dispatch) => {
-    axios.get('/api/v1/documents')
+    axios.get(`/api/v1/documents/?limit=${limit}&offset=${offset}`)
       .then((response) => {
         dispatch({
           type: 'GOT_ALL_DOCUMENTS',
-          payload: response.data
+          payload: response.data.documents
         });
       });
   };
@@ -129,18 +133,20 @@ export function getAllDocs() {
 * after successful call and payload to pass to action. Set to false by default
 * @return {object} action to send to reducers
 */
-export function deleteDoc(id, refresh = false) {
+export function deleteDoc(id, refresh = false, type = null) {
   return (dispatch) => {
-    axios.delete(`/api/v1/documents/${id}`)
+    return axios.delete(`/api/v1/documents/${id}`)
       .then(() => {
         dispatch({
           type: 'DELETED_DOCUMENT',
+          payload: { id, userDoc: type }
+        });
+        dispatch({
+          type: 'REMOVED_DOCUMENT_FROM_FOLDER',
           payload: id
         });
         if (refresh && !refresh === 'auto') {
           dispatch(refresh.action(refresh.id));
-        } else {
-          dispatch(getAllDocs());
         }
       }).catch((error) => {
         dispatch({

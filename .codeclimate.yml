@@ -1,12 +1,12 @@
 engines:
   duplication:
     enabled: true
+    checks:
+      Similar code:
+        enabled: false
     config:
       languages:
       - javascript
-  eslint:
-    enabled: true
-    channel: "eslint-3"
   fixme:
     enabled: true
 ratings:
@@ -14,6 +14,15 @@ ratings:
   - "server/*.js"
   - "server/**/*.js"
 exclude_paths:
-  - server/tests/**
-  - server/seeders/**
-  - migrations/**
+  - "client/src/components/"
+  - "server/tests/"
+  - "server/models/"
+  - "server/seeders/"
+  - "migrations/"
+  - "node_modules/"
+  - "client/src/materialize/"
+  - "client/test/"
+  - "server/public/"
+  - "examples/"
+  - "client/src/sass/"
+  - "client/src/font-awesome/"

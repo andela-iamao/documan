@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="0"
+            failures="0"
+            tests="1">
+
+  <testsuite name="adminLogin.spec"
+    errors="0" failures="0" hostname="" id="" package="adminLogin.spec" skipped="0"
+    tests="1" time="6.714" timestamp="Thu, 11 May 2017 10:32:18 GMT">
+  
+    <testcase name="Admin Users" time="6.714" assertions="4">
+
+    
+
+    
+
+    
+
+    
+    </testcase>
+      <system-err>
+        ERROR: Unable to locate element: &quot;div[class=doc-card-icon]&quot; using: css selector
+    at Object.DeleteDocument [as Delete document] (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/deleteDocument.spec.js:16:8)
+    at Module.call (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/runner/module.js:62:34)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/runner/testcase.js:70:29
+    at _fulfilled (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:816:13)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:570:49
+    at runSingle (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:137:13)
+    at flush (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+ERROR: Unable to locate element: &quot;div[class=doc-card-icon]&quot; using: css selector
+    at Object.ViewDocument [as View document] (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/viewDocument.spec.js:16:8)
+    at Module.call (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/runner/module.js:62:34)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/runner/testcase.js:70:29
+    at _fulfilled (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:854:54)
+    at self.promiseDispatch.done (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:883:30)
+    at Promise.promise.promiseDispatch (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:816:13)
+    at /Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:570:49
+    at runSingle (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:137:13)
+    at flush (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/q/q.js:125:13)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)
+ERROR: Unable to locate element: &quot;div.document-title &gt; h5&quot; using: css selector
+    at null.command (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/api/assertions/visible.js:42:21)
+    at null.module.exports.BaseAssertion._scheduleAssertion (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/assertion.js:87:17)
+    at null.module.exports.BaseAssertion._executeCommand (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/assertion.js:82:17)
+    at AssertionInstance.commandFn [as _commandFn] (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/assertion.js:180:21)
+    at AsyncTree.runCommand (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/queue.js:154:30)
+    at AsyncTree.runChildNode (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/queue.js:114:8)
+    at AsyncTree.walkDown (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/queue.js:80:10)
+    at AsyncTree.walkUp (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/queue.js:97:8)
+    at AsyncTree.walkDown (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/queue.js:90:12)
+    at AsyncTree.traverse (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/node_modules/nightwatch/lib/core/queue.js:73:8)
+      </system-err>
+  
+  
+  </testsuite>
+</testsuites>

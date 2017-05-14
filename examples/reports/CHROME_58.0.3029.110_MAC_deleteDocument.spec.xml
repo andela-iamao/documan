@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites errors="1"
+            failures="1"
+            tests="1">
+
+  <testsuite name="deleteDocument.spec"
+    errors="1" failures="1" hostname="" id="" package="deleteDocument.spec" skipped="0"
+    tests="1" time="11.15" timestamp="Thu, 11 May 2017 10:32:33 GMT">
+  
+    <testcase name="Delete document" time="11.15" assertions="3">
+
+    
+
+      <failure message="Timed out while waiting for element &lt;div[class=&quot;toolbar&quot;]&gt; to be present for 4000 milliseconds.">    at Object.DeleteDocument [as Delete document] (/Users/andeladeveloper/Projects/checkpoints/cp2/sandbox/iamdocuman/client/test/e2e/deleteDocument.spec.js:18:8)
+    at _combinedTickCallback (internal/process/next_tick.js:67:7)</failure>
+
+    
+    </testcase>
+  
+  
+  </testsuite>
+</testsuites>
